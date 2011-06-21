@@ -1,0 +1,36 @@
+package com.proserus.stocks;
+
+import java.io.IOException;
+
+import org.apache.log4j.xml.DOMConfigurator;
+
+import com.proserus.stocks.view.general.Window;
+
+public class Launch {
+
+	// Get exchange rate from web
+	// Set default Currency
+	// Show/Hide columns
+	// Full proof list of Symbols...
+	// Can dd symbols from files, transaction and symbols
+	// All tables editable
+	// Combobox for buy,sell,div
+	// Combobox for currency
+	// Combobox for symbols
+	// Default columns hidden at startup
+	
+	public static void initLogging(){
+		
+	}
+
+	/**
+	 * @param args
+	 * @throws IOException
+	 * @throws SecurityException
+	 */
+	public static void main(String[] args) throws SecurityException, IOException {
+		DOMConfigurator.configure("log4j.xml");
+		Window.getInstance().start();
+	}
+
+}

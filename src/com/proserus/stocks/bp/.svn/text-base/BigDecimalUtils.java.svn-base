@@ -1,0 +1,20 @@
+package com.proserus.stocks.bp;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
+public class BigDecimalUtils {
+
+	static public String v = "DECIMAL(38,8)";
+	static public BigDecimal setDecimalWithScale(BigDecimal value){
+		return value.setScale(5,RoundingMode.HALF_EVEN);
+	}
+	
+	static public String getDatabaseLength(){
+		return "DECIMAL(38,8)";
+	}
+	
+	static public int getDatabasePrecision(){
+		return 8;
+	}
+}
