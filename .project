@@ -3,6 +3,8 @@
 	<name>StockPortfolioBP</name>
 	<comment></comment>
 	<projects>
+		<project>StockPortfolioBO</project>
+		<project>StockPortfolioLIBS</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
