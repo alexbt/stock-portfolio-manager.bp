@@ -213,7 +213,7 @@ public class PortfolioControllerImpl implements PortfolioController {
 	@Override
 	public void addLabelsObserver(Observer o) {
 		labelsBp.addObserver(o);
-//		o.update(labelsBp, null);
+		o.update(labelsBp, null);//TODO remove this eventually..
 	}
 
 	@Override
