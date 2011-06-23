@@ -7,14 +7,31 @@ import java.util.Map;
 import org.jfree.data.time.Year;
 import org.joda.time.DateTime;
 
+import com.google.inject.Inject;
 import com.proserus.stocks.model.common.ObservableModel;
 import com.proserus.stocks.model.symbols.Symbol;
 import com.proserus.stocks.model.transactions.Label;
 
 public class FilterBp extends ObservableModel {
-	private SymbolsBp symbolsBp = SymbolsBp.getInstance();
-	private TransactionsBp transactionsBp = TransactionsBp.getInstance();
-	private AnalysisBp analysisBp = AnalysisBp.getInstance();
+	private SymbolsBp symbolsBp;
+	
+	@Inject
+	public void setSymbolsBp(SymbolsBp symbolsBp) {
+    	this.symbolsBp = symbolsBp;
+    }
+
+	@Inject
+	public void setTransactionsBp(TransactionsBp transactionsBp) {
+    	this.transactionsBp = transactionsBp;
+    }
+
+	@Inject
+	public void setAnalysisBp(AnalysisBp analysisBp) {
+    	this.analysisBp = analysisBp;
+    }
+
+	private TransactionsBp transactionsBp;
+	private AnalysisBp analysisBp;
 
 	private Map<String, Label> labels = new HashMap<String, Label>();
 

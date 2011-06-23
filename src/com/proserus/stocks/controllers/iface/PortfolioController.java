@@ -6,8 +6,6 @@ import java.util.Observer;
 import org.jfree.data.time.Year;
 
 import com.proserus.stocks.bp.FilterBp;
-import com.proserus.stocks.exceptions.InvalidLabelsTransactionException;
-import com.proserus.stocks.exceptions.InvalidTransactionException;
 import com.proserus.stocks.model.analysis.CurrencyAnalysis;
 import com.proserus.stocks.model.analysis.SymbolAnalysis;
 import com.proserus.stocks.model.symbols.HistoricalPrice;
@@ -36,8 +34,7 @@ public interface PortfolioController {
 
 	void addLabelsObserver(Observer o);
 
-	void updateTransaction(Transaction t) throws InvalidLabelsTransactionException,
-	        InvalidTransactionException;
+	void updateTransaction(Transaction t);
 	
 	boolean updateSymbol(Symbol symbol);
 
@@ -66,5 +63,7 @@ public interface PortfolioController {
 	Collection<? extends SymbolAnalysis> getSymbolAnalysis(FilterBp filter);
 	
 	void update(HistoricalPrice hPrice);
+	
+	void refresh();
 	
 }

@@ -11,8 +11,6 @@ import javax.persistence.Transient;
 import org.jfree.data.time.Year;
 
 import com.proserus.stocks.dao.PersistenceManager;
-import com.proserus.stocks.exceptions.InvalidLabelsTransactionException;
-import com.proserus.stocks.exceptions.InvalidTransactionException;
 import com.proserus.stocks.model.common.ObservableModel;
 import com.proserus.stocks.model.symbols.CurrencyEnum;
 import com.proserus.stocks.model.symbols.Symbol;
@@ -20,10 +18,6 @@ import com.proserus.stocks.model.transactions.Label;
 import com.proserus.stocks.model.transactions.Transaction;
 
 public class TransactionsBp extends ObservableModel {
-	private Integer id;
-
-	private static TransactionsBp singleton = new TransactionsBp();
-
 	@Transient
 	private EntityManager em;
 
@@ -153,7 +147,7 @@ public class TransactionsBp extends ObservableModel {
 	 * 
 	 * return col; }
 	 */
-	public void updateTransaction(Transaction t) throws InvalidLabelsTransactionException, InvalidTransactionException {
+	public void updateTransaction(Transaction t){
 		add(t);
 	}
 
@@ -163,12 +157,8 @@ public class TransactionsBp extends ObservableModel {
 		notifyObservers();
 	}
 
-	private TransactionsBp() {	
+	public TransactionsBp() {	
 		em = PersistenceManager.getEntityManager();
-	}
-
-	public static TransactionsBp getInstance(){
-		return singleton;
 	}
 
 	public int getMinYear() {

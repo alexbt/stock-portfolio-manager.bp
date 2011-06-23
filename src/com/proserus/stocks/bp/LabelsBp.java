@@ -22,13 +22,6 @@ public class LabelsBp extends ObservableModel {
 	@Id @GeneratedValue(strategy=GenerationType.SEQUENCE)
 	private Integer id;
 	
-	private static final String CLOSING_BRACKETS = "\\]";
-	private static final String EMPTY_STR = "";
-	private static final String OPENING_BRACKETS = "\\[";
-	private static final String COMMA_STR = ",";
-	private static final String LABELS = "labels";
-	private static final String CONFIG_PROPERTIES = "config.properties";
-
 	@Transient
 	private EntityManager em;
 	

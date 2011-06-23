@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.inject.Inject;
 import com.proserus.stocks.bp.strategies.StrategyEnum;
 import com.proserus.stocks.bp.strategies.currencies.CurrencyStrategyEnum;
 import com.proserus.stocks.bp.strategies.symbols.SymbolStrategyEnum;
@@ -18,20 +19,25 @@ import com.proserus.stocks.model.symbols.Symbol;
 import com.proserus.stocks.model.transactions.Transaction;
 
 public class AnalysisBp extends ObservableModel {
-	private TransactionsBp transactionsBp = TransactionsBp.getInstance();
+	private TransactionsBp transactionsBp;
 
-	private SymbolsBp symbolsBp = SymbolsBp.getInstance();
+	private SymbolsBp symbolsBp;
 
-	private static AnalysisBp singleton = new AnalysisBp();
-	Collection<Analysis> symbolAnalysis;
-	Collection<Analysis> currencyAnalysis;
+	@Inject
+	public void setTransactionsBp(TransactionsBp transactionsBp) {
+    	this.transactionsBp = transactionsBp;
+    }
 
-	private AnalysisBp() {
-		recalculate(new FilterBp());
-	}
+	@Inject
+	public void setSymbolsBp(SymbolsBp symbolsBp) {
+    	this.symbolsBp = symbolsBp;
+    }
 
-	public static AnalysisBp getInstance() {
-		return singleton;
+	private Collection<Analysis> symbolAnalysis;
+	private Collection<Analysis> currencyAnalysis;
+
+	public AnalysisBp() {
+		//recalculate(new FilterBp());
 	}
 
 	public void recalculate(FilterBp filter) {

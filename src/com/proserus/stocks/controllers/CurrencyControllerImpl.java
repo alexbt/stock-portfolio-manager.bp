@@ -8,14 +8,9 @@ import com.proserus.stocks.model.symbols.DefaultCurrency;
 
 public class CurrencyControllerImpl implements CurrencyController {
 
-	private static CurrencyController controller = new CurrencyControllerImpl();
 	private DefaultCurrency currencies = new DefaultCurrency();
 
-	private CurrencyControllerImpl() {
-	}
-
-	static public CurrencyController getInstance() {
-		return controller;
+	public CurrencyControllerImpl() {
 	}
 
 	public void setDefaultCurrency(CurrencyEnum currency) {

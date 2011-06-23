@@ -14,6 +14,7 @@ import javax.persistence.Transient;
 
 import org.jfree.data.time.Year;
 
+import com.google.inject.Inject;
 import com.proserus.stocks.dao.PersistenceManager;
 import com.proserus.stocks.model.common.ObservableModel;
 import com.proserus.stocks.model.symbols.HistoricalPrice;
@@ -21,30 +22,29 @@ import com.proserus.stocks.model.symbols.Symbol;
 
 public class SymbolsBp extends ObservableModel {
 
-	private static SymbolsBp singleton = new SymbolsBp();
-
 	private static final String INTERNET_PROPERTY = "internet";
 	private static final String SYMBOLS_PROPERTIES = "symbols.properties";
 	private HashMap<String, Symbol> symbols = new HashMap<String, Symbol>();
 	private Properties ptrans = new Properties();
 	public static Boolean automaticUpdate = false;
-	OnlineUpdateBp onlineUpdate = new YahooUpdateBp();
+	
+	
+	private OnlineUpdateBp onlineUpdateBp;
+
+	@Inject
+	public void setOnlineUpdateBp(OnlineUpdateBp onlineUpdateBp) {
+    	this.onlineUpdateBp = onlineUpdateBp;
+    }
 
 	@Transient
 	private EntityManager em;
 
-	private SymbolsBp() {
+	public SymbolsBp() {
 		em = PersistenceManager.getEntityManager();
 	}
 
-	public static SymbolsBp getInstance() {
-		return singleton;
-	}
-
 	public boolean setAutomaticUpdate(boolean flag) {
-		/*
-		 * if (automaticUpdate != flag) { automaticUpdate = flag; update(); return true; }
-		 */
+		//TODO legacy code..
 		return false;
 	}
 
@@ -67,7 +67,7 @@ public class SymbolsBp extends ObservableModel {
 	}
 
 	public void updatePrices() {
-		onlineUpdate.retrieveCurrentPrice(get());
+		onlineUpdateBp.retrieveCurrentPrice(get());
 		setChanged();
 		notifyObservers(SymbolUpdateEnum.CURRENT_PRICE);
 	}
@@ -88,12 +88,12 @@ public class SymbolsBp extends ObservableModel {
 
 	public void updatePrices(Symbol symbol) {
 		// TODO Manage Date better
-		symbol.setPrice(onlineUpdate.retrieveCurrentPrice(symbol), DateUtil.getCurrentYear());
+		symbol.setPrice(onlineUpdateBp.retrieveCurrentPrice(symbol), DateUtil.getCurrentYear());
 		PersistenceManager.persist(symbol);
 	}
 
 	public void updateHistoricalPrices(Symbol symbol) {
-		symbol.setPrices(onlineUpdate.retrieveHistoricalPrices(symbol, new Year(1994)));
+		symbol.setPrices(onlineUpdateBp.retrieveHistoricalPrices(symbol, new Year(1994)));
 		PersistenceManager.persist(symbol);
 	}
 
