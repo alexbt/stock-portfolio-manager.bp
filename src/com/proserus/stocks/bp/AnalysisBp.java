@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
+
 import com.google.inject.Inject;
 import com.proserus.stocks.bp.strategies.StrategyEnum;
 import com.proserus.stocks.bp.strategies.currencies.CurrencyStrategyEnum;
@@ -16,9 +18,16 @@ import com.proserus.stocks.model.analysis.SymbolAnalysis;
 import com.proserus.stocks.model.common.ObservableModel;
 import com.proserus.stocks.model.symbols.CurrencyEnum;
 import com.proserus.stocks.model.symbols.Symbol;
+import com.proserus.stocks.model.transactions.Label;
 import com.proserus.stocks.model.transactions.Transaction;
 
 public class AnalysisBp extends ObservableModel {
+	private LabelsBp labelsBp;
+	@Inject
+	public void setLabelsBp(LabelsBp labelsBp) {
+		this.labelsBp = labelsBp;
+	}
+	
 	private TransactionsBp transactionsBp;
 
 	private SymbolsBp symbolsBp;
@@ -43,6 +52,7 @@ public class AnalysisBp extends ObservableModel {
 	public void recalculate(FilterBp filter) {
 		calculatePerSymbol(filter);
 		calculatePerCurrency();
+		calculatePerLabels(filter);
 		setChanged();
 		notifyObservers();
 	}
@@ -54,9 +64,20 @@ public class AnalysisBp extends ObservableModel {
 			if (trans.size() > 0) {
 				Analysis analysis = createAnalysis(trans, filter);
 				analysis.setSymbol(symbol);
-				if(analysis.getQuantity().floatValue()!=0F){
+				if(analysis.getQuantity().floatValue() != 0F){
 					symbolAnalysis.add(analysis);
 				}
+			}
+		}
+	}
+	
+	
+	private void calculatePerLabels(FilterBp filter) {
+		if(filter.isLabelsFiltered()){
+			Collection<Transaction> transactions = transactionsBp.getTransactions(filter, false);
+			for(Label label: filter.getLabels()){
+				Collection<Transaction> trans = transactionsBp.getTransactionsByLabel(label);
+				trans = CollectionUtils.union(trans, transactions);
 			}
 		}
 	}

@@ -1,5 +1,9 @@
 package com.proserus.stocks.controllers;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Observer;
@@ -13,6 +17,7 @@ import com.google.inject.Inject;
 import com.proserus.stocks.bp.AnalysisBp;
 import com.proserus.stocks.bp.DateUtil;
 import com.proserus.stocks.bp.FilterBp;
+import com.proserus.stocks.bp.ImportExportBp;
 import com.proserus.stocks.bp.LabelsBp;
 import com.proserus.stocks.bp.SharedFilter;
 import com.proserus.stocks.bp.SymbolsBp;
@@ -35,11 +40,17 @@ public class PortfolioControllerImpl implements PortfolioController {
 	private AnalysisBp analysisBp;
 	private SharedFilter sharedFilter;
 	private FilterBp filterBp;
+	private ImportExportBp importExportBp;
 	private CurrencyController currencyController;
 
 	@Inject
 	public void setCurrencyController(CurrencyController currencyController) {
     	this.currencyController = currencyController;
+    }
+	
+	@Inject
+	public void setImportExportBp(ImportExportBp importExportBp) {
+    	this.importExportBp = importExportBp;
     }
 
 	@Inject
@@ -251,4 +262,35 @@ public class PortfolioControllerImpl implements PortfolioController {
 		symbolsBp.update(hPrice);
 		analysisBp.recalculate(sharedFilter);
 	}
+
+	@Override
+    public ByteArrayOutputStream exportTransactions(FilterBp filter) {
+	    try {
+	        return importExportBp.exportTransactions(transactionsBp.getTransactions(filter, true));
+        } catch (IOException e) {
+        }
+        return null;
+    }
+
+	@Override
+    public ByteArrayOutputStream exportTransactions() {
+		try {
+	        return importExportBp.exportTransactions(transactionsBp.getTransactions());
+        } catch (IOException e) {
+        	int i=0;
+        }
+        return null;
+    }
+
+	@Override
+    public void importTransactions(File file) {
+		try {
+	        importExportBp.importTransactions(file);
+	        refresh();
+        } catch (FileNotFoundException e) {
+	        // TODO Auto-generated catch block
+	        e.printStackTrace();
+        }
+		
+    }
 }

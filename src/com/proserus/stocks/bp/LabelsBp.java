@@ -13,7 +13,6 @@ import javax.persistence.Transient;
 import com.proserus.stocks.dao.PersistenceManager;
 import com.proserus.stocks.model.common.ObservableModel;
 import com.proserus.stocks.model.transactions.Label;
-import com.proserus.stocks.model.transactions.Transaction;
 
 @Embeddable
 public class LabelsBp extends ObservableModel {
@@ -39,12 +38,13 @@ public class LabelsBp extends ObservableModel {
 		return query.getResultList();
 	}
 	
-	public Collection<Label> getByTransactions(Transaction t) {
+	public Collection<Label> getSubLabels(Collection<Label> labels) {
 		EntityManager em  = PersistenceManager.getEntityManager();
-		Query query = em.createNamedQuery("label.findAllByTransaction");
-		query.setParameter("transactionId", t.getId());
+		Query query = em.createNamedQuery("label.findSubLabels");
+		query.setParameter("labels", labels);
 		return query.getResultList();
 	}
+	
 	public Label add(Label label){
 		EntityManager em  = PersistenceManager.getEntityManager();
 		Query query = em.createNamedQuery("label.findByName");

@@ -1,5 +1,7 @@
 package com.proserus.stocks.controllers.iface;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.Collection;
 import java.util.Observer;
 
@@ -65,5 +67,11 @@ public interface PortfolioController {
 	void update(HistoricalPrice hPrice);
 	
 	void refresh();
+	
+	ByteArrayOutputStream exportTransactions(FilterBp filter);
+	
+	ByteArrayOutputStream exportTransactions();
+	
+	void importTransactions(File file);
 	
 }

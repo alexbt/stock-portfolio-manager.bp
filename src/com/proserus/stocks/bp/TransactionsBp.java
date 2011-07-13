@@ -46,7 +46,14 @@ public class TransactionsBp extends ObservableModel {
 	}
 
 	public boolean contains(Symbol symbol) {
+		//TODO use count instead ?
 		return getTransactionsBySymbol(symbol, true).size() > 0;
+	}
+	
+	public Collection<Transaction> getTransactions() {
+		String str = "SELECT t FROM Transaction t where 1=1";
+		Query query = em.createQuery(str);
+		return query.getResultList();
 	}
 	
 	public Collection<Transaction> getTransactionsBySymbol(Symbol s, boolean dateFlag) {
