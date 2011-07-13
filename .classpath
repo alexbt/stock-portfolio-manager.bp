@@ -47,5 +47,6 @@
 	<classpathentry kind="lib" path="/StockPortfolioLIBS/lib/javax.inject.jar"/>
 	<classpathentry kind="lib" path="/StockPortfolioLIBS/lib/junit-4.9b2.jar"/>
 	<classpathentry kind="lib" path="/StockPortfolioLIBS/lib/mockito-all-1.8.5.jar"/>
+	<classpathentry kind="lib" path="/StockPortfolioLIBS/lib/opencsv-2.3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
