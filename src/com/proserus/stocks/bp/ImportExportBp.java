@@ -6,15 +6,13 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.math.BigDecimal;
-import java.text.Format;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Collection;
-import java.util.Date;
+import java.util.List;
 
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.CSVWriter;
+import au.com.bytecode.opencsv.bean.CsvToBean;
+import au.com.bytecode.opencsv.bean.HeaderColumnNameMappingStrategy;
 
 import com.google.inject.Inject;
 import com.proserus.stocks.controllers.iface.PortfolioController;
@@ -36,10 +34,9 @@ public class ImportExportBp {
 	public ByteArrayOutputStream exportTransactions(Collection<Transaction> transactions) throws IOException {
 		ByteArrayOutputStream b = new ByteArrayOutputStream();
 		CSVWriter writer = new CSVWriter(new OutputStreamWriter(b), ',');
-		// CSVWriter writer = new CSVWriter(new FileWriter(file), ',');
-		writer.writeNext(transactionHeader());
+		writer.writeNext(CsvModel.getHeaders());
 		for (Transaction t : transactions) {
-			writer.writeNext(transactionToCsv(t));
+			writer.writeNext(new CsvModel(t).getFields());
 		}
 		writer.close();
 		b.close();
@@ -47,60 +44,35 @@ public class ImportExportBp {
 	}
 
 	public void importTransactions(File file) throws FileNotFoundException {
-		CSVReader reader = new CSVReader(new FileReader(file));
-		String[] nextLine;
-		try {
-			while ((nextLine = reader.readNext()) != null) {
-				try {
-					System.out.println(nextLine[0] + nextLine[1] + "etc...");
-					Symbol s = new Symbol();
-					s.setTicker(nextLine[0]);
-					s.setName(nextLine[1]);
+		HeaderColumnNameMappingStrategy<CsvModel> strat = new HeaderColumnNameMappingStrategy<CsvModel>();
+		strat.setType(CsvModel.class);
 
-					Transaction t = new Transaction();
-					t.setSymbol(s);
+		CsvToBean<CsvModel> csv = new CsvToBean<CsvModel>();
+		List<CsvModel> list = csv.parse(strat, new CSVReader(new FileReader(file)));
 
-					t.setType(TransactionType.valueOf(nextLine[2].toUpperCase()));
+		for (CsvModel model : list) {
+			Symbol s = new Symbol();
+			s.setTicker(model.getSymbol());
+			s.setName(model.getName());
 
-					Format formatter = new SimpleDateFormat("MMM dd, yyyy");
-					t.setDate((Date) formatter.parseObject(nextLine[3]));
+			Transaction transaction = new Transaction();
+			transaction.setSymbol(s);
+			transaction.setType(TransactionType.valueOf(model.getType().toUpperCase()));
+			transaction.setDate(DateUtil.stringToToDate(CsvModel.DATE_FORMAT, model.getDate()));
+			transaction.setQuantity(BigDecimalUtils.stringToBigDecimal(model.getQuantity()));
+			transaction.setPrice(BigDecimalUtils.stringToBigDecimal(model.getPrice()));
+			transaction.setCommission(BigDecimalUtils.stringToBigDecimal(model.getCommission()));
 
-					t.setQuantity(new BigDecimal(nextLine[4]));
-					t.setPrice(new BigDecimal(nextLine[5]));
-					t.setCommission(new BigDecimal(nextLine[6]));
-					
-					controller.addSymbol(s);
-					for (String str : nextLine[7].replaceFirst("\\[", "").replaceAll("\\]", "").split(",")) {
-						Label l = new Label();
-						l.setName(str);
-						l.addTransaction(t);
-						controller.addLabel(l);
-						controller.addTransaction(t);
-					}
-				} catch (IndexOutOfBoundsException e) {
-					// TODO Auto-generated catch block
-				} catch (IllegalArgumentException e) {
-					// TODO Auto-generated catch block
-				}catch (ParseException e) {
-					// TODO Auto-generated catch block
+			controller.addSymbol(s);
+			for (String str : model.getLabels().replaceFirst("\\[", "").replaceAll("\\]", "").split(",")) {
+				if (!str.isEmpty()) {
+					Label label = new Label();
+					label.setName(str);
+					label = controller.addLabel(label);
+					transaction.addLabel(label);
 				}
 			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			controller.addTransaction(transaction);
 		}
-	}
-
-	private String[] transactionHeader() {
-		return new String[] { "Symbol", "Name", "Type", "Date", "Shares", "Price", "Commission", "Notes" };
-	}
-
-	private String[] transactionToCsv(Transaction transaction) {
-		Format formatter = new SimpleDateFormat("MMM dd, yyyy");
-		return new String[] { transaction.getSymbol().getTicker(), transaction.getSymbol().getName(), transaction.getType().toString(),
-		        formatter.format(transaction.getDate()), BigDecimalUtils.getString(transaction.getQuantity()),
-		        BigDecimalUtils.getString(transaction.getPrice()),
-		        /** cash value here */
-		        BigDecimalUtils.getString(transaction.getCommission()), transaction.getLabelsValues().toString() };
 	}
 }
