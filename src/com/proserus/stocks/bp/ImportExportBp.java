@@ -12,7 +12,7 @@ import java.util.List;
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.CSVWriter;
 import au.com.bytecode.opencsv.bean.CsvToBean;
-import au.com.bytecode.opencsv.bean.HeaderColumnNameMappingStrategy;
+import au.com.bytecode.opencsv.bean.HeaderColumnNameTranslateMappingStrategy;
 
 import com.google.inject.Inject;
 import com.proserus.stocks.controllers.iface.PortfolioController;
@@ -44,35 +44,39 @@ public class ImportExportBp {
 	}
 
 	public void importTransactions(File file) throws FileNotFoundException {
-		HeaderColumnNameMappingStrategy<CsvModel> strat = new HeaderColumnNameMappingStrategy<CsvModel>();
-		strat.setType(CsvModel.class);
+//		HeaderColumnNameMappingStrategy<CsvModel> strat = new HeaderColumnNameMappingStrategy<CsvModel>();
+		HeaderColumnNameTranslateMappingStrategy<CsvModel> strat2 = new HeaderColumnNameTranslateMappingStrategy<CsvModel>();
+		strat2.setColumnMapping(CsvModel.getColumnMapping());
+		strat2.setType(CsvModel.class);
 
 		CsvToBean<CsvModel> csv = new CsvToBean<CsvModel>();
-		List<CsvModel> list = csv.parse(strat, new CSVReader(new FileReader(file)));
+		List<CsvModel> list = csv.parse(strat2, new CSVReader(new FileReader(file)));
 
 		for (CsvModel model : list) {
-			Symbol s = new Symbol();
-			s.setTicker(model.getSymbol());
-			s.setName(model.getName());
-			controller.addSymbol(s);
-			
-			Transaction transaction = new Transaction();
-			transaction.setSymbol(s);
-			transaction.setType(TransactionType.valueOf(model.getType().toUpperCase()));
-			transaction.setDate(DateUtil.stringToToDate(CsvModel.DATE_FORMAT, model.getDate()));
-			transaction.setQuantity(BigDecimalUtils.stringToBigDecimal(model.getQuantity()));
-			transaction.setPrice(BigDecimalUtils.stringToBigDecimal(model.getPrice()));
-			transaction.setCommission(BigDecimalUtils.stringToBigDecimal(model.getCommission()));
-
-			for (String str : model.getLabels().replaceFirst("\\[", "").replaceAll("\\]", "").split(",")) {
-				if (!str.isEmpty()) {
-					Label label = new Label();
-					label.setName(str);
-					label = controller.addLabel(label);
-					transaction.addLabel(label);
+			if(!model.getSymbol().isEmpty()){
+				Symbol s = new Symbol();
+				s.setTicker(model.getSymbol());
+				s.setName(model.getName());
+				controller.addSymbol(s);
+				
+				Transaction transaction = new Transaction();
+				transaction.setSymbol(s);
+				transaction.setType(TransactionType.valueOf(model.getType().toUpperCase()));
+				transaction.setDate(DateUtil.stringToToDate(CsvModel.DATE_FORMAT, model.getDate()));
+				transaction.setQuantity(BigDecimalUtils.stringToBigDecimal(model.getQuantity()));
+				transaction.setPrice(BigDecimalUtils.stringToBigDecimal(model.getPrice()));
+				transaction.setCommission(BigDecimalUtils.stringToBigDecimal(model.getCommission()));
+	
+				for (String str : model.getLabels().replaceFirst("\\[", "").replaceAll("\\]", "").split(",")) {
+					if (!str.isEmpty()) {
+						Label label = new Label();
+						label.setName(str);
+						label = controller.addLabel(label);
+						transaction.addLabel(label);
+					}
 				}
+				controller.addTransaction(transaction);
 			}
-			controller.addTransaction(transaction);
 		}
 	}
 }
