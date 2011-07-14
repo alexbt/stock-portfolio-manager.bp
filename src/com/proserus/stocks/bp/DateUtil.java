@@ -1,5 +1,10 @@
 package com.proserus.stocks.bp;
 
+import java.text.Format;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.jfree.data.time.Year;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
@@ -79,5 +84,15 @@ public class DateUtil {
 			return 0d;
 		}
 		return value / NUMBER_OF_DAYS_PER_YEAR;
+	}
+	
+	static public Date stringToToDate(String pattern, String date){
+		Format formatter = new SimpleDateFormat(pattern);
+		try {
+	        return (Date)formatter.parseObject(date);
+        } catch (ParseException e) {
+        	//TODO not good..
+	        return new Date();
+        }
 	}
 }
