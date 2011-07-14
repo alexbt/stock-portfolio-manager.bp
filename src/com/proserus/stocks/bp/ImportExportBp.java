@@ -54,7 +54,8 @@ public class ImportExportBp {
 			Symbol s = new Symbol();
 			s.setTicker(model.getSymbol());
 			s.setName(model.getName());
-
+			controller.addSymbol(s);
+			
 			Transaction transaction = new Transaction();
 			transaction.setSymbol(s);
 			transaction.setType(TransactionType.valueOf(model.getType().toUpperCase()));
@@ -63,7 +64,6 @@ public class ImportExportBp {
 			transaction.setPrice(BigDecimalUtils.stringToBigDecimal(model.getPrice()));
 			transaction.setCommission(BigDecimalUtils.stringToBigDecimal(model.getCommission()));
 
-			controller.addSymbol(s);
 			for (String str : model.getLabels().replaceFirst("\\[", "").replaceAll("\\]", "").split(",")) {
 				if (!str.isEmpty()) {
 					Label label = new Label();
