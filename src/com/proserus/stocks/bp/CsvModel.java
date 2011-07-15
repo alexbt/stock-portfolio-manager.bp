@@ -131,12 +131,19 @@ public class CsvModel {
 	static public Map<String,String> getColumnMapping() {
 		Map<String,String> mapping = new HashMap<String,String>();
 		mapping.put("Name","Name");
+		mapping.put("Company","Name");
+		mapping.put("CompanyName","Name");
+		mapping.put("Company Name","Name");
 		mapping.put("﻿Name","Name");//Google format when 1st column
 		
 		mapping.put("Symbol","Symbol");
+		mapping.put("Ticker","Symbol");
+		mapping.put("Asset","Symbol");//Other
 		mapping.put("﻿Symbol","Symbol");//Google format when 1st column
 		
 		mapping.put("Type","Type");
+		mapping.put("Activity","Type");
+		mapping.put("Transaction","Type");
 		mapping.put("﻿Type","Type");//Google format when 1st column
 		
 		mapping.put("Date","Date");
@@ -147,6 +154,7 @@ public class CsvModel {
 		mapping.put("﻿Shares","Quantity");//Google format when 1st column
 		
 		mapping.put("Price","Price");
+		mapping.put("Cost","Price");
 		mapping.put("﻿Price","Price");//Google format when 1st column
 		
 		mapping.put("Commission","Commission");
