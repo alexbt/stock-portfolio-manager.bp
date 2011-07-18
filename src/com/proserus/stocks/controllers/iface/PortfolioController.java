@@ -8,6 +8,7 @@ import java.util.Observer;
 import org.jfree.data.time.Year;
 
 import com.proserus.stocks.bp.FilterBp;
+import com.proserus.stocks.model.ItemSelection;
 import com.proserus.stocks.model.analysis.CurrencyAnalysis;
 import com.proserus.stocks.model.analysis.SymbolAnalysis;
 import com.proserus.stocks.model.symbols.HistoricalPrice;
@@ -21,7 +22,11 @@ public interface PortfolioController {
 	void addTransactionObserver(Observer o);
 
 	void remove(Transaction t);
-
+	
+	void setSelection(Transaction t);
+	void setSelection(Symbol s);
+	ItemSelection getSelection();
+	
 	void remove(Label label);
 
 	Label addLabel(Label str);
@@ -49,6 +54,8 @@ public interface PortfolioController {
 	Symbol getSymbol(String ticker);
 
 	void addSymbolsObserver(Observer o);
+	
+	void addSelectionObserver(Observer o);
 	
 	void updatePrices();
 
