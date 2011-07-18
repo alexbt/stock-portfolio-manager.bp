@@ -25,6 +25,7 @@ import com.proserus.stocks.bp.TransactionsBp;
 import com.proserus.stocks.controllers.iface.CurrencyController;
 import com.proserus.stocks.controllers.iface.PortfolioController;
 import com.proserus.stocks.dao.PersistenceManager;
+import com.proserus.stocks.model.ItemSelection;
 import com.proserus.stocks.model.analysis.CurrencyAnalysis;
 import com.proserus.stocks.model.analysis.SymbolAnalysis;
 import com.proserus.stocks.model.symbols.CurrencyEnum;
@@ -42,6 +43,21 @@ public class PortfolioControllerImpl implements PortfolioController {
 	private FilterBp filterBp;
 	private ImportExportBp importExportBp;
 	private CurrencyController currencyController;
+	
+	private ItemSelection itemSelection = new ItemSelection();
+	
+	public ItemSelection getItemSelection() {
+    	return itemSelection;
+    }
+	
+	public void select(Transaction t){
+		itemSelection.setSelectedTransaction(t);
+	}
+	
+	public void select(Symbol s){
+		itemSelection.setSelectedSymbol(s);
+	}
+
 
 	@Inject
 	public void setCurrencyController(CurrencyController currencyController) {
@@ -292,5 +308,26 @@ public class PortfolioControllerImpl implements PortfolioController {
 	        e.printStackTrace();
         }
 		
+    }
+
+
+	@Override
+    public void addSelectionObserver(Observer o) {
+	    itemSelection.addObserver(o);	    
+    }
+
+	@Override
+    public void setSelection(Transaction t) {
+		itemSelection.setSelectedTransaction(t);
+    }
+
+	@Override
+    public void setSelection(Symbol s) {
+		itemSelection.setSelectedSymbol(s);
+    }
+
+	@Override
+    public ItemSelection getSelection() {
+	    return itemSelection;
     }
 }
