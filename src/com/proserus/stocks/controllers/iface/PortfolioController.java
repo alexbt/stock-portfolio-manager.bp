@@ -23,9 +23,9 @@ public interface PortfolioController {
 
 	void remove(Transaction t);
 	
-	void setSelection(Transaction t);
-	void setSelection(Symbol s);
-	ItemSelection getSelection();
+	void setSelection(Transaction t);//TODO This should be handled entirely in the view layer..
+	void setSelection(Symbol s);//TODO This should be handled entirely in the view layer..
+	ItemSelection getSelection();//TODO This should be handled entirely in the view layer..
 	
 	void remove(Label label);
 
