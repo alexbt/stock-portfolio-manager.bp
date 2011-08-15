@@ -17,7 +17,7 @@ public class AveragePriceCY implements CurrencyStrategy {
 			calculsLog.info("Logging not completely implemented for this calcul");
 		}
 		if (analysis.getQuantity().doubleValue() > 0) {
-			value = analysis.getCurrentCost().divide(analysis.getQuantity(), BigDecimal.ROUND_UP);
+			value = analysis.getTotalCost().divide(analysis.getQuantityBuy(), BigDecimal.ROUND_UP);
 		}
 		
 		calculsLog.info("setAveragePrice: " + value);

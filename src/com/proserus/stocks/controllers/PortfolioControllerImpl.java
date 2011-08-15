@@ -39,7 +39,7 @@ public class PortfolioControllerImpl implements PortfolioController {
 	private LabelsBp labelsBp;
 	private TransactionsBp transactionsBp;
 	private AnalysisBp analysisBp;
-	private SharedFilter sharedFilter;
+	private SharedFilter sharedFilter;//TODO Merge sharedFilter and/or filterBp..
 	private FilterBp filterBp;
 	private ImportExportBp importExportBp;
 	private CurrencyController currencyController;
@@ -302,7 +302,7 @@ public class PortfolioControllerImpl implements PortfolioController {
     public void importTransactions(File file) {
 		try {
 	        importExportBp.importTransactions(file);
-	        refresh();
+	        //refresh();
         } catch (FileNotFoundException e) {
 	        // TODO Auto-generated catch block
 	        e.printStackTrace();

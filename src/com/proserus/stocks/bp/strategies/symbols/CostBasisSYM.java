@@ -1,49 +1,33 @@
 package com.proserus.stocks.bp.strategies.symbols;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 
-import org.jfree.data.time.Year;
-import org.joda.time.DateTime;
+import org.apache.log4j.Logger;
 
-import com.proserus.stocks.bp.DateUtil;
 import com.proserus.stocks.bp.FilterBp;
 import com.proserus.stocks.model.analysis.Analysis;
-import com.proserus.stocks.model.symbols.HistoricalPrice;
 import com.proserus.stocks.model.transactions.Transaction;
-import com.proserus.stocks.model.transactions.TransactionType;
 
-public class CostBasisSYM extends AbstractStrategyCumulative {
-
+public class CostBasisSYM implements SymbolStrategySYM {
+	protected static Logger calculsLog = Logger.getLogger("calculs." + CostBasisSYM.class.getName());
+	
 	@Override
-	public BigDecimal getTransactionValue(Transaction t, FilterBp filter) {
-		//TODO logging
+	public void process(Analysis analysis, Collection<Transaction> transactions, FilterBp filter) {
+		BigDecimal value = BigDecimal.ZERO;
+		
 		if (calculsLog.isInfoEnabled()) {
 			calculsLog.info("--------------------------------------");
-			calculsLog.info("Logging not completely implemented for this calcul");
+			calculsLog.info("CostBasisSYM = quantity x averagePrice");
+			calculsLog.info("getQuantity: " + analysis.getQuantity());
+			calculsLog.info("getAveragePrice: " + analysis.getAveragePrice());
 		}
+		value = analysis.getAveragePrice().multiply(analysis.getQuantity());
 		
-		BigDecimal value = BigDecimal.ZERO;
-
-		if (t.getType().equals(TransactionType.BUY)) {
-
-			value = t.getQuantity();
-			if (filter.isDateFiltered() && filter.isFilteredYearAfter(new DateTime(t.getDate()))) {
-				HistoricalPrice h = t.getSymbol().getPrice((Year)DateUtil.getYearForUsablePrice(filter).previous());
-				if (t.getSymbol().isCustomPriceFirst()) {
-					value = value.multiply(h.getCustomPrice());
-				} else {
-					value = value.multiply(h.getPrice());
-				}
-			} else {
-				value = value.multiply(t.getPrice());
-			}
-		}
-		return value;
-	}
-
-	@Override
-	public void setAnalysisValue(Analysis analysis, BigDecimal value) {
-		calculsLog.info("setCost: " + value);
-		analysis.setCost(value);
+		//value = value.add(analysis.getTotalCost().subtract(value));
+		//value.subtract(analysis.getTotalCost().subtract(analysis.getQua))
+				
+		calculsLog.info("setAveragePrice = " +  value);
+		analysis.setCostBasis(value);
 	}
 }

@@ -92,7 +92,7 @@ public class DateUtil {
 	        return (Date)formatter.parseObject(date);
         } catch (ParseException e) {
         	//TODO not good..
-	        return new Date();
+	        return null;
         }
 	}
 }

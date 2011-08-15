@@ -12,20 +12,27 @@ import com.proserus.stocks.model.transactions.TransactionType;
 public class MarketValueSYM extends AbstractStrategyCumulative {
 
 	@Override
-	public BigDecimal  getTransactionValue(Transaction t, FilterBp filter) {
+	public BigDecimal getTransactionValue(Transaction t, FilterBp filter) {
 		//TODO Logging
 		if (calculsLog.isInfoEnabled()) {
 			calculsLog.info("--------------------------------------");
-			calculsLog.info("Logging not completely implemented for this calcul");
+			calculsLog.info(this.getClass().getName() + " - Symbol: " + t.getSymbol().getTicker());
+			calculsLog.info("getQuantity: " + t.getQuantity());
 		}
 		BigDecimal  value = BigDecimal.ZERO;
 		if (!t.getType().equals(TransactionType.DIVIDEND)) {
 			HistoricalPrice h = t.getSymbol().getPrice(DateUtil.getYearForUsablePrice(filter));
+			if (calculsLog.isInfoEnabled()) {
+				calculsLog.info("getCustomPrice: " + h.getCustomPrice());
+				calculsLog.info("getPrice: " + h.getPrice());
+			}
 			value = t.getQuantity();
 			if(t.getSymbol().isCustomPriceFirst()){
+				calculsLog.info("=> Using custom price");
 				value = value.multiply(h.getCustomPrice());
 			}else{
 				value = value.multiply(h.getPrice());
+				calculsLog.info("=> Using online price (not custom)");
 			}
 			if (t.getType().equals(TransactionType.SELL)) {
 				value = value.negate();

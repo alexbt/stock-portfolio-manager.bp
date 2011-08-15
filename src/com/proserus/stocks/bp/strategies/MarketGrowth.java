@@ -14,22 +14,29 @@ public class MarketGrowth extends AnalysisStrategy {
 
 		if (calculsLog.isInfoEnabled()) {
 			calculsLog.info("--------------------------------------");
-			calculsLog.info("getCurrentCost: " + analysis.getCurrentCost());
+			calculsLog.info("getCurrentCost: " + analysis.getTotalCost());
 			calculsLog.info("getMarketValue: " + analysis.getMarketValue());
 			calculsLog.info("marketGrowth = ((marketValue - currentCost) / currentCost) x 100");
 		}
 
-		if (analysis.getCurrentCost().intValue() != 0) {
+		try{
+			if (!analysis.getTotalCost().equals(BigDecimal.ZERO)) {
+		
 			value = analysis.getMarketValue();
-			value = value.subtract(analysis.getCurrentCost());
-			value = value.divide(analysis.getCurrentCost(), BigDecimal.ROUND_UP);
+			value = value.subtract(analysis.getCostBasis());
+			value = value.divide(analysis.getCostBasis(), BigDecimal.ROUND_UP);
 			value = value.multiply(BigDecimal.valueOf(100));
 			calculsLog.info("Calculated MarketGrowth successfully!");
 		} else {
 			calculsLog.info("Failed to calculate MarketGrowth: current Cost is 0");
 		}
-
-		calculsLog.info("setMarketGrowth = " + value);
-		analysis.setMarketGrowth(value);
+			
+			calculsLog.info("setMarketGrowth = " + value);
+			analysis.setMarketGrowth(value);
+		}catch(java.lang.ArithmeticException e){
+			calculsLog.info("setMarketGrowth = Infinite");
+			analysis.setMarketGrowth(null);
+		}
+		
 	}
 }

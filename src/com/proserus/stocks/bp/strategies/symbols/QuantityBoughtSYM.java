@@ -18,11 +18,11 @@ public class QuantityBoughtSYM extends AbstractStrategyCumulative {
 		}
 		BigDecimal value = BigDecimal.ZERO;
 
-		if (!filter.isFilteredYearAfter(t.getDateTime())) {
+//		if (!filter.isFilteredYearAfter(t.getDateTime())) {
 			if (t.getType().equals(TransactionType.BUY)) {
 				value = t.getQuantity();
 			}
-		}
+//		}
 		return value;
 	}
 

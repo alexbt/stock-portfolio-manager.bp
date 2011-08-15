@@ -18,22 +18,28 @@ public class OverallReturn extends AnalysisStrategy {
 			calculsLog.info("--------------------------------------");
 			calculsLog.info("Overall Return = (capitalGain / (currentCost+totalSold)) + marketGrowth + dividendYield");
 			calculsLog.info("getCapitalGain: " + analysis.getCapitalGain());
-			calculsLog.info("getCurrentCost: " + analysis.getCurrentCost());
+			calculsLog.info("getCurrentCost: " + analysis.getTotalCost());
 			calculsLog.info("getTotalSold: " + analysis.getTotalSold());
 			calculsLog.info("getMarketGrowth: " + analysis.getMarketGrowth());
 			calculsLog.info("getDividendYield: " + analysis.getDividendYield());
 		}
 
 		if (!analysis.getCapitalGain().equals(BigDecimal.ZERO)) {
-			value = analysis.getCapitalGain().doubleValue() / analysis.getCurrentCost().add(analysis.getTotalSold()).doubleValue();
+			value = analysis.getCapitalGain().doubleValue() / analysis.getTotalCost().add(analysis.getTotalSold()).doubleValue();
 		} else {
 			calculsLog.info("Capital gain is 0: (currentCost+totalSold): Overall return is market growth + dividend yield.");
 		}
-		value += analysis.getMarketGrowth().doubleValue();
+		if(analysis.getMarketGrowth()!=null){
+			value += analysis.getMarketGrowth().doubleValue();
+		}
 		value += analysis.getDividendYield().doubleValue();
 		calculsLog.info("Calculated OverallReturn successfully!");
 
 		calculsLog.info("setOverallReturn: " + value);
+		try{
 		analysis.setOverallReturn(new BigDecimal(value));
+		}catch(java.lang.NumberFormatException e){
+			analysis.setOverallReturn(null);
+		}
 	}
 }

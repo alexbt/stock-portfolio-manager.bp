@@ -13,13 +13,13 @@ public class DividendYield extends AnalysisStrategy {
 	protected void process(Analysis analysis) {
 		double value = 0d;
 
-		double divisor = analysis.getCurrentCost().doubleValue() + analysis.getTotalSold().doubleValue() - analysis.getCapitalGain().doubleValue();
+		double divisor = analysis.getTotalCost().doubleValue() + analysis.getTotalSold().doubleValue() - analysis.getCapitalGain().doubleValue();
 
 		if (calculsLog.isInfoEnabled()) {
 			calculsLog.info("--------------------------------------");
 			calculsLog.info("dividend yield = dividend / divisor");
 			calculsLog.info("divisor = (getCurrentCost + getTotalSold - getCapitalGain)");
-			calculsLog.info("getCurrentCost: " + analysis.getCurrentCost());
+			calculsLog.info("getCurrentCost: " + analysis.getTotalCost());
 			calculsLog.info("getTotalSold: " + analysis.getTotalSold());
 			calculsLog.info("getCapitalGain: " + analysis.getCapitalGain());
 			calculsLog.info("getDividend: " + analysis.getDividend());

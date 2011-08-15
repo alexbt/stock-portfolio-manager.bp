@@ -14,10 +14,11 @@ public class QuantityRemainingSYM extends AbstractStrategyCumulative {
 		//TODO Logging
 		if (calculsLog.isInfoEnabled()) {
 			calculsLog.info("--------------------------------------");
-			calculsLog.info("Logging not completely implemented for this calcul");
+			calculsLog.info(this.getClass().getName() + " - Symbol: " + t.getSymbol().getTicker());
+			calculsLog.info("Transaction Type: " + t.getType());
+			calculsLog.info("getQuantity: " + t.getQuantity());
 		}
 		BigDecimal  value = BigDecimal .ZERO;
-		
 		if ((!t.getType().equals(TransactionType.DIVIDEND))) {
 			value = t.getQuantity();
 			if (t.getType().equals(TransactionType.SELL)) {

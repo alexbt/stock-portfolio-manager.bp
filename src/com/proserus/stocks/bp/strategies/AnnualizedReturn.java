@@ -16,6 +16,10 @@ public class AnnualizedReturn extends AnalysisStrategy {
 	protected void process(Analysis analysis) {
 		// BigDecimal value = analysis.getDividendYield().add(analysis.getMarketGrowth().add(analysis.getCapitalGainPercent()));
 		// analysis.setOverallReturn(value);
+		if(analysis.getOverallReturn() == null){
+			analysis.setAnnualizedReturn(null);
+			return;
+		}
 		double value = analysis.getOverallReturn().doubleValue();
 
 		if (calculsLog.isInfoEnabled()) {
