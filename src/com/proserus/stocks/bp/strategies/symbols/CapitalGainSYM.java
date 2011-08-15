@@ -24,7 +24,7 @@ public class CapitalGainSYM implements SymbolStrategySYM {
 			calculsLog.info("getQuantitySold: " + analysis.getQuantitySold());
 			calculsLog.info("getAveragePrice: " + analysis.getAveragePrice());
 		}
-		if (!divider.equals(BigDecimal.ZERO)) {
+		if (divider.doubleValue()!=0) {
 			value = analysis.getTotalSold().subtract(divider);
 			calculsLog.info("Calculated CapitalGainSYM successfully!");
 		}else{

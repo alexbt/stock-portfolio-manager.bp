@@ -11,6 +11,7 @@ import com.google.inject.Inject;
 import com.proserus.stocks.model.common.ObservableModel;
 import com.proserus.stocks.model.symbols.Symbol;
 import com.proserus.stocks.model.transactions.Label;
+import com.proserus.stocks.model.transactions.TransactionType;
 
 public class FilterBp extends ObservableModel {
 	private SymbolsBp symbolsBp;
@@ -36,6 +37,8 @@ public class FilterBp extends ObservableModel {
 	private Map<String, Label> labels = new HashMap<String, Label>();
 
 	private Year year = null;
+	
+	private TransactionType type = null;
 
 	public Collection<Label> getLabels() {
 		return labels.values();
@@ -72,11 +75,15 @@ public class FilterBp extends ObservableModel {
 	}
 	
 	public boolean isFiltered(){
-		return isDateFiltered() || isSymbolFiltered() || isLabelsFiltered();
+		return isDateFiltered() || isSymbolFiltered() || isLabelsFiltered() || isTypeFiltered();
 	}
 	
 	public boolean isSymbolFiltered() {
 		return symbol!=null && !symbol.getTicker().isEmpty();
+	}
+	
+	public boolean isTypeFiltered() {
+		return type != null;
 	}
 	
 	public boolean isLabelsFiltered() {
@@ -87,6 +94,20 @@ public class FilterBp extends ObservableModel {
 		//TODO Manage Date better
 		return isDateFiltered() && (getYear().getYear() > date.getYear());
 	}
+	
+	public void setTransactionType(TransactionType type){
+		this.type = type;
+		setChanged();
+		notifyObservers();
+		transactionsBp.changeFilter();
+		symbolsBp.changeFilter();
+		analysisBp.recalculate(this);
+	}
+	
+
+	public TransactionType getTransactionType() {
+    	return type;
+    }
 
 	public Year getYear() {
 		return year;

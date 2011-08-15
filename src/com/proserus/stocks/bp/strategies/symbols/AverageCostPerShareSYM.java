@@ -20,11 +20,11 @@ public class AverageCostPerShareSYM implements SymbolStrategySYM {
 			calculsLog.info("--------------------------------------");
 			calculsLog.info("AverageCostPerShareSYM = Cost / Quantity");
 			calculsLog.info("getQuantityBuy: " + analysis.getQuantityBuy());
-			calculsLog.info("getCurrentCost: " + analysis.getCurrentCost());
+			calculsLog.info("getCurrentCost: " + analysis.getTotalCost());
 		}
 		
 		if (!analysis.getQuantityBuy().equals(BigDecimal.ZERO)) {
-			value = analysis.getCurrentCost().divide(analysis.getQuantityBuy(),BigDecimal.ROUND_UP);
+			value = analysis.getTotalCost().divide(analysis.getQuantityBuy(),BigDecimal.ROUND_UP);
 			calculsLog.info("Calculated AverageCostPerShare successfully!");
 		}else{
 			calculsLog.error("Failed to calculated AverageCostPerShare: Quantity is 0");

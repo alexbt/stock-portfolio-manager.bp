@@ -3,8 +3,10 @@ package com.proserus.stocks.bp.strategies.currencies;
 import org.apache.log4j.Logger;
 
 public enum CurrencyStrategyEnum {
-	COST(new CostCY()),
+	COST_BASIS(new CostBasisCY()),
+	TOTAL_COST(new TotalCostCY()),
 	COMMISSION(new CommissionCY()),
+	QUANTITY_BUY(new QuantityBoughtCY()),
 	QUANTITY(new QuantityCY()),
 	QUANTITY_SOLD(new QuantitySoldCY()),
 	CAPITAL_GAIN(new CapitalGainCY()),

@@ -1,6 +1,5 @@
 package com.proserus.stocks.bp;
 
-import java.math.BigDecimal;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -10,24 +9,22 @@ import com.proserus.stocks.model.transactions.Transaction;
 import com.proserus.stocks.utils.BigDecimalUtils;
 
 public class CsvModel {
-	public static final String DATE_FORMAT = "MMM dd, yyyy";
+	public static final String[] DATE_FORMATS = new String[]{"MMM dd, yyyy","yyyy-MM-dd","yyyyMMdd", "yyyy/MM/dd","MMM dd yyyy","MMM-dd-yyyy","MMM/dd/yyyy"};
 	private String symbol;
-	private String name;
+	private String name = "";
 	private String price;
 	private String quantity;
-	private String commission;
-	private String labels;
+	private String commission = "0.00";
+	private String labels = "";
 	private String type;
 	private String date;
 	
-	private String first;
-
 	public CsvModel() {
 
 	}
 
 	public CsvModel(Transaction transaction) {
-		Format formatter = new SimpleDateFormat(DATE_FORMAT);
+		Format formatter = new SimpleDateFormat(DATE_FORMATS[0]);
 		date = formatter.format(transaction.getDate());
 		symbol = transaction.getSymbol().getTicker();
 		name = transaction.getSymbol().getName();
@@ -38,7 +35,7 @@ public class CsvModel {
 		commission = BigDecimalUtils.getString(transaction.getCommission());
 		labels = transaction.getLabelsValues().toString();
 	}
-
+	
 	public String getDate() {
 		return date;
 	}
@@ -55,10 +52,6 @@ public class CsvModel {
 		this.symbol = symbol;
 	}
 	
-	public void setFirst(String first) {
-		this.first = first;
-	}
-
 	public String getName() {
 		return name;
 	}
@@ -92,14 +85,6 @@ public class CsvModel {
 		return commission;
 	}
 	
-	private BigDecimal returnBigDecimal(String value){
-		try {
-			return new BigDecimal(value);
-		} catch (NumberFormatException e) {
-			return BigDecimal.ZERO;
-		}
-	}
-
 	public void setCommission(String commission) {
 		this.commission = commission;
 	}
@@ -142,18 +127,30 @@ public class CsvModel {
 		mapping.put("﻿Symbol","Symbol");//Google format when 1st column
 		
 		mapping.put("Type","Type");
+		mapping.put("Action","Type");
 		mapping.put("Activity","Type");
 		mapping.put("Transaction","Type");
 		mapping.put("﻿Type","Type");//Google format when 1st column
 		
 		mapping.put("Date","Date");
+		mapping.put("ValueDate","Date");
+		mapping.put("PurchaseDate","Date");
+		mapping.put("Purchase Date","Date");
+		mapping.put("Value Date","Date");
 		mapping.put("﻿Date","Date");//Google format when 1st column
 		
 		mapping.put("Quantity","Quantity");
+		mapping.put("Shares/Ratio","Quantity");
+		mapping.put("Number Of Shares","Quantity");
+		mapping.put("NumberOfShares","Quantity");
 		mapping.put("Shares","Quantity"); //Google format
 		mapping.put("﻿Shares","Quantity");//Google format when 1st column
 		
 		mapping.put("Price","Price");
+		mapping.put("Price Per Share","Price");
+		mapping.put("PricePerShare","Price");
+		mapping.put("Average Price","Price");
+		mapping.put("AveragePrice","Price");
 		mapping.put("Cost","Price");
 		mapping.put("﻿Price","Price");//Google format when 1st column
 		
@@ -161,6 +158,7 @@ public class CsvModel {
 		mapping.put("﻿Commission","Commission");//Google format when 1st column
 		
 		mapping.put("Labels","Labels");
+		mapping.put("Other","Labels");
 		mapping.put("Notes","Labels");//Google format
 		mapping.put("﻿Notes","Labels");//Google format when 1st column
 		return mapping;

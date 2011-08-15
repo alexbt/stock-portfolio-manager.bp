@@ -16,6 +16,7 @@ import com.proserus.stocks.model.symbols.CurrencyEnum;
 import com.proserus.stocks.model.symbols.Symbol;
 import com.proserus.stocks.model.transactions.Label;
 import com.proserus.stocks.model.transactions.Transaction;
+import com.proserus.stocks.model.transactions.TransactionType;
 
 public class TransactionsBp extends ObservableModel {
 	@Transient
@@ -92,7 +93,7 @@ public class TransactionsBp extends ObservableModel {
 
 	private String getFilterQuery(FilterBp filter, boolean dateFlag) {
 		//TODO Manage Date better
-		return getLabelQuery(filter.getLabels()) + getSymbolQuery(filter.getSymbol()) + getDateQuery(filter.getYear(),dateFlag);
+		return getLabelQuery(filter.getLabels()) + getSymbolQuery(filter.getSymbol()) + getTypeQuery(filter.getTransactionType()) + getDateQuery(filter.getYear(),dateFlag);
 	}
 
 	private String getLabelQuery(Collection<Label> labels) {
@@ -108,6 +109,14 @@ public class TransactionsBp extends ObservableModel {
 		String query = "";
 		if (symbol != null) {
 			query = " AND " + " symbol_id=" + symbol.getId();
+		}
+		return query;
+	}
+	
+	private String getTypeQuery(TransactionType type) {
+		String query = "";
+		if (type != null) {
+			query = " AND " + " type=" + type.ordinal();
 		}
 		return query;
 	}
