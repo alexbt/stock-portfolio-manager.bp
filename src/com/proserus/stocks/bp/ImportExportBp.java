@@ -21,6 +21,7 @@ import au.com.bytecode.opencsv.bean.HeaderColumnNameTranslateMappingStrategy;
 import com.google.inject.Inject;
 import com.proserus.stocks.controllers.iface.PortfolioController;
 import com.proserus.stocks.model.symbols.Symbol;
+import com.proserus.stocks.model.transactions.Label;
 import com.proserus.stocks.model.transactions.LabelImpl;
 import com.proserus.stocks.model.transactions.Transaction;
 import com.proserus.stocks.model.transactions.TransactionImpl;
@@ -37,7 +38,7 @@ public class ImportExportBp {
 		this.controller = controller;
 	}
 
-	public ByteArrayOutputStream exportTransactions(Collection<TransactionImpl> transactions) throws IOException {
+	public ByteArrayOutputStream exportTransactions(Collection<Transaction> transactions) throws IOException {
 		ByteArrayOutputStream b = new ByteArrayOutputStream();
 		CSVWriter writer = new CSVWriter(new OutputStreamWriter(b), ',');
 		writer.writeNext(CsvModel.getHeaders());
@@ -78,7 +79,7 @@ public class ImportExportBp {
 		if (model.getLabels() != null && !model.getLabels().isEmpty()) {
 			for (String str : model.getLabels().replaceFirst("\\[", "").replaceAll("\\]", "").split(",")) {
 				if (!str.isEmpty()) {
-					LabelImpl label = new LabelImpl();
+					Label label = new LabelImpl();//TODO Implementation
 					label.setName(str);
 					label = controller.addLabel(label);
 					transaction.addLabel(label);

@@ -6,12 +6,12 @@ import com.proserus.stocks.bp.FilterBp;
 import com.proserus.stocks.bp.strategies.currencies.CurrencyStrategy;
 import com.proserus.stocks.bp.strategies.symbols.SymbolStrategySYM;
 import com.proserus.stocks.model.analysis.Analysis;
-import com.proserus.stocks.model.transactions.TransactionImpl;
+import com.proserus.stocks.model.transactions.Transaction;
 
 public abstract class AnalysisStrategy implements SymbolStrategySYM, CurrencyStrategy {
 
 	@Override
-	public void process(Analysis analysis, Collection<TransactionImpl> transactions, FilterBp filter) {
+	public void process(Analysis analysis, Collection<Transaction> transactions, FilterBp filter) {
 		process(analysis);
 
 	}

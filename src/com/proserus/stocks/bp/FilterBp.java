@@ -11,7 +11,6 @@ import com.google.inject.Inject;
 import com.proserus.stocks.model.common.ObservableModel;
 import com.proserus.stocks.model.symbols.Symbol;
 import com.proserus.stocks.model.transactions.Label;
-import com.proserus.stocks.model.transactions.LabelImpl;
 import com.proserus.stocks.model.transactions.TransactionType;
 
 public class FilterBp extends ObservableModel {
@@ -35,21 +34,21 @@ public class FilterBp extends ObservableModel {
 	private TransactionsBp transactionsBp;
 	private AnalysisBp analysisBp;
 
-	private Map<String, LabelImpl> labels = new HashMap<String, LabelImpl>();
+	private Map<String, Label> labels = new HashMap<String, Label>();
 
 	private Year year = null;
 	
 	private TransactionType type = null;
 
-	public Collection<LabelImpl> getLabels() {
+	public Collection<Label> getLabels() {
 		return labels.values();
 	}
 
-	public Map<String, LabelImpl> getLabelsMap() {
+	public Map<String, Label> getLabelsMap() {
 		return labels;
 	}
 
-	public void setLabels(Map<String, LabelImpl> labels) {
+	public void setLabels(Map<String, Label> labels) {
 		this.labels = labels;
 		setChanged();
 		notifyObservers();
@@ -114,7 +113,7 @@ public class FilterBp extends ObservableModel {
 		return year;
 	}
 	
-	public void addLabel(LabelImpl label) {
+	public void addLabel(Label label) {
 		this.labels.put(label.getName(), label);
 		setChanged();
 		notifyObservers();

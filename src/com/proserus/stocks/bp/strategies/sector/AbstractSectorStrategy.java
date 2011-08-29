@@ -6,12 +6,11 @@ import java.util.Collection;
 import com.proserus.stocks.bp.FilterBp;
 import com.proserus.stocks.model.analysis.SectorAnalysis;
 import com.proserus.stocks.model.transactions.Transaction;
-import com.proserus.stocks.model.transactions.TransactionImpl;
 
 public abstract class AbstractSectorStrategy implements SectorStrategy {
 
 	public void process(SectorAnalysis analysis,
-			Collection<TransactionImpl> transactions, FilterBp filter) {
+			Collection<Transaction> transactions, FilterBp filter) {
 
 		BigDecimal value = BigDecimal.ZERO;
 		for (Transaction t : transactions) {

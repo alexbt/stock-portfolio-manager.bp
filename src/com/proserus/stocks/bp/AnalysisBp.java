@@ -19,7 +19,7 @@ import com.proserus.stocks.model.common.ObservableModel;
 import com.proserus.stocks.model.symbols.CurrencyEnum;
 import com.proserus.stocks.model.symbols.Symbol;
 import com.proserus.stocks.model.transactions.Label;
-import com.proserus.stocks.model.transactions.TransactionImpl;
+import com.proserus.stocks.model.transactions.Transaction;
 
 public class AnalysisBp extends ObservableModel {
 	private LabelsBp labelsBp;
@@ -60,7 +60,7 @@ public class AnalysisBp extends ObservableModel {
 	private void calculatePerSymbol(FilterBp filter) {
 		symbolAnalysis = new ArrayList<Analysis>();
 		for (Symbol symbol : symbolsBp.get()) {
-			Collection<TransactionImpl> trans = transactionsBp.getTransactionsBySymbol(symbol, filter, false);
+			Collection<Transaction> trans = transactionsBp.getTransactionsBySymbol(symbol, filter, false);
 			if (trans.size() > 0) {
 				Analysis analysis = createAnalysis(trans, filter);
 				analysis.setSymbol(symbol);
@@ -74,15 +74,15 @@ public class AnalysisBp extends ObservableModel {
 	
 	private void calculatePerLabels(FilterBp filter) {
 		if(filter.isLabelsFiltered()){
-			Collection<TransactionImpl> transactions = transactionsBp.getTransactions(filter, false);
+			Collection<Transaction> transactions = transactionsBp.getTransactions(filter, false);
 			for(Label label: filter.getLabels()){
-				Collection<TransactionImpl> trans = transactionsBp.getTransactionsByLabel(label);
+				Collection<Transaction> trans = transactionsBp.getTransactionsByLabel(label);
 				trans = CollectionUtils.union(trans, transactions);
 			}
 		}
 	}
 
-	private Analysis createAnalysis(Collection<TransactionImpl> trans, FilterBp filter) {
+	private Analysis createAnalysis(Collection<Transaction> trans, FilterBp filter) {
 		Analysis analysis = new AnalysisImpl();
 		for (SymbolStrategyEnum strategy : SymbolStrategyEnum.values()) {
 			strategy.getStrategy().process(analysis, trans, filter);

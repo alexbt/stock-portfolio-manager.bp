@@ -8,13 +8,13 @@ import org.joda.time.DateTime;
 import com.proserus.stocks.bp.DateUtil;
 import com.proserus.stocks.bp.FilterBp;
 import com.proserus.stocks.model.analysis.Analysis;
-import com.proserus.stocks.model.transactions.TransactionImpl;
+import com.proserus.stocks.model.transactions.Transaction;
 
 public class EndOfPeriodSYM implements SymbolStrategySYM {
 	protected static Logger calculsLog = Logger.getLogger("calculs." + EndOfPeriodSYM.class.getName());
 	
 	@Override
-	public void process(Analysis analysis, Collection<TransactionImpl> transactions, FilterBp filter) {
+	public void process(Analysis analysis, Collection<Transaction> transactions, FilterBp filter) {
 		DateTime date = DateUtil.getFilteredEndDate(filter);
 		if(calculsLog.isInfoEnabled()){
 			calculsLog.info("--------------------------------------");
