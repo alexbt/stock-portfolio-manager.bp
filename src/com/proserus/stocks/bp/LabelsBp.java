@@ -13,6 +13,7 @@ import javax.persistence.Transient;
 import com.proserus.stocks.dao.PersistenceManager;
 import com.proserus.stocks.model.common.ObservableModel;
 import com.proserus.stocks.model.transactions.Label;
+import com.proserus.stocks.model.transactions.LabelImpl;
 
 @Embeddable
 public class LabelsBp extends ObservableModel {
@@ -32,28 +33,28 @@ public class LabelsBp extends ObservableModel {
     	return singleton;
     }
 
-	public Collection<Label> get() {
+	public Collection<LabelImpl> get() {
 		EntityManager em  = PersistenceManager.getEntityManager();
 		Query query = em.createNamedQuery("label.findAll");
 		return query.getResultList();
 	}
 	
-	public Collection<Label> getSubLabels(Collection<Label> labels) {
+	public Collection<LabelImpl> getSubLabels(Collection<LabelImpl> labels) {
 		EntityManager em  = PersistenceManager.getEntityManager();
 		Query query = em.createNamedQuery("label.findSubLabels");
 		query.setParameter("labels", labels);
 		return query.getResultList();
 	}
 	
-	public Label add(Label label){
+	public LabelImpl add(LabelImpl label){
 		EntityManager em  = PersistenceManager.getEntityManager();
 		Query query = em.createNamedQuery("label.findByName");
 		query.setParameter("label", label.getName());
 		try{
-		Label l = (Label)query.getSingleResult();
+		LabelImpl l = (LabelImpl)query.getSingleResult();
 		label = l;
 		}catch(javax.persistence.NoResultException e){
-			label = (Label)PersistenceManager.persist(label);
+			label = (LabelImpl)PersistenceManager.persist(label);
 		}
 		
 		setChanged();
