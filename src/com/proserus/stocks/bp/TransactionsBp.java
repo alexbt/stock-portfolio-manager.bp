@@ -15,7 +15,9 @@ import com.proserus.stocks.model.common.ObservableModel;
 import com.proserus.stocks.model.symbols.CurrencyEnum;
 import com.proserus.stocks.model.symbols.Symbol;
 import com.proserus.stocks.model.transactions.Label;
+import com.proserus.stocks.model.transactions.LabelImpl;
 import com.proserus.stocks.model.transactions.Transaction;
+import com.proserus.stocks.model.transactions.TransactionImpl;
 import com.proserus.stocks.model.transactions.TransactionType;
 
 public class TransactionsBp extends ObservableModel {
@@ -51,13 +53,13 @@ public class TransactionsBp extends ObservableModel {
 		return getTransactionsBySymbol(symbol, true).size() > 0;
 	}
 	
-	public Collection<Transaction> getTransactions() {
+	public Collection<TransactionImpl> getTransactions() {
 		String str = "SELECT t FROM Transaction t where 1=1";
 		Query query = em.createQuery(str);
 		return query.getResultList();
 	}
 	
-	public Collection<Transaction> getTransactionsBySymbol(Symbol s, boolean dateFlag) {
+	public Collection<TransactionImpl> getTransactionsBySymbol(Symbol s, boolean dateFlag) {
 		String str = "SELECT t FROM Transaction t where 1=1";
 		str += getSymbolQuery(s);
 		str += getAscendingOrder();
@@ -65,7 +67,7 @@ public class TransactionsBp extends ObservableModel {
 		return query.getResultList();
 	}
 
-	public Collection<Transaction> getTransactionsBySymbol(Symbol s, FilterBp filter, boolean dateFlag) {
+	public Collection<TransactionImpl> getTransactionsBySymbol(Symbol s, FilterBp filter, boolean dateFlag) {
 		String str = "SELECT t FROM Transaction t where 1=1";
 		str += getFilterQuery(filter, dateFlag);
 		str += getSymbolQuery(s);
@@ -74,7 +76,7 @@ public class TransactionsBp extends ObservableModel {
 		return query.getResultList();
 	}
 	
-	public Collection<Transaction> getTransactions(FilterBp filter, boolean dateFlag) {
+	public Collection<TransactionImpl> getTransactions(FilterBp filter, boolean dateFlag) {
 		String str = "SELECT t FROM Transaction t where 1=1";
 		str += getFilterQuery(filter,dateFlag);
 		str += getAscendingOrder();
@@ -82,7 +84,7 @@ public class TransactionsBp extends ObservableModel {
 		return query.getResultList();
 	}
 	
-	public Collection<Transaction> getTransactionsByCurrency(CurrencyEnum currency, FilterBp filter, boolean dateFlag) {
+	public Collection<TransactionImpl> getTransactionsByCurrency(CurrencyEnum currency, FilterBp filter, boolean dateFlag) {
 		String str = "SELECT t FROM Transaction t, Symbol s WHERE symbol_id=s.id";
 		str += getFilterQuery(filter, dateFlag);
 		str += getCurrencyQuery(currency);
@@ -96,11 +98,11 @@ public class TransactionsBp extends ObservableModel {
 		return getLabelQuery(filter.getLabels()) + getSymbolQuery(filter.getSymbol()) + getTypeQuery(filter.getTransactionType()) + getDateQuery(filter.getYear(),dateFlag);
 	}
 
-	private String getLabelQuery(Collection<Label> labels) {
+	private String getLabelQuery(Collection<LabelImpl> labels) {
 		String query = "";
 		for (Label label : labels) {
 
-			query += " AND " + label.getId() + " " + Transaction.IN_LABELS;
+			query += " AND " + label.getId() + " " + TransactionImpl.IN_LABELS;
 		}
 		return query;
 	}
@@ -148,7 +150,7 @@ public class TransactionsBp extends ObservableModel {
 		return query;
 	}
 
-	public Collection<Transaction> getTransactionsByLabel(Label label) {
+	public Collection<TransactionImpl> getTransactionsByLabel(Label label) {
 		Query query = em.createNamedQuery("transaction.findAllByLabel");
 		query.setParameter("label", label);
 		return query.getResultList();

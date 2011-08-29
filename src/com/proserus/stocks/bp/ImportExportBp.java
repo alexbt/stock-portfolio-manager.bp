@@ -21,8 +21,9 @@ import au.com.bytecode.opencsv.bean.HeaderColumnNameTranslateMappingStrategy;
 import com.google.inject.Inject;
 import com.proserus.stocks.controllers.iface.PortfolioController;
 import com.proserus.stocks.model.symbols.Symbol;
-import com.proserus.stocks.model.transactions.Label;
+import com.proserus.stocks.model.transactions.LabelImpl;
 import com.proserus.stocks.model.transactions.Transaction;
+import com.proserus.stocks.model.transactions.TransactionImpl;
 import com.proserus.stocks.model.transactions.TransactionType;
 import com.proserus.stocks.utils.BigDecimalUtils;
 
@@ -36,7 +37,7 @@ public class ImportExportBp {
 		this.controller = controller;
 	}
 
-	public ByteArrayOutputStream exportTransactions(Collection<Transaction> transactions) throws IOException {
+	public ByteArrayOutputStream exportTransactions(Collection<TransactionImpl> transactions) throws IOException {
 		ByteArrayOutputStream b = new ByteArrayOutputStream();
 		CSVWriter writer = new CSVWriter(new OutputStreamWriter(b), ',');
 		writer.writeNext(CsvModel.getHeaders());
@@ -59,7 +60,7 @@ public class ImportExportBp {
 
 		for (CsvModel model : list) {
 			Symbol s = new Symbol();
-			Transaction transaction = new Transaction();
+			Transaction transaction = new TransactionImpl();
 
 			if (setSymbol(model, s) && setDate(model, transaction) && setQuantity(model, transaction) && setType(model, transaction)
 			        && setPrice(model, transaction)) {
@@ -77,7 +78,7 @@ public class ImportExportBp {
 		if (model.getLabels() != null && !model.getLabels().isEmpty()) {
 			for (String str : model.getLabels().replaceFirst("\\[", "").replaceAll("\\]", "").split(",")) {
 				if (!str.isEmpty()) {
-					Label label = new Label();
+					LabelImpl label = new LabelImpl();
 					label.setName(str);
 					label = controller.addLabel(label);
 					transaction.addLabel(label);

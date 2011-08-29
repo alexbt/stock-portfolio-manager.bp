@@ -7,13 +7,13 @@ import org.apache.log4j.Logger;
 
 import com.proserus.stocks.bp.FilterBp;
 import com.proserus.stocks.model.analysis.Analysis;
-import com.proserus.stocks.model.transactions.Transaction;
+import com.proserus.stocks.model.transactions.TransactionImpl;
 
 public class CostBasisSYM implements SymbolStrategySYM {
 	protected static Logger calculsLog = Logger.getLogger("calculs." + CostBasisSYM.class.getName());
 	
 	@Override
-	public void process(Analysis analysis, Collection<Transaction> transactions, FilterBp filter) {
+	public void process(Analysis analysis, Collection<TransactionImpl> transactions, FilterBp filter) {
 		BigDecimal value = BigDecimal.ZERO;
 		
 		if (calculsLog.isInfoEnabled()) {

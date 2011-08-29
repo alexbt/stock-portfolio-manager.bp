@@ -14,7 +14,9 @@ import com.proserus.stocks.model.analysis.SymbolAnalysis;
 import com.proserus.stocks.model.symbols.HistoricalPrice;
 import com.proserus.stocks.model.symbols.Symbol;
 import com.proserus.stocks.model.transactions.Label;
+import com.proserus.stocks.model.transactions.LabelImpl;
 import com.proserus.stocks.model.transactions.Transaction;
+import com.proserus.stocks.model.transactions.TransactionImpl;
 
 public interface PortfolioController {
 	Transaction addTransaction(Transaction t);
@@ -29,15 +31,15 @@ public interface PortfolioController {
 	
 	void remove(Label label);
 
-	Label addLabel(Label str);
+	LabelImpl addLabel(LabelImpl str);
 	
-	Collection<Label> getLabels();
+	Collection<LabelImpl> getLabels();
 	
 	Year getFirstYear();
 	
 	void addFilterObserver(Observer o);
 
-	Collection<Transaction> getTransactions(FilterBp filter);
+	Collection<TransactionImpl> getTransactions(FilterBp filter);
 
 	void addLabelsObserver(Observer o);
 

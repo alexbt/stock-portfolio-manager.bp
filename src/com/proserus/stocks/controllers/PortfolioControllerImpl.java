@@ -32,7 +32,9 @@ import com.proserus.stocks.model.symbols.CurrencyEnum;
 import com.proserus.stocks.model.symbols.HistoricalPrice;
 import com.proserus.stocks.model.symbols.Symbol;
 import com.proserus.stocks.model.transactions.Label;
+import com.proserus.stocks.model.transactions.LabelImpl;
 import com.proserus.stocks.model.transactions.Transaction;
+import com.proserus.stocks.model.transactions.TransactionImpl;
 
 public class PortfolioControllerImpl implements PortfolioController {
 	private SymbolsBp symbolsBp;
@@ -186,7 +188,7 @@ public class PortfolioControllerImpl implements PortfolioController {
 	}
 
 	@Override
-	public Collection<Transaction> getTransactions(FilterBp filter) {
+	public Collection<TransactionImpl> getTransactions(FilterBp filter) {
 		return transactionsBp.getTransactions(filter, true);
 	}
 	
@@ -229,7 +231,7 @@ public class PortfolioControllerImpl implements PortfolioController {
 
 	@Override
 	public void remove(Label label) {
-		Collection<Transaction> transactions = transactionsBp.getTransactionsByLabel(label);
+		Collection<TransactionImpl> transactions = transactionsBp.getTransactionsByLabel(label);
 		for (Transaction t : transactions) {
 			t.removeLabel(label);
 		}
@@ -250,14 +252,14 @@ public class PortfolioControllerImpl implements PortfolioController {
 	}
 
 	@Override
-	public Label addLabel(Label label) {
-		Label l = labelsBp.add(label);
+	public LabelImpl addLabel(LabelImpl label) {
+		LabelImpl l = labelsBp.add(label);
 		analysisBp.recalculate(sharedFilter);
 		return l;
 	}
 
 	@Override
-	public Collection<Label> getLabels() {
+	public Collection<LabelImpl> getLabels() {
 		return labelsBp.get();
 	}
 
