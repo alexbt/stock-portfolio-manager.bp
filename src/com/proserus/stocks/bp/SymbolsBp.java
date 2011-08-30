@@ -2,10 +2,8 @@ package com.proserus.stocks.bp;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import javax.persistence.Transient;
 
 import org.jfree.data.time.Year;
@@ -45,8 +43,9 @@ public class SymbolsBp extends ObservableModel {
 	}
 
 	public Collection<Symbol> get() {
-		Query query = em.createNamedQuery("symbol.findAll");
-		return new HashSet<Symbol>(query.getResultList());
+		return symbolsDao.get();
+//		Query query = em.createNamedQuery("symbol.findAll");
+//		return new HashSet<Symbol>(query.getResultList());
 	}
 
 	//TODO This should not allow adding a symbol with same name!
