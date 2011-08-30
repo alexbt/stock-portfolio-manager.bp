@@ -1,12 +1,8 @@
 package com.proserus.stocks.bp;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Properties;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -15,19 +11,20 @@ import javax.persistence.Transient;
 import org.jfree.data.time.Year;
 
 import com.google.inject.Inject;
-import com.proserus.stocks.dao.PersistenceManager;
+import com.google.inject.Singleton;
+import com.proserus.stocks.dao.SymbolsDao;
 import com.proserus.stocks.model.common.ObservableModel;
 import com.proserus.stocks.model.symbols.HistoricalPrice;
 import com.proserus.stocks.model.symbols.Symbol;
 
+@Singleton
 public class SymbolsBp extends ObservableModel {
 
-	private static final String INTERNET_PROPERTY = "internet";
-	private static final String SYMBOLS_PROPERTIES = "symbols.properties";
 	private HashMap<String, Symbol> symbols = new HashMap<String, Symbol>();
-	private Properties ptrans = new Properties();
 	public static Boolean automaticUpdate = false;
 	
+	@Inject 
+	private SymbolsDao symbolsDao;
 	
 	private OnlineUpdateBp onlineUpdateBp;
 
@@ -40,7 +37,6 @@ public class SymbolsBp extends ObservableModel {
 	private EntityManager em;
 
 	public SymbolsBp() {
-		em = PersistenceManager.getEntityManager();
 	}
 
 	public boolean setAutomaticUpdate(boolean flag) {
@@ -55,7 +51,7 @@ public class SymbolsBp extends ObservableModel {
 
 	//TODO This should not allow adding a symbol with same name!
 	public boolean updateSymbol(Symbol symbol) {
-		PersistenceManager.persist(symbol);
+		symbolsDao.updateSymbol(symbol);
 		setChanged();
 		notifyObservers();
 		return true;
@@ -81,7 +77,7 @@ public class SymbolsBp extends ObservableModel {
 	}
 
 	public void update(HistoricalPrice hPrice) {
-		PersistenceManager.persist(hPrice);
+		symbolsDao.update(hPrice);
 		setChanged();
 		notifyObservers(SymbolUpdateEnum.HISTORICAL_PRICE);
 	}
@@ -89,16 +85,16 @@ public class SymbolsBp extends ObservableModel {
 	public void updatePrices(Symbol symbol) {
 		// TODO Manage Date better
 		symbol.setPrice(onlineUpdateBp.retrieveCurrentPrice(symbol), DateUtil.getCurrentYear());
-		PersistenceManager.persist(symbol);
+		symbolsDao.updatePrices(symbol);
 	}
 
 	public void updateHistoricalPrices(Symbol symbol) {
 		symbol.setPrices(onlineUpdateBp.retrieveHistoricalPrices(symbol, new Year(1994)));
-		PersistenceManager.persist(symbol);
+		symbolsDao.updateHistoricalPrices(symbol);
 	}
 
 	public void remove(Symbol s) {
-		PersistenceManager.remove(s);
+		symbolsDao.remove(s);
 		setChanged();
 		notifyObservers();
 	}
@@ -113,7 +109,7 @@ public class SymbolsBp extends ObservableModel {
 	public Symbol add(Symbol symbol) {
 		Symbol symbol2 = getSymbol(symbol.getTicker());
 		if(symbol2 == null){
-			PersistenceManager.persist(symbol);
+			symbolsDao.add(symbol);
 			updatePrices(symbol);
 			updateHistoricalPrices(symbol);
 			setChanged();
@@ -126,28 +122,6 @@ public class SymbolsBp extends ObservableModel {
 	}
 	
 	
-
-	void init() {
-		try {
-			symbols = new HashMap<String, Symbol>();
-			ptrans.load(new FileInputStream(config + SYMBOLS_PROPERTIES));
-			String internet = ptrans.getProperty(INTERNET_PROPERTY);
-			if (internet != null) {
-				automaticUpdate = new Boolean(internet);
-				// ptrans.remove(INTERNET_PROPERTY);
-			}
-			/*
-			 * Iterator iterator = ptrans.keySet().iterator(); HashMap<String, String> str = new HashMap<String, String>();
-			 * 
-			 * while (iterator.hasNext()) { try { add(new Symbol(ptrans.getProperty((String) iterator.next()).toLowerCase())); } catch
-			 * (SymbolAlreadyExistException e) { } }
-			 */
-		} catch (FileNotFoundException e) {
-		} catch (IOException e) {
-		}
-		setChanged();
-		notifyObservers();
-	}
 
 	/*
 	 * public void save() { try { ptrans.clear(); Iterator<String> iterator = symbols.keySet().iterator(); HashMap<String, String> str = new
@@ -162,15 +136,6 @@ public class SymbolsBp extends ObservableModel {
 	}
 
 	public Symbol getSymbol(String ticker) {
-		Symbol symbol = null;
-		Query query = em.createNamedQuery("symbol.findByTicker");
-		query.setParameter("ticker", ticker);
-		try {
-			symbol = (Symbol) query.getSingleResult();
-		} catch (javax.persistence.NoResultException e) {
-			//TODO logging.
-		}
-
-		return symbol;
+		return symbolsDao.getSymbol(ticker);
 	}
 }
