@@ -11,6 +11,8 @@ import com.google.inject.Inject;
 import com.proserus.stocks.bp.strategies.StrategyEnum;
 import com.proserus.stocks.bp.strategies.currencies.CurrencyStrategyEnum;
 import com.proserus.stocks.bp.strategies.symbols.SymbolStrategyEnum;
+import com.proserus.stocks.dao.SymbolsDao;
+import com.proserus.stocks.dao.TransactionsDao;
 import com.proserus.stocks.model.analysis.Analysis;
 import com.proserus.stocks.model.analysis.AnalysisImpl;
 import com.proserus.stocks.model.analysis.CurrencyAnalysis;
@@ -22,25 +24,11 @@ import com.proserus.stocks.model.transactions.Label;
 import com.proserus.stocks.model.transactions.Transaction;
 
 public class AnalysisBp extends ObservableModel {
-	private LabelsBp labelsBp;
 	@Inject
-	public void setLabelsBp(LabelsBp labelsBp) {
-		this.labelsBp = labelsBp;
-	}
+	private TransactionsDao transactionsDao;
 	
-	private TransactionsBp transactionsBp;
-
-	private SymbolsBp symbolsBp;
-
 	@Inject
-	public void setTransactionsBp(TransactionsBp transactionsBp) {
-    	this.transactionsBp = transactionsBp;
-    }
-
-	@Inject
-	public void setSymbolsBp(SymbolsBp symbolsBp) {
-    	this.symbolsBp = symbolsBp;
-    }
+	private SymbolsDao symbolsDao;
 
 	private Collection<Analysis> symbolAnalysis;
 	private Collection<Analysis> currencyAnalysis;
@@ -59,8 +47,8 @@ public class AnalysisBp extends ObservableModel {
 
 	private void calculatePerSymbol(FilterBp filter) {
 		symbolAnalysis = new ArrayList<Analysis>();
-		for (Symbol symbol : symbolsBp.get()) {
-			Collection<Transaction> trans = transactionsBp.getTransactionsBySymbol(symbol, filter, false);
+		for (Symbol symbol : symbolsDao.get()) {
+			Collection<Transaction> trans = transactionsDao.getTransactionsBySymbol(symbol, filter, false);
 			if (trans.size() > 0) {
 				Analysis analysis = createAnalysis(trans, filter);
 				analysis.setSymbol(symbol);
@@ -74,9 +62,9 @@ public class AnalysisBp extends ObservableModel {
 	
 	private void calculatePerLabels(FilterBp filter) {
 		if(filter.isLabelsFiltered()){
-			Collection<Transaction> transactions = transactionsBp.getTransactions(filter, false);
+			Collection<Transaction> transactions = transactionsDao.getTransactions(filter, false);
 			for(Label label: filter.getLabels()){
-				Collection<Transaction> trans = transactionsBp.getTransactionsByLabel(label);
+				Collection<Transaction> trans = transactionsDao.getTransactionsByLabel(label);
 				trans = CollectionUtils.union(trans, transactions);
 			}
 		}

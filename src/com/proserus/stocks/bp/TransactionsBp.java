@@ -1,26 +1,26 @@
 package com.proserus.stocks.bp;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import javax.persistence.Transient;
-
 import org.jfree.data.time.Year;
 
-import com.proserus.stocks.dao.PersistenceManager;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import com.proserus.stocks.dao.TransactionsDao;
 import com.proserus.stocks.model.common.ObservableModel;
 import com.proserus.stocks.model.symbols.CurrencyEnum;
 import com.proserus.stocks.model.symbols.Symbol;
 import com.proserus.stocks.model.transactions.Label;
 import com.proserus.stocks.model.transactions.Transaction;
-import com.proserus.stocks.model.transactions.TransactionType;
 
+@Singleton
 public class TransactionsBp extends ObservableModel {
-	@Transient
-	private EntityManager em;
+	
+	@Inject
+	TransactionsDao transactionsDao;
 
 	private Map<Integer, Integer> years = new HashMap<Integer, Integer>();
 	private int minYear = 99999;
@@ -34,11 +34,22 @@ public class TransactionsBp extends ObservableModel {
 		minYear = Math.min(t.getDate().getYear(), minYear);
 		maxYear = Math.max(t.getDate().getYear(), maxYear);
 
-		t = (Transaction) PersistenceManager.persist(t);
+		transactionsDao.add(t);
 
 		setChanged();
 		notifyObservers();
 		return t;
+	}
+	
+	public Year getFirstYear(){
+		Date val = transactionsDao.getFirstYear();
+		// TODO Manage Date better
+		if (val != null) {
+			return new Year(val);
+		} else {
+			return DateUtil.getCurrentYear();
+		}
+		
 	}
 
 	public void changeFilter() {
@@ -48,133 +59,37 @@ public class TransactionsBp extends ObservableModel {
 
 	public boolean contains(Symbol symbol) {
 		//TODO use count instead ?
-		return getTransactionsBySymbol(symbol, true).size() > 0;
+		return transactionsDao.getTransactionsBySymbol(symbol, true).size() > 0;
 	}
 	
 	public Collection<Transaction> getTransactions() {
-		String str = "SELECT t FROM Transaction t where 1=1";
-		Query query = em.createQuery(str);
-		return query.getResultList();
+		return transactionsDao.getTransactions();
 	}
 	
-	public Collection<Transaction> getTransactionsBySymbol(Symbol s, boolean dateFlag) {
-		String str = "SELECT t FROM Transaction t where 1=1";
-		str += getSymbolQuery(s);
-		str += getAscendingOrder();
-		Query query = em.createQuery(str);
-		return query.getResultList();
-	}
-
-	public Collection<Transaction> getTransactionsBySymbol(Symbol s, FilterBp filter, boolean dateFlag) {
-		String str = "SELECT t FROM Transaction t where 1=1";
-		str += getFilterQuery(filter, dateFlag);
-		str += getSymbolQuery(s);
-		str += getAscendingOrder();
-		Query query = em.createQuery(str);
-		return query.getResultList();
-	}
 	
 	public Collection<Transaction> getTransactions(FilterBp filter, boolean dateFlag) {
-		String str = "SELECT t FROM Transaction t where 1=1";
-		str += getFilterQuery(filter,dateFlag);
-		str += getAscendingOrder();
-		Query query = em.createQuery(str);
-		return query.getResultList();
+		return transactionsDao.getTransactions(filter, dateFlag);
 	}
 	
 	public Collection<Transaction> getTransactionsByCurrency(CurrencyEnum currency, FilterBp filter, boolean dateFlag) {
-		String str = "SELECT t FROM Transaction t, Symbol s WHERE symbol_id=s.id";
-		str += getFilterQuery(filter, dateFlag);
-		str += getCurrencyQuery(currency);
-		str += getAscendingOrder();
-		Query query = em.createQuery(str);
-		return query.getResultList();
-	}
-
-	private String getFilterQuery(FilterBp filter, boolean dateFlag) {
-		//TODO Manage Date better
-		return getLabelQuery(filter.getLabels()) + getSymbolQuery(filter.getSymbol()) + getTypeQuery(filter.getTransactionType()) + getDateQuery(filter.getYear(),dateFlag);
-	}
-
-	private String getLabelQuery(Collection<Label> labels) {
-		String query = "";
-		for (Label label : labels) {
-
-			query += " AND " + label.getId() + " " + Transaction.IN_LABELS;
-		}
-		return query;
-	}
-
-	private String getSymbolQuery(Symbol symbol) {
-		String query = "";
-		if (symbol != null) {
-			query = " AND " + " symbol_id=" + symbol.getId();
-		}
-		return query;
-	}
-	
-	private String getTypeQuery(TransactionType type) {
-		String query = "";
-		if (type != null) {
-			query = " AND " + " type=" + type.ordinal();
-		}
-		return query;
-	}
-
-	private String getDateQuery(Year year, boolean dateFlag) {
-		String query = "";
-		if (year != null) {
-			String DATE_DB_FORMAT_MIN = "-12-31 23:59:59";
-			String DATE_DB_FORMAT_MAX = "-01-01 00:00:00";
-
-			if(dateFlag){
-				query += " AND " + " date>'" + (year.getYear()-1) + DATE_DB_FORMAT_MIN + "'";
-			}
-			query += " AND " + " date<'" + (year.getYear()+1) + DATE_DB_FORMAT_MAX + "'";
-		}
-		return query;
-	}
-
-	private String getAscendingOrder() {
-		return " ORDER BY date ASC";
-	}
-
-	private String getCurrencyQuery(CurrencyEnum currency) {
-		String query = "";
-		if (currency != null) {
-			//FIXME Do not use ordinal
-			query = " AND " + " currency=" + currency.ordinal();
-		}
-		return query;
+		return transactionsDao.getTransactionsByCurrency(currency, filter, dateFlag);
 	}
 
 	public Collection<Transaction> getTransactionsByLabel(Label label) {
-		Query query = em.createNamedQuery("transaction.findAllByLabel");
-		query.setParameter("label", label);
-		return query.getResultList();
+		return transactionsDao.getTransactionsByLabel(label);
 	}
 
-
-	/*
-	 * public Collection<Transaction> getTransactions() { return getTransactionsByFilter(Filter.getInstance()); /*EntityManager em =
-	 * PersistenceManager.getEntityManager(); Query query = em.createNamedQuery("transaction.findAll"); Collection<Transaction> col = null;
-	 * 
-	 * try { col = query.getResultList(); } catch (EntityNotFoundException e) { col = new ArrayList<Transaction>(); }
-	 * 
-	 * return col; }
-	 */
 	public void updateTransaction(Transaction t){
-		add(t);
+		transactionsDao.add(t);
 	}
 
 	public void remove(Transaction t) {
-		PersistenceManager.remove(t);
+		transactionsDao.remove(t);
 		setChanged();
 		notifyObservers();
 	}
 
 	public TransactionsBp() {	
-		em = PersistenceManager.getEntityManager();
 	}
 
 	public int getMinYear() {

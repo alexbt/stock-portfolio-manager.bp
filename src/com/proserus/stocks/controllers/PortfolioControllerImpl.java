@@ -5,17 +5,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Observer;
-
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
 
 import org.jfree.data.time.Year;
 
 import com.google.inject.Inject;
 import com.proserus.stocks.bp.AnalysisBp;
-import com.proserus.stocks.bp.DateUtil;
 import com.proserus.stocks.bp.FilterBp;
 import com.proserus.stocks.bp.ImportExportBp;
 import com.proserus.stocks.bp.LabelsBp;
@@ -24,7 +19,6 @@ import com.proserus.stocks.bp.SymbolsBp;
 import com.proserus.stocks.bp.TransactionsBp;
 import com.proserus.stocks.controllers.iface.CurrencyController;
 import com.proserus.stocks.controllers.iface.PortfolioController;
-import com.proserus.stocks.dao.PersistenceManager;
 import com.proserus.stocks.model.ItemSelection;
 import com.proserus.stocks.model.analysis.CurrencyAnalysis;
 import com.proserus.stocks.model.analysis.SymbolAnalysis;
@@ -143,15 +137,7 @@ public class PortfolioControllerImpl implements PortfolioController {
 
 	@Override
 	public Year getFirstYear() {
-		EntityManager em = PersistenceManager.getEntityManager();
-		Query query = em.createNamedQuery("transaction.findMinDate");
-		Date val = (Date) query.getSingleResult();
-		// TODO Manage Date better
-		if (val != null) {
-			return new Year(val);
-		} else {
-			return DateUtil.getCurrentYear();
-		}
+		return transactionsBp.getFirstYear();
 	}
 
 	@Override

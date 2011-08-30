@@ -5,11 +5,16 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+
+@Singleton
 public class PersistenceManager {
 
-	private static EntityManager em = null;
+	@Inject
+	private EntityManager em;
 
-	public static Object persist(Object o) {
+	public Object persist(Object o) {
 		//EntityManagerFactory emf  = Persistence.createEntityManagerFactory("jpaDemo");
 		//EntityManager em = emf.createEntityManager();
 		EntityTransaction tx = em.getTransaction();
@@ -27,7 +32,7 @@ public class PersistenceManager {
 	}
 	
 	
-	public static void remove(Object o){
+	public void remove(Object o){
 		//EntityManagerFactory emf  = Persistence.createEntityManagerFactory("jpaDemo");
 		//EntityManager em = emf.createEntityManager();
 		EntityTransaction tx = em.getTransaction();
@@ -40,7 +45,7 @@ public class PersistenceManager {
 		//emf.close();
 	}
 	
-	public static EntityManager getEntityManager(){
+	public EntityManager getEntityManager(){
 		if(em==null){
 			try{
 				em = Persistence.createEntityManagerFactory("jpaDemo").createEntityManager();
@@ -51,7 +56,7 @@ public class PersistenceManager {
 		return em;
 	}
 	
-	public static void close(){
+	public void close(){
 		em.close();
 	}
 	
