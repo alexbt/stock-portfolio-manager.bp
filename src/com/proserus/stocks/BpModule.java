@@ -25,5 +25,7 @@ public class BpModule extends AbstractModule {
 	    bind( LabelsBp.class ).in( Scopes.SINGLETON );
 	    bind( SymbolsBp.class ).in( Scopes.SINGLETON );
 	    bind( TransactionsBp.class ).in( Scopes.SINGLETON );
+//	    bind( PersistenceManager.class ).in( Scopes.SINGLETON );
+//	    bind(EntityManager.class).to(EntityManagerImpl.class);
 	  }
 	}

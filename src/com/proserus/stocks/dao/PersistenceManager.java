@@ -5,14 +5,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
-import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 @Singleton
 public class PersistenceManager {
 
-	@Inject
-	private EntityManager em;
+	private EntityManager em = Persistence.createEntityManagerFactory("jpaDemo").createEntityManager();
 
 	public Object persist(Object o) {
 		//EntityManagerFactory emf  = Persistence.createEntityManagerFactory("jpaDemo");
