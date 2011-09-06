@@ -26,6 +26,7 @@ public class EventBus {
 				col = new ArrayList<EventListener>();
 				listeners.put(event, col);
 			}
+			col.add(listener);
 		}
 	}
 

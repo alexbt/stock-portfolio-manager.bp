@@ -10,13 +10,17 @@ import java.net.URLConnection;
 import java.util.Collection;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import org.jfree.data.time.Year;
 
+import com.proserus.stocks.model.common.BoBuilder;
 import com.proserus.stocks.model.symbols.HistoricalPrice;
-import com.proserus.stocks.model.symbols.HistoricalPriceImpl;
 import com.proserus.stocks.model.symbols.Symbol;
 
 public class YahooUpdateBp implements OnlineUpdateBp {
+	@Inject private BoBuilder boBuilder;
+	
 	private static final String COMMA_STR = ",";
 	private static final String DOT_TO = ".to";
 	private static final String DASH_TO = "-to";
@@ -99,11 +103,11 @@ public class YahooUpdateBp implements OnlineUpdateBp {
 		}
 	}
 
-	public Collection<HistoricalPriceImpl> retrieveHistoricalPrices(Symbol symbol, Year year) {
+	public Collection<HistoricalPrice> retrieveHistoricalPrices(Symbol symbol, Year year) {
 		if (year == null) {
 			throw new NullPointerException();
 		}
-		Collection<HistoricalPriceImpl> prices = symbol.getPrices();
+		Collection<HistoricalPrice> prices = symbol.getPrices();
 		Map<Year, HistoricalPrice> mapPrices = symbol.getMapPrices();
 
 		String tAddress = URL_HIST_START + symbol.getTicker().replaceFirst(DOT_UN, DASH_UN).replaceAll(DASH_TO, DOT_TO)
@@ -129,9 +133,9 @@ public class YahooUpdateBp implements OnlineUpdateBp {
 				}
 
 				Float value = new Float(str.split(COMMA_STR)[6]);
-				HistoricalPriceImpl h = (HistoricalPriceImpl) mapPrices.get(previousYear);
+				HistoricalPrice h = (HistoricalPrice) mapPrices.get(previousYear);
 				if (h == null) {
-					h = new HistoricalPriceImpl();
+					h = boBuilder.getHistoricalPrice();
 					prices.add(h);
 				}
 

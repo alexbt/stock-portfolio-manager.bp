@@ -19,24 +19,26 @@ import au.com.bytecode.opencsv.bean.CsvToBean;
 import au.com.bytecode.opencsv.bean.HeaderColumnNameTranslateMappingStrategy;
 
 import com.google.inject.Inject;
-import com.proserus.stocks.controllers.iface.PortfolioController;
+import com.proserus.stocks.model.common.BoBuilder;
 import com.proserus.stocks.model.symbols.Symbol;
 import com.proserus.stocks.model.transactions.Label;
-import com.proserus.stocks.model.transactions.LabelImpl;
 import com.proserus.stocks.model.transactions.Transaction;
-import com.proserus.stocks.model.transactions.TransactionImpl;
 import com.proserus.stocks.model.transactions.TransactionType;
 import com.proserus.stocks.utils.BigDecimalUtils;
 
 public class ImportExportBp {
 	private static Logger logger = Logger.getLogger(ImportExportBp.class.getName());
-
-	private PortfolioController controller;
-
 	@Inject
-	public void setPortfolioController(PortfolioController controller) {
-		this.controller = controller;
-	}
+	private SymbolsBp symbolsBp;
+	
+	@Inject
+	private TransactionsBp transactionsBp;
+	
+	@Inject
+	private BoBuilder boBuilder;
+	
+	@Inject
+	private LabelsBp labelsBp;
 
 	public ByteArrayOutputStream exportTransactions(Collection<Transaction> transactions) throws IOException {
 		ByteArrayOutputStream b = new ByteArrayOutputStream();
@@ -60,17 +62,18 @@ public class ImportExportBp {
 		List<CsvModel> list = csv.parse(strat2, new CSVReader(new FileReader(file)));
 
 		for (CsvModel model : list) {
-			Symbol s = new Symbol();
-			Transaction transaction = new TransactionImpl();
+			Symbol s = boBuilder.getSymbol();
+			Transaction transaction = boBuilder.getTransaction();
+			
 
 			if (setSymbol(model, s) && setDate(model, transaction) && setQuantity(model, transaction) && setType(model, transaction)
 			        && setPrice(model, transaction)) {
-				controller.addSymbol(s);
+				symbolsBp.add(s);
 				transaction.setSymbol(s);
 				setName(model, s);
 				setLabels(model, transaction);
 				setCommission(model, transaction);
-				controller.addTransaction(transaction);
+				transactionsBp.add(transaction);
 			} 
 		}
 	}
@@ -79,9 +82,9 @@ public class ImportExportBp {
 		if (model.getLabels() != null && !model.getLabels().isEmpty()) {
 			for (String str : model.getLabels().replaceFirst("\\[", "").replaceAll("\\]", "").split(",")) {
 				if (!str.isEmpty()) {
-					Label label = new LabelImpl();//TODO Implementation
+					Label label = boBuilder.getLabel();
 					label.setName(str);
-					label = controller.addLabel(label);
+					label = labelsBp.add(label);
 					transaction.addLabel(label);
 				}
 			}
