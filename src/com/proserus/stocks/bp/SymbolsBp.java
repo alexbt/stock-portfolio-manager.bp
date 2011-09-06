@@ -11,12 +11,11 @@ import org.jfree.data.time.Year;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.proserus.stocks.dao.SymbolsDao;
-import com.proserus.stocks.model.common.ObservableModel;
 import com.proserus.stocks.model.symbols.HistoricalPrice;
 import com.proserus.stocks.model.symbols.Symbol;
 
 @Singleton
-public class SymbolsBp extends ObservableModel {
+public class SymbolsBp {
 
 	private HashMap<String, Symbol> symbols = new HashMap<String, Symbol>();
 	public static Boolean automaticUpdate = false;
@@ -30,7 +29,7 @@ public class SymbolsBp extends ObservableModel {
 	public void setOnlineUpdateBp(OnlineUpdateBp onlineUpdateBp) {
     	this.onlineUpdateBp = onlineUpdateBp;
     }
-
+	
 	@Transient
 	private EntityManager em;
 
@@ -51,34 +50,21 @@ public class SymbolsBp extends ObservableModel {
 	//TODO This should not allow adding a symbol with same name!
 	public boolean updateSymbol(Symbol symbol) {
 		symbolsDao.updateSymbol(symbol);
-		setChanged();
-		notifyObservers();
 		return true;
-	}
-
-	public void changeFilter() {
-		setChanged();
-		notifyObservers();
 	}
 
 	public void updatePrices() {
 		onlineUpdateBp.retrieveCurrentPrice(get());
-		setChanged();
-		notifyObservers(SymbolUpdateEnum.CURRENT_PRICE);
 	}
 
 	public void updateHistoricalPrices() {
 		for (Symbol symbol : get()) {
 			updateHistoricalPrices(symbol);
 		}
-		setChanged();
-		notifyObservers(SymbolUpdateEnum.HISTORICAL_PRICE);
 	}
 
 	public void update(HistoricalPrice hPrice) {
 		symbolsDao.update(hPrice);
-		setChanged();
-		notifyObservers(SymbolUpdateEnum.HISTORICAL_PRICE);
 	}
 
 	public void updatePrices(Symbol symbol) {
@@ -94,16 +80,8 @@ public class SymbolsBp extends ObservableModel {
 
 	public void remove(Symbol s) {
 		symbolsDao.remove(s);
-		setChanged();
-		notifyObservers();
 	}
 
-	void remove(String s) {
-		s = s.toLowerCase();
-		symbols.remove(s);
-		setChanged();
-		notifyObservers();
-	}
 
 	public Symbol add(Symbol symbol) {
 		Symbol symbol2 = getSymbol(symbol.getTicker());
@@ -111,8 +89,6 @@ public class SymbolsBp extends ObservableModel {
 			symbolsDao.add(symbol);
 			updatePrices(symbol);
 			updateHistoricalPrices(symbol);
-			setChanged();
-			notifyObservers();
 		}else{
 			symbol = symbol2;
 		}

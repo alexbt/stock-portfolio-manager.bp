@@ -17,13 +17,12 @@ import com.proserus.stocks.model.analysis.Analysis;
 import com.proserus.stocks.model.analysis.AnalysisImpl;
 import com.proserus.stocks.model.analysis.CurrencyAnalysis;
 import com.proserus.stocks.model.analysis.SymbolAnalysis;
-import com.proserus.stocks.model.common.ObservableModel;
 import com.proserus.stocks.model.symbols.CurrencyEnum;
 import com.proserus.stocks.model.symbols.Symbol;
 import com.proserus.stocks.model.transactions.Label;
 import com.proserus.stocks.model.transactions.Transaction;
 
-public class AnalysisBp extends ObservableModel {
+public class AnalysisBp {
 	@Inject
 	private TransactionsDao transactionsDao;
 	
@@ -41,8 +40,6 @@ public class AnalysisBp extends ObservableModel {
 		calculatePerSymbol(filter);
 		calculatePerCurrency();
 		calculatePerLabels(filter);
-		setChanged();
-		notifyObservers();
 	}
 
 	private void calculatePerSymbol(FilterBp filter) {

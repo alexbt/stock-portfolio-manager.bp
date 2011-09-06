@@ -14,24 +14,16 @@ import com.proserus.stocks.model.transactions.Label;
 import com.proserus.stocks.model.transactions.TransactionType;
 
 public class FilterBp extends ObservableModel {
+	@Inject
 	private SymbolsBp symbolsBp;
 	
 	@Inject
-	public void setSymbolsBp(SymbolsBp symbolsBp) {
-    	this.symbolsBp = symbolsBp;
-    }
-
-	@Inject
-	public void setTransactionsBp(TransactionsBp transactionsBp) {
-    	this.transactionsBp = transactionsBp;
-    }
-
-	@Inject
-	public void setAnalysisBp(AnalysisBp analysisBp) {
-    	this.analysisBp = analysisBp;
-    }
-
 	private TransactionsBp transactionsBp;
+
+	@Inject
+	private LabelsBp labelsBp;
+	
+	@Inject
 	private AnalysisBp analysisBp;
 
 	private Map<String, Label> labels = new HashMap<String, Label>();
@@ -52,8 +44,6 @@ public class FilterBp extends ObservableModel {
 		this.labels = labels;
 		setChanged();
 		notifyObservers();
-		transactionsBp.changeFilter();
-		symbolsBp.changeFilter();
 		analysisBp.recalculate(this);
 	}
 
@@ -65,8 +55,6 @@ public class FilterBp extends ObservableModel {
 		}
 		setChanged();
 		notifyObservers();
-		transactionsBp.changeFilter();
-		symbolsBp.changeFilter();
 		analysisBp.recalculate(this);
 	}
 
@@ -99,8 +87,6 @@ public class FilterBp extends ObservableModel {
 		this.type = type;
 		setChanged();
 		notifyObservers();
-		transactionsBp.changeFilter();
-		symbolsBp.changeFilter();
 		analysisBp.recalculate(this);
 	}
 	
@@ -115,10 +101,6 @@ public class FilterBp extends ObservableModel {
 	
 	public void addLabel(Label label) {
 		this.labels.put(label.getName(), label);
-		setChanged();
-		notifyObservers();
-		transactionsBp.changeFilter();
-		symbolsBp.changeFilter();
 		analysisBp.recalculate(this);
 	}
 
@@ -126,8 +108,6 @@ public class FilterBp extends ObservableModel {
 		this.labels.remove(label.getName());
 		setChanged();
 		notifyObservers();
-		transactionsBp.changeFilter();
-		symbolsBp.changeFilter();
 		analysisBp.recalculate(this);
 	}
 
@@ -139,8 +119,6 @@ public class FilterBp extends ObservableModel {
 		this.symbol = symbol;
 		setChanged();
 		notifyObservers();
-		transactionsBp.changeFilter();
-		symbolsBp.changeFilter();
 		analysisBp.recalculate(this);
 	}
 

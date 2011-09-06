@@ -5,7 +5,7 @@ import java.util.Collection;
 
 import org.jfree.data.time.Year;
 
-import com.proserus.stocks.model.symbols.HistoricalPriceImpl;
+import com.proserus.stocks.model.symbols.HistoricalPrice;
 import com.proserus.stocks.model.symbols.Symbol;
 
 public interface OnlineUpdateBp {
@@ -13,6 +13,6 @@ public interface OnlineUpdateBp {
 
 	void retrieveCurrentPrice(Collection<Symbol> symbols);
 
-	Collection<HistoricalPriceImpl> retrieveHistoricalPrices(Symbol symbol, Year year);
+	Collection<HistoricalPrice> retrieveHistoricalPrices(Symbol symbol, Year year);
 
 }

@@ -11,6 +11,7 @@ import com.proserus.stocks.bp.FilterBp;
 import com.proserus.stocks.model.symbols.CurrencyEnum;
 import com.proserus.stocks.model.symbols.Symbol;
 import com.proserus.stocks.model.transactions.Transaction;
+import com.proserus.stocks.model.transactions.TransactionImpl;
 import com.proserus.stocks.model.transactions.TransactionType;
 
 public class TestQuantityBoughtSYM extends TestCase {
@@ -24,7 +25,7 @@ public class TestQuantityBoughtSYM extends TestCase {
 		s.setPrice(new BigDecimal(35), new Year(2010));
 		s.setTicker("Test");
 		
-		Transaction t = new Transaction();
+		Transaction t = new TransactionImpl();
 		t.setDate(new Date());
 		t.setCommission(new BigDecimal(4.95));
 		t.setPrice(new BigDecimal(36.29));

@@ -10,14 +10,13 @@ import org.jfree.data.time.Year;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.proserus.stocks.dao.TransactionsDao;
-import com.proserus.stocks.model.common.ObservableModel;
 import com.proserus.stocks.model.symbols.CurrencyEnum;
 import com.proserus.stocks.model.symbols.Symbol;
 import com.proserus.stocks.model.transactions.Label;
 import com.proserus.stocks.model.transactions.Transaction;
 
 @Singleton
-public class TransactionsBp extends ObservableModel {
+public class TransactionsBp{
 	
 	@Inject
 	TransactionsDao transactionsDao;
@@ -36,8 +35,6 @@ public class TransactionsBp extends ObservableModel {
 
 		transactionsDao.add(t);
 
-		setChanged();
-		notifyObservers();
 		return t;
 	}
 	
@@ -50,11 +47,6 @@ public class TransactionsBp extends ObservableModel {
 			return DateUtil.getCurrentYear();
 		}
 		
-	}
-
-	public void changeFilter() {
-		setChanged();
-		notifyObservers();
 	}
 
 	public boolean contains(Symbol symbol) {
@@ -85,8 +77,6 @@ public class TransactionsBp extends ObservableModel {
 
 	public void remove(Transaction t) {
 		transactionsDao.remove(t);
-		setChanged();
-		notifyObservers();
 	}
 
 	public TransactionsBp() {	
