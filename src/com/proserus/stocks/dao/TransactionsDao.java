@@ -10,7 +10,6 @@ import org.jfree.data.time.Year;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.proserus.stocks.bp.FilterBp;
-import com.proserus.stocks.model.common.ObservableModel;
 import com.proserus.stocks.model.symbols.CurrencyEnum;
 import com.proserus.stocks.model.symbols.Symbol;
 import com.proserus.stocks.model.transactions.Label;
@@ -18,7 +17,7 @@ import com.proserus.stocks.model.transactions.Transaction;
 import com.proserus.stocks.model.transactions.TransactionType;
 
 @Singleton
-public class TransactionsDao extends ObservableModel {
+public class TransactionsDao {
 	@Inject
 	private PersistenceManager persistenceManager;
 	

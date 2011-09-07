@@ -1,12 +1,10 @@
 package com.proserus.stocks.controllers;
 
-import java.util.Observer;
-
-import com.proserus.stocks.controllers.iface.CurrencyController;
+import com.proserus.stocks.events.SwingEvents;
 import com.proserus.stocks.model.symbols.CurrencyEnum;
 import com.proserus.stocks.model.symbols.DefaultCurrency;
 
-public class CurrencyControllerImpl implements CurrencyController {
+public class CurrencyControllerImpl{
 
 	private DefaultCurrency currencies = new DefaultCurrency();
 
@@ -15,15 +13,12 @@ public class CurrencyControllerImpl implements CurrencyController {
 
 	public void setDefaultCurrency(CurrencyEnum currency) {
 		currencies.setDefault(currency);
+		SwingEvents.CURRENCY_DEFAULT_CHANGED.fire(currencies.getDefault());
 		currencies.save();
 	}
 
 	public CurrencyEnum getDefaultCurrency() {
 		return currencies.getDefault();
-	}
-
-	public void addCurrenciesObserver(Observer o) {
-		currencies.addObserver(o);
 	}
 
 	public void save() {
