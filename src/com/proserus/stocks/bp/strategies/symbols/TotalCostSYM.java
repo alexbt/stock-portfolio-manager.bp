@@ -6,7 +6,7 @@ import org.jfree.data.time.Year;
 import org.joda.time.DateTime;
 
 import com.proserus.stocks.bp.DateUtil;
-import com.proserus.stocks.bp.FilterBp;
+import com.proserus.stocks.bp.Filter;
 import com.proserus.stocks.model.analysis.Analysis;
 import com.proserus.stocks.model.symbols.HistoricalPrice;
 import com.proserus.stocks.model.transactions.Transaction;
@@ -15,7 +15,7 @@ import com.proserus.stocks.model.transactions.TransactionType;
 public class TotalCostSYM extends AbstractStrategyCumulative {
 
 	@Override
-	public BigDecimal getTransactionValue(Transaction t, FilterBp filter) {
+	public BigDecimal getTransactionValue(Transaction t, Filter filter) {
 		//TODO logging
 		if (calculsLog.isInfoEnabled()) {
 			calculsLog.info("--------------------------------------");

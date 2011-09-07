@@ -59,11 +59,11 @@ public class TransactionsBp{
 	}
 	
 	
-	public Collection<Transaction> getTransactions(FilterBp filter, boolean dateFlag) {
+	public Collection<Transaction> getTransactions(Filter filter, boolean dateFlag) {
 		return transactionsDao.getTransactions(filter, dateFlag);
 	}
 	
-	public Collection<Transaction> getTransactionsByCurrency(CurrencyEnum currency, FilterBp filter, boolean dateFlag) {
+	public Collection<Transaction> getTransactionsByCurrency(CurrencyEnum currency, Filter filter, boolean dateFlag) {
 		return transactionsDao.getTransactionsByCurrency(currency, filter, dateFlag);
 	}
 

@@ -18,7 +18,7 @@ public class DateUtil {
 		return new DateTime();
 	}
 	
-	static public DateTime getFilteredStartDate(DateTime date, FilterBp filter){
+	static public DateTime getFilteredStartDate(DateTime date, Filter filter){
 		if(filter.isDateFiltered()){
 			DateTime start = new DateTime(filter.getYear().getStart());
 			if(date.isBefore(start)){
@@ -28,7 +28,7 @@ public class DateUtil {
 		return date;
 	}
 	
-	static public DateTime getFilteredEndDate(FilterBp filter){
+	static public DateTime getFilteredEndDate(Filter filter){
 		if(filter.isDateFiltered()){
 			DateTime endOfYear = new DateTime(filter.getYear().getEnd());
 			if(endOfYear.isBeforeNow()){
@@ -38,10 +38,10 @@ public class DateUtil {
 		return getCurrentDate();
 	}
 	
-	static public Year getFilteredYear(DateTime date, FilterBp filter){
+	static public Year getFilteredYear(DateTime date, Filter filter){
 		return getFilteredYear(new Year(date.getYear()),filter);
 	}
-	static public Year getFilteredYear(Year year, FilterBp filter){
+	static public Year getFilteredYear(Year year, Filter filter){
 		if(filter.isDateFiltered()){
 			//TODO fix filter date
 			if(year.getYear() < filter.getYear().getYear()){
@@ -55,7 +55,7 @@ public class DateUtil {
 		return new Year();
 	}
 	
-	static public boolean isFilteredForYear(DateTime year, FilterBp filter){
+	static public boolean isFilteredForYear(DateTime year, Filter filter){
 		if(filter.isDateFiltered()){
 			if(year.getYear() != filter.getYear().getYear()){
 				return false;
@@ -66,7 +66,7 @@ public class DateUtil {
 	
 	//TODO Better name...
 	//It returns the date that should be used, considering to the current filter.
-	static public Year getYearForUsablePrice(FilterBp filter){
+	static public Year getYearForUsablePrice(Filter filter){
 		if(filter.isDateFiltered()){
 			return (Year)filter.getYear();
 		}else{
