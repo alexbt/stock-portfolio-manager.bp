@@ -11,7 +11,7 @@ import com.proserus.stocks.model.transactions.Transaction;
 public abstract class AnalysisStrategy implements SymbolStrategySYM, CurrencyStrategy {
 
 	@Override
-	public void process(Analysis analysis, Collection<Transaction> transactions, Filter filter) {
+	public void process(Analysis analysis, Collection<Transaction> transactions) {
 		process(analysis);
 
 	}
