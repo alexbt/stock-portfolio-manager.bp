@@ -10,22 +10,22 @@ import com.proserus.stocks.model.transactions.Transaction;
 
 public class SwingEvents {
 
-	static public Event<Collection<Transaction>> TRANSACTION_UPDATED = new Event<Collection<Transaction>>();
+	static public ModelEvent<Collection<Transaction>> TRANSACTION_UPDATED = new ModelEvent<Collection<Transaction>>();
 	
-	static public Event<Collection<Symbol>> SYMBOLS_UPDATED = new Event<Collection<Symbol>>();
+	static public ModelEvent<Collection<Symbol>> SYMBOLS_UPDATED = new ModelEvent<Collection<Symbol>>();
 	
-	static public Event<Collection<Symbol>> SYMBOLS_CURRENT_PRICE_UPDATED = new Event<Collection<Symbol>>();
+	static public NoModelEvent SYMBOLS_HISTORICAL_PRICE_UPDATED = new NoModelEvent();
 	
-	static public Event<Collection<Symbol>> SYMBOLS_HISTORICAL_PRICE_UPDATED = new Event<Collection<Symbol>>();
+	static public NoModelEvent SYMBOLS_CURRENT_PRICE_UPDATED = new NoModelEvent();
 	
-	static public Event<Collection<Label>> LABELS_UPDATED = new Event<Collection<Label>>();
+	static public ModelEvent<Collection<Label>> LABELS_UPDATED = new ModelEvent<Collection<Label>>();
 	
-	static public Event<Collection<? extends SymbolAnalysis>> SYMBOL_ANALYSIS_UPDATED = new Event<Collection<? extends SymbolAnalysis>>();
+	static public ModelEvent<Collection<? extends SymbolAnalysis>> SYMBOL_ANALYSIS_UPDATED = new ModelEvent<Collection<? extends SymbolAnalysis>>();
 	
-	static public Event<Collection<? extends CurrencyAnalysis>> CURRENCY_ANALYSIS_UPDATED = new Event<Collection<? extends CurrencyAnalysis>>();
+	static public ModelEvent<Collection<? extends CurrencyAnalysis>> CURRENCY_ANALYSIS_UPDATED = new ModelEvent<Collection<? extends CurrencyAnalysis>>();
 	
-	static public Event<Transaction> TRANSACTION_SELECTION_CHANGED = new Event<Transaction>();
+	static public ModelEvent<Transaction> TRANSACTION_SELECTION_CHANGED = new ModelEvent<Transaction>();
 	
-	static public Event<Symbol> SYMBOL_SELECTION_CHANGED = new Event<Symbol>();
+	static public ModelEvent<Symbol> SYMBOL_SELECTION_CHANGED = new ModelEvent<Symbol>();
 	
 }
