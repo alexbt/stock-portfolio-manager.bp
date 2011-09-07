@@ -7,11 +7,10 @@ import javax.persistence.Query;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.proserus.stocks.model.common.ObservableModel;
 import com.proserus.stocks.model.transactions.Label;
 
 @Singleton
-public class LabelsDao extends ObservableModel {
+public class LabelsDao {
 	@Inject
 	private PersistenceManager persistenceManager;
 

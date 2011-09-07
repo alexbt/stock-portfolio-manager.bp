@@ -6,11 +6,12 @@ import java.util.HashSet;
 import javax.persistence.Query;
 
 import com.google.inject.Inject;
-import com.proserus.stocks.model.common.ObservableModel;
+import com.google.inject.Singleton;
 import com.proserus.stocks.model.symbols.HistoricalPrice;
 import com.proserus.stocks.model.symbols.Symbol;
 
-public class SymbolsDao extends ObservableModel {
+@Singleton
+public class SymbolsDao {
 	@Inject
 	private PersistenceManager persistenceManager;
 
@@ -49,8 +50,6 @@ public class SymbolsDao extends ObservableModel {
 
 	public void remove(Symbol s) {
 		persistenceManager.remove(s);
-		setChanged();
-		notifyObservers();
 	}
 
 	public Symbol add(Symbol symbol) {

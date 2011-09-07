@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import com.proserus.stocks.model.analysis.CurrencyAnalysis;
 import com.proserus.stocks.model.analysis.SymbolAnalysis;
+import com.proserus.stocks.model.symbols.CurrencyEnum;
 import com.proserus.stocks.model.symbols.Symbol;
 import com.proserus.stocks.model.transactions.Label;
 import com.proserus.stocks.model.transactions.Transaction;
@@ -27,5 +28,7 @@ public class SwingEvents {
 	static public ModelEvent<Transaction> TRANSACTION_SELECTION_CHANGED = new ModelEvent<Transaction>();
 	
 	static public ModelEvent<Symbol> SYMBOL_SELECTION_CHANGED = new ModelEvent<Symbol>();
+	
+	static public ModelEvent<CurrencyEnum> CURRENCY_DEFAULT_CHANGED = new ModelEvent<CurrencyEnum>();
 	
 }

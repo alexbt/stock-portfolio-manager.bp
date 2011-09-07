@@ -8,21 +8,11 @@ import org.jfree.data.time.Year;
 import org.joda.time.DateTime;
 
 import com.google.inject.Inject;
-import com.proserus.stocks.model.common.ObservableModel;
 import com.proserus.stocks.model.symbols.Symbol;
 import com.proserus.stocks.model.transactions.Label;
 import com.proserus.stocks.model.transactions.TransactionType;
 
-public class FilterBp extends ObservableModel {
-	@Inject
-	private SymbolsBp symbolsBp;
-	
-	@Inject
-	private TransactionsBp transactionsBp;
-
-	@Inject
-	private LabelsBp labelsBp;
-	
+public class FilterBp {
 	@Inject
 	private AnalysisBp analysisBp;
 
@@ -42,8 +32,6 @@ public class FilterBp extends ObservableModel {
 
 	public void setLabels(Map<String, Label> labels) {
 		this.labels = labels;
-		setChanged();
-		notifyObservers();
 		analysisBp.recalculate(this);
 	}
 
@@ -53,8 +41,6 @@ public class FilterBp extends ObservableModel {
 		} else {
 			this.year = null;
 		}
-		setChanged();
-		notifyObservers();
 		analysisBp.recalculate(this);
 	}
 
@@ -85,8 +71,6 @@ public class FilterBp extends ObservableModel {
 	
 	public void setTransactionType(TransactionType type){
 		this.type = type;
-		setChanged();
-		notifyObservers();
 		analysisBp.recalculate(this);
 	}
 	
@@ -106,8 +90,6 @@ public class FilterBp extends ObservableModel {
 
 	public void removeLabel(Label label) {
 		this.labels.remove(label.getName());
-		setChanged();
-		notifyObservers();
 		analysisBp.recalculate(this);
 	}
 
@@ -117,8 +99,6 @@ public class FilterBp extends ObservableModel {
 
 	public void setSymbol(Symbol symbol) {
 		this.symbol = symbol;
-		setChanged();
-		notifyObservers();
 		analysisBp.recalculate(this);
 	}
 
