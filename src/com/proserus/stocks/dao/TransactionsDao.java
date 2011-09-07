@@ -9,7 +9,7 @@ import org.jfree.data.time.Year;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.proserus.stocks.bp.FilterBp;
+import com.proserus.stocks.bp.Filter;
 import com.proserus.stocks.model.symbols.CurrencyEnum;
 import com.proserus.stocks.model.symbols.Symbol;
 import com.proserus.stocks.model.transactions.Label;
@@ -40,7 +40,7 @@ public class TransactionsDao {
 		return query.getResultList();
 	}
 
-	public Collection<Transaction> getTransactionsBySymbol(Symbol s, FilterBp filter, boolean dateFlag) {
+	public Collection<Transaction> getTransactionsBySymbol(Symbol s, Filter filter, boolean dateFlag) {
 		String str = "SELECT t FROM Transaction t where 1=1";
 		str += getFilterQuery(filter, dateFlag);
 		str += getSymbolQuery(s);
@@ -49,7 +49,7 @@ public class TransactionsDao {
 		return query.getResultList();
 	}
 	
-	public Collection<Transaction> getTransactions(FilterBp filter, boolean dateFlag) {
+	public Collection<Transaction> getTransactions(Filter filter, boolean dateFlag) {
 		String str = "SELECT t FROM Transaction t where 1=1";
 		str += getFilterQuery(filter,dateFlag);
 		str += getAscendingOrder();
@@ -57,7 +57,7 @@ public class TransactionsDao {
 		return query.getResultList();
 	}
 	
-	public Collection<Transaction> getTransactionsByCurrency(CurrencyEnum currency, FilterBp filter, boolean dateFlag) {
+	public Collection<Transaction> getTransactionsByCurrency(CurrencyEnum currency, Filter filter, boolean dateFlag) {
 		String str = "SELECT t FROM Transaction t, Symbol s WHERE symbol_id=s.id";
 		str += getFilterQuery(filter, dateFlag);
 		str += getCurrencyQuery(currency);
@@ -66,7 +66,7 @@ public class TransactionsDao {
 		return query.getResultList();
 	}
 
-	private String getFilterQuery(FilterBp filter, boolean dateFlag) {
+	private String getFilterQuery(Filter filter, boolean dateFlag) {
 		//TODO Manage Date better
 		return getLabelQuery(filter.getLabels()) + getSymbolQuery(filter.getSymbol()) + getTypeQuery(filter.getTransactionType()) + getDateQuery(filter.getYear(),dateFlag);
 	}

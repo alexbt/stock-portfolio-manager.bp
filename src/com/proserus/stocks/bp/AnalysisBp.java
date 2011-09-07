@@ -36,13 +36,13 @@ public class AnalysisBp {
 		//recalculate(new FilterBp());
 	}
 
-	public void recalculate(FilterBp filter) {
+	public void recalculate(Filter filter) {
 		calculatePerSymbol(filter);
 		calculatePerCurrency();
 		calculatePerLabels(filter);
 	}
 
-	private void calculatePerSymbol(FilterBp filter) {
+	private void calculatePerSymbol(Filter filter) {
 		symbolAnalysis = new ArrayList<Analysis>();
 		for (Symbol symbol : symbolsDao.get()) {
 			Collection<Transaction> trans = transactionsDao.getTransactionsBySymbol(symbol, filter, false);
@@ -57,7 +57,7 @@ public class AnalysisBp {
 	}
 	
 	
-	private void calculatePerLabels(FilterBp filter) {
+	private void calculatePerLabels(Filter filter) {
 		if(filter.isLabelsFiltered()){
 			Collection<Transaction> transactions = transactionsDao.getTransactions(filter, false);
 			for(Label label: filter.getLabels()){
@@ -67,7 +67,7 @@ public class AnalysisBp {
 		}
 	}
 
-	private Analysis createAnalysis(Collection<Transaction> trans, FilterBp filter) {
+	private Analysis createAnalysis(Collection<Transaction> trans, Filter filter) {
 		Analysis analysis = new AnalysisImpl();
 		for (SymbolStrategyEnum strategy : SymbolStrategyEnum.values()) {
 			strategy.getStrategy().process(analysis, trans, filter);

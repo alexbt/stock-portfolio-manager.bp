@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 
 import org.joda.time.DateTime;
 
-import com.proserus.stocks.bp.FilterBp;
+import com.proserus.stocks.bp.Filter;
 import com.proserus.stocks.model.analysis.Analysis;
 import com.proserus.stocks.model.transactions.Transaction;
 import com.proserus.stocks.model.transactions.TransactionType;
@@ -13,7 +13,7 @@ import com.proserus.stocks.model.transactions.TransactionType;
 public class DividendSYM extends AbstractStrategyCumulative {
 	
 	@Override
-	public BigDecimal getTransactionValue(Transaction t, FilterBp filter){
+	public BigDecimal getTransactionValue(Transaction t, Filter filter){
 		//TODO Logging
 		if (calculsLog.isInfoEnabled()) {
 			calculsLog.info("--------------------------------------");

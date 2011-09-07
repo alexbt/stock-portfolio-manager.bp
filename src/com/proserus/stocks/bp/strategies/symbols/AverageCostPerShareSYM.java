@@ -5,7 +5,7 @@ import java.util.Collection;
 
 import org.apache.log4j.Logger;
 
-import com.proserus.stocks.bp.FilterBp;
+import com.proserus.stocks.bp.Filter;
 import com.proserus.stocks.model.analysis.Analysis;
 import com.proserus.stocks.model.transactions.Transaction;
 
@@ -13,7 +13,7 @@ public class AverageCostPerShareSYM implements SymbolStrategySYM {
 	protected static Logger calculsLog = Logger.getLogger("calculs." + AverageCostPerShareSYM.class.getName());
 	
 	@Override
-	public void process(Analysis analysis, Collection<Transaction> transactions, FilterBp filter) {
+	public void process(Analysis analysis, Collection<Transaction> transactions, Filter filter) {
 		BigDecimal value = BigDecimal.ZERO;
 		
 		if (calculsLog.isInfoEnabled()) {
