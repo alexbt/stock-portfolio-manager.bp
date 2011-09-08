@@ -8,9 +8,9 @@ import org.jfree.data.time.Year;
 import org.joda.time.DateTime;
 
 import com.google.inject.Singleton;
-import com.proserus.stocks.model.symbols.Symbol;
-import com.proserus.stocks.model.transactions.Label;
-import com.proserus.stocks.model.transactions.TransactionType;
+import com.proserus.stocks.bo.symbols.Symbol;
+import com.proserus.stocks.bo.transactions.Label;
+import com.proserus.stocks.bo.transactions.TransactionType;
 
 @Singleton
 public class Filter{
