@@ -9,8 +9,7 @@ import org.jfree.data.time.Year;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 
-import com.proserus.stocks.bp.Filter;
-
+import com.proserus.stocks.bp.model.Filter;
 
 public class DateUtil {
 

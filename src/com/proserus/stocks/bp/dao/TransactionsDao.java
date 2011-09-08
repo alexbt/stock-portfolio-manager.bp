@@ -15,7 +15,7 @@ import com.proserus.stocks.bo.symbols.Symbol;
 import com.proserus.stocks.bo.transactions.Label;
 import com.proserus.stocks.bo.transactions.Transaction;
 import com.proserus.stocks.bo.transactions.TransactionType;
-import com.proserus.stocks.bp.Filter;
+import com.proserus.stocks.bp.model.Filter;
 
 @Singleton
 public class TransactionsDao {
