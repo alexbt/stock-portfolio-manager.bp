@@ -5,8 +5,10 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.proserus.stocks.model.transactions.Transaction;
-import com.proserus.stocks.utils.BigDecimalUtils;
+import org.apache.commons.lang3.Validate;
+
+import com.proserus.stocks.bo.transactions.Transaction;
+import com.proserus.stocks.bo.utils.BigDecimalUtils;
 
 public class CsvModel {
 	public static final String[] DATE_FORMATS = new String[]{"MMM dd, yyyy","yyyy-MM-dd","yyyyMMdd", "yyyy/MM/dd","MMM dd yyyy","MMM-dd-yyyy","MMM/dd/yyyy"};
@@ -24,6 +26,8 @@ public class CsvModel {
 	}
 
 	public CsvModel(Transaction transaction) {
+		Validate.notNull(transaction);
+		
 		Format formatter = new SimpleDateFormat(DATE_FORMATS[0]);
 		date = formatter.format(transaction.getDate());
 		symbol = transaction.getSymbol().getTicker();
