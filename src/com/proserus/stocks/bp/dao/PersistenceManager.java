@@ -20,14 +20,24 @@ public class PersistenceManager {
 		//EntityManagerFactory emf  = Persistence.createEntityManagerFactory("jpaDemo");
 		//EntityManager em = emf.createEntityManager();
 		EntityTransaction tx = em.getTransaction();
-		tx.begin();
+		boolean wasAlreadyActive = false;
+		if(tx.isActive()){
+			em.joinTransaction();
+			wasAlreadyActive = true;
+		}else{
+			tx.begin();
+		}
+		
 		try{
 			em.persist(o);
 		}catch(EntityExistsException e){
 			em.refresh(o);
 		}
 		
-		tx.commit();
+		if(!wasAlreadyActive){
+			tx.commit();
+		}
+		
 		//em.close();
 		return o;
 		//emf.close();

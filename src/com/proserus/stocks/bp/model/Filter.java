@@ -7,6 +7,8 @@ import java.util.Map;
 import org.jfree.data.time.Year;
 import org.joda.time.DateTime;
 
+import com.proserus.stocks.bo.symbols.CurrencyEnum;
+import com.proserus.stocks.bo.symbols.SectorEnum;
 import com.proserus.stocks.bo.symbols.Symbol;
 import com.proserus.stocks.bo.transactions.Label;
 import com.proserus.stocks.bo.transactions.TransactionType;
@@ -17,6 +19,26 @@ public class Filter{
 	private Year year = null;
 	
 	private TransactionType type = null;
+	
+	private SectorEnum sector = null;
+	
+	public SectorEnum getSector() {
+    	return sector;
+    }
+
+	public void setSector(SectorEnum sector) {
+    	this.sector = sector;
+    }
+
+	public CurrencyEnum getCurrency() {
+    	return currency;
+    }
+
+	public void setCurrency(CurrencyEnum currency) {
+    	this.currency = currency;
+    }
+
+	private CurrencyEnum currency = null;
 
 	public Collection<Label> getLabels() {
 		return labels.values();
@@ -43,7 +65,7 @@ public class Filter{
 	}
 	
 	public boolean isFiltered(){
-		return isDateFiltered() || isSymbolFiltered() || isLabelsFiltered() || isTypeFiltered();
+		return isDateFiltered() || isSymbolFiltered() || isLabelsFiltered() || isTypeFiltered() || isCurrencyFiltered() || isSectorFiltered();
 	}
 	
 	public boolean isSymbolFiltered() {
@@ -52,6 +74,14 @@ public class Filter{
 	
 	public boolean isTypeFiltered() {
 		return type != null;
+	}
+	
+	public boolean isSectorFiltered() {
+		return sector != null;
+	}
+	
+	public boolean isCurrencyFiltered() {
+		return currency != null;
 	}
 	
 	public boolean isLabelsFiltered() {
