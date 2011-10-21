@@ -20,7 +20,34 @@ public class CsvModel {
 	private String labels = "";
 	private String type;
 	private String date;
+	private String currency;
+	private String sector;
+	private String customPrices;
 	
+	public String getCustomPrices() {
+    	return customPrices;
+    }
+
+	public void setCustomPrices(String customPrices) {
+    	this.customPrices = customPrices;
+    }
+
+	public String getCurrency() {
+    	return currency;
+    }
+
+	public void setCurrency(String currency) {
+    	this.currency = currency;
+    }
+
+	public String getSector() {
+    	return sector;
+    }
+
+	public void setSector(String sector) {
+    	this.sector = sector;
+    }
+
 	public CsvModel() {
 
 	}
@@ -38,6 +65,9 @@ public class CsvModel {
 		/** cash value here */
 		commission = BigDecimalUtils.getString(transaction.getCommission());
 		labels = transaction.getLabelsValues().toString();
+		currency = transaction.getSymbol().getCurrency().name();
+		sector = transaction.getSymbol().getSector().name();
+		customPrices = String.valueOf(transaction.getSymbol().isCustomPriceFirst());
 	}
 	
 	public String getDate() {
@@ -114,7 +144,7 @@ public class CsvModel {
 	}
 
 	static public String[] getHeaders() {
-		return new String[] { "Name", "Symbol", "Type", "Date", "Quantity", "Price", "Commission", "Labels" };
+		return new String[] { "Name", "Symbol", "Type", "Date", "Quantity", "Price", "Commission", "Currency", "Sector", "CustomPrices","Labels" };
 	}
 	
 	static public Map<String,String> getColumnMapping() {
@@ -150,6 +180,14 @@ public class CsvModel {
 		mapping.put("Shares","Quantity"); //Google format
 		mapping.put("﻿Shares","Quantity");//Google format when 1st column
 		
+		mapping.put("Sector","Sector");
+		mapping.put("Industry","Sector");
+		mapping.put("﻿Sector","Sector");//Google format when 1st column
+		
+		mapping.put("Currency","Currency");
+		mapping.put("﻿Currency","Currency");//Google format when 1st column
+		
+		
 		mapping.put("Price","Price");
 		mapping.put("Price Per Share","Price");
 		mapping.put("PricePerShare","Price");
@@ -161,6 +199,13 @@ public class CsvModel {
 		mapping.put("Commission","Commission");
 		mapping.put("﻿Commission","Commission");//Google format when 1st column
 		
+		mapping.put("Custom Prices","CustomPrices");
+		mapping.put("CustomPrices","CustomPrices");
+		mapping.put("Custom Price","CustomPrices");
+		mapping.put("Custom","CustomPrices");
+		mapping.put("Use Custom Prices","CustomPrices");
+		mapping.put("User Prices","CustomPrices");
+		
 		mapping.put("Labels","Labels");
 		mapping.put("Other","Labels");
 		mapping.put("Notes","Labels");//Google format
@@ -169,7 +214,7 @@ public class CsvModel {
 	}
 
 	public String[] getFields() {
-		return new String[] { getName(), getSymbol(), getType(), getDate(), getQuantity(), getPrice(), getCommission(), getLabels() };
+		return new String[] { getName(), getSymbol(), getType(), getDate(), getQuantity(), getPrice(), getCommission(), getCurrency(), getSector(), getCustomPrices(), getLabels() };
 	}
 
 }

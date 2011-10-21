@@ -16,63 +16,76 @@ public class PersistenceManager {
 
 	public Object persist(Object o) {
 		Validate.notNull(o);
-		
-		//EntityManagerFactory emf  = Persistence.createEntityManagerFactory("jpaDemo");
-		//EntityManager em = emf.createEntityManager();
+
+		// EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpaDemo");
+		// EntityManager em = emf.createEntityManager();
 		EntityTransaction tx = em.getTransaction();
 		boolean wasAlreadyActive = false;
-		if(tx.isActive()){
+		if (tx.isActive()) {
 			em.joinTransaction();
 			wasAlreadyActive = true;
-		}else{
+		} else {
 			tx.begin();
 		}
-		
-		try{
+
+		try {
 			em.persist(o);
-		}catch(EntityExistsException e){
+		} catch (EntityExistsException e) {
 			em.refresh(o);
 		}
-		
-		if(!wasAlreadyActive){
+
+		if (!wasAlreadyActive) {
 			tx.commit();
 		}
-		
-		//em.close();
+
+		// em.close();
 		return o;
-		//emf.close();
+		// emf.close();
 	}
-	
-	
-	public void remove(Object o){
+
+	public void remove(Object o) {
 		Validate.notNull(o);
-		
-		//EntityManagerFactory emf  = Persistence.createEntityManagerFactory("jpaDemo");
-		//EntityManager em = emf.createEntityManager();
+
+		// EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpaDemo");
+		// EntityManager em = emf.createEntityManager();
 		EntityTransaction tx = em.getTransaction();
-		if(!tx.isActive()){
+		if (!tx.isActive()) {
 			tx.begin();
 		}
 		em.remove(o);
 		tx.commit();
-		//em.close();
-		//emf.close();
+		// em.close();
+		// emf.close();
 	}
-	
-	public EntityManager getEntityManager(){
-		if(em==null){
-			try{
+
+	public EntityManager getEntityManager() {
+		if (em == null) {
+			try {
 				em = Persistence.createEntityManagerFactory("jpaDemo").createEntityManager();
 			} catch (Throwable e) {
-				//ignore
+				// ignore
 			}
 		}
 		return em;
 	}
-	
-	public void close(){
-		em.close();
+
+	public void close() {
+		try {
+			if (em.getTransaction().isActive()) {
+				assert false : "Should never be here... but just in case";
+				if (em.getTransaction().getRollbackOnly()) {
+					em.getTransaction().rollback();
+				} else {
+					em.getTransaction().commit();
+				}
+			}
+			em.getTransaction().begin();
+
+			em.createNativeQuery("SHUTDOWN").executeUpdate();
+			em.getTransaction().commit();
+		} finally {
+			em.close();
+		}
 	}
-	
-	
+
 }

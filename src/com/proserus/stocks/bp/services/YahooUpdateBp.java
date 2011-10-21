@@ -103,7 +103,7 @@ public class YahooUpdateBp implements OnlineUpdateBp {
 							s.setName(str[1]);
 						}
 						//TODO Manage Date better
-						s.setPrice(new BigDecimal(Double.parseDouble(str[2])), DateUtil.getCurrentYear());
+						s.setPrice(new BigDecimal(Double.parseDouble(str[2])), DateUtil.getCurrentYear());//FIXME Year JFree
 					}
 				}
 			} catch (MalformedURLException e) {
@@ -112,7 +112,7 @@ public class YahooUpdateBp implements OnlineUpdateBp {
 		}
 	}
 
-	public Collection<HistoricalPrice> retrieveHistoricalPrices(Symbol symbol, Year year) {
+	public Collection<HistoricalPrice> retrieveHistoricalPrices(Symbol symbol, Year year) {//FIXME Year JFree
 		Validate.notNull(symbol);
 		Validate.notNull(year);
 		

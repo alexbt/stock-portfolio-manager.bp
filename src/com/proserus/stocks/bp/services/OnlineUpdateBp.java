@@ -13,6 +13,6 @@ public interface OnlineUpdateBp {
 
 	void retrieveCurrentPrice(Collection<Symbol> symbols);
 
-	Collection<HistoricalPrice> retrieveHistoricalPrices(Symbol symbol, Year year);
+	Collection<HistoricalPrice> retrieveHistoricalPrices(Symbol symbol, Year year);//FIXME Year JFree
 
 }
