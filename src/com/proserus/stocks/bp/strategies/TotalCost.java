@@ -26,6 +26,7 @@ public class TotalCost extends AbstractStrategyCumulative {
 		if (t.getType().equals(TransactionType.BUY)) {
 			value = t.getQuantity();
 			if (filter.isDateFiltered() && filter.isFilteredYearAfter(new DateTime(t.getDate()))) {
+				//FIXME Year JFree
 				HistoricalPrice h = t.getSymbol().getPrice((Year)DateUtil.getYearForUsablePrice(filter).previous());
 				if (t.getSymbol().isCustomPriceFirst()) {
 					value = value.multiply(h.getCustomPrice());

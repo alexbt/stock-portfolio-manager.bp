@@ -83,6 +83,7 @@ public class TransactionsDao {
 	private String getFilterQuery(Filter filter, boolean dateFlag) {
 		Validate.notNull(filter);
 		// TODO Manage Date better
+		//FIXME Year JFree
 		return getLabelQuery(filter.getLabels()) + getSymbolQuery(filter.getSymbol()) + getTypeQuery(filter.getTransactionType())
 		        + getDateQuery(filter.getYear(), dateFlag) + getCurrencyQuery(filter.getCurrency()) + getSectorQuery(filter.getSector());
 	}

@@ -21,6 +21,8 @@ import au.com.bytecode.opencsv.bean.HeaderColumnNameTranslateMappingStrategy;
 
 import com.google.inject.Inject;
 import com.proserus.stocks.bo.common.BoBuilder;
+import com.proserus.stocks.bo.symbols.CurrencyEnum;
+import com.proserus.stocks.bo.symbols.SectorEnum;
 import com.proserus.stocks.bo.symbols.Symbol;
 import com.proserus.stocks.bo.transactions.Label;
 import com.proserus.stocks.bo.transactions.Transaction;
@@ -33,20 +35,20 @@ public class ImportExportBp {
 	private static Logger logger = Logger.getLogger(ImportExportBp.class.getName());
 	@Inject
 	private SymbolsBp symbolsBp;
-	
+
 	@Inject
 	private TransactionsBp transactionsBp;
-	
+
 	@Inject
 	private BoBuilder boBuilder;
-	
+
 	@Inject
 	private LabelsBp labelsBp;
 
 	public ByteArrayOutputStream exportTransactions(Collection<Transaction> transactions) throws IOException {
 		Validate.notNull(transactions);
 		Validate.notEmpty(transactions);
-		
+
 		ByteArrayOutputStream b = new ByteArrayOutputStream();
 		CSVWriter writer = new CSVWriter(new OutputStreamWriter(b), ',');
 		writer.writeNext(CsvModel.getHeaders());
@@ -58,9 +60,9 @@ public class ImportExportBp {
 		return b;
 	}
 
-	public void importTransactions(File file) throws FileNotFoundException {
+	public void importTransactions(File file, CurrencyEnum defaultCurrency) throws FileNotFoundException {
 		Validate.notNull(file);
-		
+
 		// HeaderColumnNameMappingStrategy<CsvModel> strat = new HeaderColumnNameMappingStrategy<CsvModel>();
 		HeaderColumnNameTranslateMappingStrategy<CsvModel> strat2 = new HeaderColumnNameTranslateMappingStrategy<CsvModel>();
 		strat2.setColumnMapping(CsvModel.getColumnMapping());
@@ -72,24 +74,27 @@ public class ImportExportBp {
 		for (CsvModel model : list) {
 			Symbol s = boBuilder.getSymbol();
 			Transaction transaction = boBuilder.getTransaction();
-			
 
 			if (setSymbol(model, s) && setDate(model, transaction) && setQuantity(model, transaction) && setType(model, transaction)
 			        && setPrice(model, transaction)) {
+
+				setName(model, s);
+				setCurrency(model, s, defaultCurrency);
+				setSector(model, s);
+				setCustomPrice(model, s);
 				s = symbolsBp.add(s);
 				transaction.setSymbol(s);
-				setName(model, s);
-				setLabels(model, transaction);
 				setCommission(model, transaction);
+				setLabels(model, transaction);
 				transactionsBp.add(transaction);
-			} 
+			}
 		}
 	}
 
 	private boolean setLabels(CsvModel model, Transaction transaction) {
 		Validate.notNull(model);
 		Validate.notNull(transaction);
-		
+
 		if (model.getLabels() != null && !model.getLabels().isEmpty()) {
 			for (String str : model.getLabels().replaceFirst("\\[", "").replaceAll("\\]", "").split(",")) {
 				if (!str.isEmpty()) {
@@ -106,7 +111,7 @@ public class ImportExportBp {
 	private boolean setCommission(CsvModel model, Transaction transaction) {
 		Validate.notNull(model);
 		Validate.notNull(transaction);
-		
+
 		if (model.getCommission() != null && !model.getCommission().isEmpty()) {
 			transaction.setCommission(BigDecimalUtils.stringToBigDecimal(model.getCommission()));
 		} else {
@@ -119,7 +124,7 @@ public class ImportExportBp {
 	private boolean setPrice(CsvModel model, Transaction transaction) {
 		Validate.notNull(model);
 		Validate.notNull(transaction);
-		
+
 		if (model.getPrice() != null && !model.getPrice().isEmpty()) {
 			transaction.setPrice(BigDecimalUtils.stringToBigDecimal(model.getPrice()));
 			return true;
@@ -132,7 +137,7 @@ public class ImportExportBp {
 	private boolean setType(CsvModel model, Transaction transaction) {
 		Validate.notNull(model);
 		Validate.notNull(transaction);
-		
+
 		if (model.getType() != null && !model.getType().isEmpty()) {
 			transaction.setQuantity(BigDecimalUtils.stringToBigDecimal(model.getQuantity()));
 			try {
@@ -153,7 +158,7 @@ public class ImportExportBp {
 	private boolean setQuantity(CsvModel model, Transaction transaction) {
 		Validate.notNull(model);
 		Validate.notNull(transaction);
-		
+
 		if (model.getQuantity() != null && !model.getQuantity().isEmpty()) {
 			transaction.setQuantity(BigDecimalUtils.stringToBigDecimal(model.getQuantity()));
 			return true;
@@ -166,7 +171,7 @@ public class ImportExportBp {
 	private boolean setDate(CsvModel model, Transaction transaction) {
 		Validate.notNull(model);
 		Validate.notNull(transaction);
-		
+
 		if (model.getDate() != null && !model.getDate().isEmpty()) {
 			int i = 0;
 			Date date = null;
@@ -189,7 +194,7 @@ public class ImportExportBp {
 	private boolean setName(CsvModel model, Symbol s) {
 		Validate.notNull(model);
 		Validate.notNull(s);
-		
+
 		if (model.getName() != null && !model.getName().isEmpty()) {
 			s.setName(model.getName());
 		} else {
@@ -198,10 +203,53 @@ public class ImportExportBp {
 		return true;
 	}
 
+	private boolean setCurrency(CsvModel model, Symbol s, CurrencyEnum defaultCurrency) {
+		Validate.notNull(model);
+		Validate.notNull(s);
+
+		if (model.getCurrency() != null && !model.getCurrency().isEmpty()) {
+			try {
+				s.setCurrency(CurrencyEnum.valueOf(model.getCurrency()));
+			} catch (IllegalArgumentException e) {
+
+			}
+		}
+		if (s.getCurrency() == null) {
+			s.setCurrency(defaultCurrency);
+			logger.debug("Using default currency: continuing");
+		}
+		return true;
+	}
+
+	private boolean setSector(CsvModel model, Symbol s) {
+		Validate.notNull(model);
+		Validate.notNull(s);
+
+		if (model.getSector() != null && !model.getSector().isEmpty()) {
+			try {
+				s.setSector(SectorEnum.valueOf(model.getSector()));
+				return true;
+			} catch (IllegalArgumentException e) {
+
+			}
+		}
+		s.setSector(SectorEnum.UNKNOWN);
+		return true;
+	}
+
+	private boolean setCustomPrice(CsvModel model, Symbol s) {
+		Validate.notNull(model);
+		Validate.notNull(s);
+
+		s.setCustomPriceFirst(Boolean.parseBoolean(model.getCustomPrices()));
+		
+		return true;
+	}
+
 	private boolean setSymbol(CsvModel model, Symbol s) {
 		Validate.notNull(model);
 		Validate.notNull(s);
-		
+
 		if (model.getSymbol() != null && !model.getSymbol().isEmpty()) {
 			s.setTicker(model.getSymbol());
 			return true;

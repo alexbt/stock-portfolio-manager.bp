@@ -39,7 +39,7 @@ public class DateUtil {
 		return getCurrentDate();
 	}
 	
-	static public Year getFilteredYear(DateTime date, Filter filter){
+	static public Year getFilteredYear(DateTime date, Filter filter){//FIXME Year JFree
 		return getFilteredYear(new Year(date.getYear()),filter);
 	}
 	static public Year getFilteredYear(Year year, Filter filter){

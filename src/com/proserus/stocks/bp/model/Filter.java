@@ -16,7 +16,7 @@ import com.proserus.stocks.bo.transactions.TransactionType;
 public class Filter{
 	private Map<String, Label> labels = new HashMap<String, Label>();
 
-	private Year year = null;
+	private Year year = null;//FIXME Year JFree
 	
 	private TransactionType type = null;
 	

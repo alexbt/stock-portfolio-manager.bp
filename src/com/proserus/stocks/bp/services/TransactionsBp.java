@@ -24,7 +24,7 @@ public class TransactionsBp{
 	@Inject
 	TransactionsDao transactionsDao;
 
-	private Map<Integer, Integer> years = new HashMap<Integer, Integer>();
+	private Map<Integer, Integer> years = new HashMap<Integer, Integer>();//FIXME Year JFree
 	private int minYear = 99999;
 	private int maxYear = -1;
 

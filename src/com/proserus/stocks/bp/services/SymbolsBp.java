@@ -78,7 +78,7 @@ public class SymbolsBp {
 	public void updatePrices(Symbol symbol) {
 		Validate.notNull(symbol);
 		// TODO Manage Date better
-		symbol.setPrice(onlineUpdateBp.retrieveCurrentPrice(symbol), DateUtil.getCurrentYear());
+		symbol.setPrice(onlineUpdateBp.retrieveCurrentPrice(symbol), DateUtil.getCurrentYear());//FIXME Year JFree
 		symbolsDao.updatePrices(symbol);
 	}
 
