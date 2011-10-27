@@ -45,6 +45,29 @@ public class TransactionsDao {
 		Query query = persistenceManager.getEntityManager().createQuery(str);
 		return query.getResultList();
 	}
+	
+	public Collection<Transaction> getTransactionsBySector(SectorEnum sector, Filter filter, boolean dateFlag) {
+		Validate.notNull(sector);
+		Validate.notNull(filter);
+
+		String str = "SELECT t FROM Transaction t, Symbol s WHERE symbol_id=s.id";
+		str += getFilterQuery(filter, dateFlag);
+		str += getSectorQuery(sector);
+		str += getAscendingOrder();
+		Query query = persistenceManager.getEntityManager().createQuery(str);
+		return query.getResultList();
+	}
+	
+	public Collection<Transaction> getTransactionsByYear(Year year, Filter filter, boolean dateFlag) {
+		Validate.notNull(filter);
+
+		String str = "SELECT t FROM Transaction t, Symbol s WHERE symbol_id=s.id";
+		str += getFilterQuery(filter, dateFlag);
+		str += getDateQuery(year, true);
+		str += getAscendingOrder();
+		Query query = persistenceManager.getEntityManager().createQuery(str);
+		return query.getResultList();
+	}
 
 	public Collection<Transaction> getTransactionsBySymbol(Symbol s, Filter filter, boolean dateFlag) {
 		Validate.notNull(s);
@@ -98,6 +121,15 @@ public class TransactionsDao {
 		}
 		return query;
 	}
+	
+	private String getLabelQuery(Label label) {
+
+		String query = "";
+		if (label != null) {
+			query += " AND " + label.getId() + " " + Transaction.IN_LABELS;
+		}
+		return query;
+	}
 
 	private String getSymbolQuery(Symbol symbol) {
 
@@ -107,7 +139,7 @@ public class TransactionsDao {
 		}
 		return query;
 	}
-
+	
 	private String getTypeQuery(TransactionType type) {
 		String query = "";
 		if (type != null) {
@@ -160,6 +192,18 @@ public class TransactionsDao {
 
 		Query query = persistenceManager.getEntityManager().createNamedQuery("transaction.findAllByLabel");
 		query.setParameter("label", label);
+		return query.getResultList();
+	}
+	
+	public Collection<Transaction> getTransactionsByLabel(Label label, Filter filter, boolean dateFlag) {
+		Validate.notNull(label);
+		Validate.notNull(filter);
+
+		String str = "SELECT t FROM Transaction t, Symbol s WHERE symbol_id=s.id";
+		str += getFilterQuery(filter, dateFlag);
+		str += getLabelQuery(label);
+		str += getAscendingOrder();
+		Query query = persistenceManager.getEntityManager().createQuery(str);
 		return query.getResultList();
 	}
 
