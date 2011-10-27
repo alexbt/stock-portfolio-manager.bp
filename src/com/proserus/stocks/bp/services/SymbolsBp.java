@@ -14,6 +14,7 @@ import com.google.inject.Singleton;
 import com.proserus.stocks.bo.symbols.HistoricalPrice;
 import com.proserus.stocks.bo.symbols.Symbol;
 import com.proserus.stocks.bp.dao.SymbolsDao;
+import com.proserus.stocks.bp.model.Filter;
 import com.proserus.stocks.bp.utils.DateUtil;
 
 @Singleton
@@ -43,8 +44,8 @@ public class SymbolsBp {
 		return false;
 	}
 
-	public Collection<Symbol> get() {
-		return symbolsDao.get();
+	public Collection<Symbol> get(Filter filter) {
+		return symbolsDao.get(filter);
 //		Query query = em.createNamedQuery("symbol.findAll");
 //		return new HashSet<Symbol>(query.getResultList());
 	}
@@ -56,16 +57,16 @@ public class SymbolsBp {
 		return true;
 	}
 
-	public void updatePrices() {
-		Collection<Symbol> symbols = get();
+	public void updatePrices(Filter filter) {
+		Collection<Symbol> symbols = get(filter);
 		onlineUpdateBp.retrieveCurrentPrice(symbols);
 		for(Symbol symbol: symbols){
 			symbolsDao.updatePrices(symbol);
 		}
 	}
 
-	public void updateHistoricalPrices() {
-		for (Symbol symbol : get()) {
+	public void updateHistoricalPrices(Filter filter) {
+		for (Symbol symbol : get(filter)) {
 			updateHistoricalPrices(symbol);
 		}
 	}
