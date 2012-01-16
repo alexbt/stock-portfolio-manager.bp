@@ -32,6 +32,7 @@ public class YahooUpdateBp implements OnlineUpdateBp {
 	private static final String DOT_UN = "\\.un";
 
 	private static final String QUOTE = "\",|\"";
+  //http://www.gummy-stuff.org/Yahoo-data.htm
 	// http://quote.yahoo.com/d/quotes.csv?s=usdcad=X&f=nl1&e=.csv
 	private static String URL_START = "http://finance.yahoo.com/d/quotes.csv?s=";
 	private static String URL_END = "&f=nl1&e=.csv";
