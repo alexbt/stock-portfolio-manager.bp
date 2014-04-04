@@ -75,7 +75,6 @@ public class YahooUpdateBp implements OnlineUpdateBp {
 
 	public void retrieveCurrentPrice(Collection<Symbol> symbols) {
 		Validate.notNull(symbols);
-		Validate.notEmpty(symbols);
 		
 		String listOfSymbols = "";
 		for (Symbol s : symbols) {

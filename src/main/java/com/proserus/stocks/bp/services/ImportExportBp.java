@@ -32,7 +32,7 @@ import com.proserus.stocks.bp.model.CsvModel;
 import com.proserus.stocks.bp.utils.DateUtil;
 
 public class ImportExportBp {
-	private static Logger logger = Logger.getLogger(ImportExportBp.class.getName());
+	private final static Logger LOGGER = Logger.getLogger(ImportExportBp.class.getName());
 	@Inject
 	private SymbolsBp symbolsBp;
 
@@ -116,7 +116,7 @@ public class ImportExportBp {
 			transaction.setCommission(BigDecimalUtils.stringToBigDecimal(model.getCommission()));
 		} else {
 			transaction.setCommission(BigDecimal.ZERO);
-			logger.debug("No commission found during import: Continuing");
+			LOGGER.debug("No commission found during import: Continuing");
 		}
 		return true;
 	}
@@ -129,7 +129,7 @@ public class ImportExportBp {
 			transaction.setPrice(BigDecimalUtils.stringToBigDecimal(model.getPrice()));
 			return true;
 		} else {
-			logger.debug("Unable to import transaction: No price found");
+			LOGGER.debug("Unable to import transaction: No price found");
 		}
 		return false;
 	}
@@ -145,11 +145,11 @@ public class ImportExportBp {
 				transaction.setType(type);
 				return true;
 			} catch (IllegalArgumentException e) {
-				logger.debug("Unable to import transaction: No valid type found");
+				LOGGER.debug("Unable to import transaction: No valid type found");
 
 			}
 		} else {
-			logger.debug("Unable to import transaction: No type found");
+			LOGGER.debug("Unable to import transaction: No type found");
 		}
 
 		return false;
@@ -163,7 +163,7 @@ public class ImportExportBp {
 			transaction.setQuantity(BigDecimalUtils.stringToBigDecimal(model.getQuantity()));
 			return true;
 		} else {
-			logger.debug("Unable to import transaction: No quantity found");
+			LOGGER.debug("Unable to import transaction: No quantity found");
 		}
 		return false;
 	}
@@ -185,7 +185,7 @@ public class ImportExportBp {
 				return true;
 			} else {
 				transaction.setDate(new Date());
-				logger.debug("No valid date found during import: continuing with today's date");
+				LOGGER.debug("No valid date found during import: continuing with today's date");
 			}
 		}
 		return false;
@@ -198,7 +198,7 @@ public class ImportExportBp {
 		if (model.getName() != null && !model.getName().isEmpty()) {
 			s.setName(model.getName());
 		} else {
-			logger.debug("No name found during import: continuing");
+			LOGGER.debug("No name found during import: continuing");
 		}
 		return true;
 	}
@@ -216,7 +216,7 @@ public class ImportExportBp {
 		}
 		if (s.getCurrency() == null) {
 			s.setCurrency(defaultCurrency);
-			logger.debug("Using default currency: continuing");
+			LOGGER.debug("Using default currency: continuing");
 		}
 		return true;
 	}
@@ -254,7 +254,7 @@ public class ImportExportBp {
 			s.setTicker(model.getSymbol());
 			return true;
 		} else {
-			logger.debug("Unable to import transaction: No symbol found");
+			LOGGER.debug("Unable to import transaction: No symbol found");
 		}
 		return false;
 	}
