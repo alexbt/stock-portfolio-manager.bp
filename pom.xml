@@ -6,7 +6,7 @@
     <groupId>com.proserus.stock</groupId>
     <artifactId>stockportfolioparent</artifactId>
     <version>${version}</version>
-    <relativePath>../StockPortfolioLIBS</relativePath>
+    <relativePath>../stockportfolio-parent</relativePath>
 </parent>
 
 	<artifactId>stockportfoliobp</artifactId>
@@ -15,6 +15,7 @@
 
 	<properties>
 		<jdk.version>1.6</jdk.version>
+		<folder.bp>${project.basedir}</folder.bp>
 	</properties>
 
 	<repositories>
@@ -32,7 +33,6 @@
 				<artifactId>maven-jar-plugin</artifactId>
 				<version>2.3</version>
 				<configuration>
-<!-- 				<outputDirectory>${buildDir}</outputDirectory> -->
 					<archive>
 						<manifest>
 							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
