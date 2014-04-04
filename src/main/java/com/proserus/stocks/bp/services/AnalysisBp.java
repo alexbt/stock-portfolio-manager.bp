@@ -81,7 +81,7 @@ public class AnalysisBp {
 
 		sectorAnalysis = new ArrayList<Analysis>();
 
-		for (SectorEnum sector : SectorEnum.values()) {
+		for (SectorEnum sector : SectorEnum.retrieveSortedSectors()) {
 			Collection<Transaction> trans = transactionsDao.getTransactionsBySector(sector, filter, false);
 			if (trans.size() > 0) {
 				Analysis analysis = createAnalysis(trans, filter);
