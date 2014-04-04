@@ -13,11 +13,6 @@
 	<name>Stock Portfolio Manager - BP</name>
 	<description>Stock Portfolio Manager - Business Process</description>
 
-	<properties>
-		<jdk.version>1.6</jdk.version>
-		<folder.bp>${project.basedir}</folder.bp>
-	</properties>
-
 	<repositories>
 		<repository>
 			<id>atlassian</id>
