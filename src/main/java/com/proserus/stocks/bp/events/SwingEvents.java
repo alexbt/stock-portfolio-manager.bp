@@ -25,15 +25,15 @@ public class SwingEvents {
 	
 	static public ModelEvent<Collection<Label>> LABELS_UPDATED = new ModelEvent<Collection<Label>>();
 	
-	static public ModelEvent<Collection<? extends SymbolAnalysis>> SYMBOL_ANALYSIS_UPDATED = new ModelEvent<Collection<? extends SymbolAnalysis>>();
+	static public ModelEvent<Collection<SymbolAnalysis>> SYMBOL_ANALYSIS_UPDATED = new ModelEvent<Collection<SymbolAnalysis>>();
 	
-	static public ModelEvent<Collection<? extends CurrencyAnalysis>> CURRENCY_ANALYSIS_UPDATED = new ModelEvent<Collection<? extends CurrencyAnalysis>>();
+	static public ModelEvent<Collection<CurrencyAnalysis>> CURRENCY_ANALYSIS_UPDATED = new ModelEvent<Collection<CurrencyAnalysis>>();
 	
-	static public ModelEvent<Collection<? extends SectorAnalysis>> SECTOR_ANALYSIS_UPDATED = new ModelEvent<Collection<? extends SectorAnalysis>>();
+	static public ModelEvent<Collection<SectorAnalysis>> SECTOR_ANALYSIS_UPDATED = new ModelEvent<Collection<SectorAnalysis>>();
 	
-	static public ModelEvent<Collection<? extends LabelAnalysis>> LABEL_ANALYSIS_UPDATED = new ModelEvent<Collection<? extends LabelAnalysis>>();
+	static public ModelEvent<Collection<LabelAnalysis>> LABEL_ANALYSIS_UPDATED = new ModelEvent<Collection<LabelAnalysis>>();
 	
-	static public ModelEvent<Collection<? extends YearAnalysis>> YEAR_ANALYSIS_UPDATED = new ModelEvent<Collection<? extends YearAnalysis>>();
+	static public ModelEvent<Collection<YearAnalysis>> YEAR_ANALYSIS_UPDATED = new ModelEvent<Collection<YearAnalysis>>();
 	
 	static public ModelEvent<Transaction> TRANSACTION_SELECTION_CHANGED = new ModelEvent<Transaction>();
 	

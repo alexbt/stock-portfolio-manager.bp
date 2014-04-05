@@ -36,7 +36,10 @@ public class TotalCost extends AbstractStrategyCumulative {
 			} else {
 				value = value.multiply(t.getPrice());
 			}
+			
+			value = value.add(t.getCommission());
 		}
+		
 		return value;
 	}
 

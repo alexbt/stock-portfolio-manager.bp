@@ -19,12 +19,14 @@ public class LabelsDao {
 	public LabelsDao() {
 	}
 	
+	@SuppressWarnings("unchecked")
 	public Collection<Label> get() {
 		EntityManager em  = persistenceManager.getEntityManager();
 		Query query = em.createNamedQuery("label.findAll");
 		return query.getResultList();
 	}
 	
+	@SuppressWarnings("unchecked")
 	public Collection<Label> getSubLabels(Collection<Label> labels) {
 		Validate.notNull(labels);
 		Validate.notEmpty(labels);
