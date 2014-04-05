@@ -30,12 +30,14 @@ public class TransactionsDao {
 		return t;
 	}
 
+	@SuppressWarnings("unchecked")
 	public Collection<Transaction> getTransactions() {
 		String str = "SELECT t FROM Transaction t where 1=1";
 		Query query = persistenceManager.getEntityManager().createQuery(str);
 		return query.getResultList();
 	}
 
+	@SuppressWarnings("unchecked")
 	public Collection<Transaction> getTransactionsBySymbol(Symbol s, boolean dateFlag) {
 		Validate.notNull(s);
 
@@ -46,6 +48,7 @@ public class TransactionsDao {
 		return query.getResultList();
 	}
 	
+	@SuppressWarnings("unchecked")
 	public Collection<Transaction> getTransactionsBySector(SectorEnum sector, Filter filter, boolean dateFlag) {
 		Validate.notNull(sector);
 		Validate.notNull(filter);
@@ -58,6 +61,7 @@ public class TransactionsDao {
 		return query.getResultList();
 	}
 	
+	@SuppressWarnings("unchecked")
 	public Collection<Transaction> getTransactionsByYear(Year year, Filter filter, boolean dateFlag) {
 		Validate.notNull(filter);
 
@@ -69,6 +73,7 @@ public class TransactionsDao {
 		return query.getResultList();
 	}
 
+	@SuppressWarnings("unchecked")
 	public Collection<Transaction> getTransactionsBySymbol(Symbol s, Filter filter, boolean dateFlag) {
 		Validate.notNull(s);
 		Validate.notNull(filter);
@@ -81,6 +86,7 @@ public class TransactionsDao {
 		return query.getResultList();
 	}
 
+	@SuppressWarnings("unchecked")
 	public Collection<Transaction> getTransactions(Filter filter, boolean dateFlag) {
 		Validate.notNull(filter);
 
@@ -91,6 +97,7 @@ public class TransactionsDao {
 		return query.getResultList();
 	}
 
+	@SuppressWarnings("unchecked")
 	public Collection<Transaction> getTransactionsByCurrency(CurrencyEnum currency, Filter filter, boolean dateFlag) {
 		Validate.notNull(currency);
 		Validate.notNull(filter);
@@ -187,6 +194,7 @@ public class TransactionsDao {
 		return query;
 	}
 
+	@SuppressWarnings("unchecked")
 	public Collection<Transaction> getTransactionsByLabel(Label label) {
 		Validate.notNull(label);
 
@@ -195,6 +203,7 @@ public class TransactionsDao {
 		return query.getResultList();
 	}
 	
+	@SuppressWarnings("unchecked")
 	public Collection<Transaction> getTransactionsByLabel(Label label, Filter filter, boolean dateFlag) {
 		Validate.notNull(label);
 		Validate.notNull(filter);

@@ -23,6 +23,7 @@ public class SymbolsDao {
 	public SymbolsDao() {
 	}
 
+	@SuppressWarnings("unchecked")
 	public Collection<Symbol> get(Filter filter) {
 		String str = "SELECT s FROM Symbol s WHERE 1=1";
 		str += getFilterQuery(filter);

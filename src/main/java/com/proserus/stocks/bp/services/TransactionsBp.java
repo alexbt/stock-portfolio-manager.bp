@@ -1,5 +1,6 @@
 package com.proserus.stocks.bp.services;
 
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -32,11 +33,13 @@ public class TransactionsBp{
 		Validate.notNull(t);
 		
 		//TODO Manage Date better
-		if (!years.containsKey(t.getDate().getYear())) {
-			years.put(t.getDate().getYear(), t.getDate().getYear());
+		Calendar c = Calendar.getInstance();
+		c.setTime(t.getDate());
+		if (!years.containsKey(c.get(Calendar.YEAR))) {
+			years.put(c.get(Calendar.YEAR), c.get(Calendar.YEAR));
 		}
-		minYear = Math.min(t.getDate().getYear(), minYear);
-		maxYear = Math.max(t.getDate().getYear(), maxYear);
+		minYear = Math.min(c.get(Calendar.YEAR), minYear);
+		maxYear = Math.max(c.get(Calendar.YEAR), maxYear);
 
 		transactionsDao.add(t);
 

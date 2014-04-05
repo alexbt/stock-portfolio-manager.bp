@@ -116,9 +116,6 @@ public class YahooUpdateBp implements OnlineUpdateBp {
 		Validate.notNull(symbol);
 		Validate.notNull(year);
 		
-		if (year == null) {
-			throw new NullPointerException();
-		}
 		Collection<HistoricalPrice> prices = symbol.getPrices();
 		Map<Year, HistoricalPrice> mapPrices = symbol.getMapPrices();
 

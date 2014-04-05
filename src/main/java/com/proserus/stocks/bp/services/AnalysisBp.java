@@ -10,7 +10,10 @@ import com.google.inject.Singleton;
 import com.proserus.stocks.bo.analysis.Analysis;
 import com.proserus.stocks.bo.analysis.AnalysisImpl;
 import com.proserus.stocks.bo.analysis.CurrencyAnalysis;
+import com.proserus.stocks.bo.analysis.LabelAnalysis;
+import com.proserus.stocks.bo.analysis.SectorAnalysis;
 import com.proserus.stocks.bo.analysis.SymbolAnalysis;
+import com.proserus.stocks.bo.analysis.YearAnalysis;
 import com.proserus.stocks.bo.symbols.CurrencyEnum;
 import com.proserus.stocks.bo.symbols.SectorEnum;
 import com.proserus.stocks.bo.symbols.Symbol;
@@ -33,21 +36,21 @@ public class AnalysisBp {
 	@Inject
 	private LabelsDao labelsDao;
 
-	private Collection<Analysis> symbolAnalysis;
-	private Collection<Analysis> currencyAnalysis;
-	private Collection<Analysis> yearAnalysis;
+	private Collection<SymbolAnalysis> symbolAnalysis;
+	private Collection<CurrencyAnalysis> currencyAnalysis;
+	private Collection<YearAnalysis> yearAnalysis;
 
-	public Collection<Analysis> getYearAnalysis() {
+	public Collection<YearAnalysis> getYearAnalysis() {
 		return yearAnalysis;
 	}
 
-	public Collection<Analysis> getLabelAnalysis() {
+	public Collection<LabelAnalysis> getLabelAnalysis() {
 		return labelAnalysis;
 	}
 
-	private Collection<Analysis> sectorAnalysis;
+	private Collection<SectorAnalysis> sectorAnalysis;
 
-	private Collection<Analysis> labelAnalysis;
+	private Collection<LabelAnalysis> labelAnalysis;
 
 	public AnalysisBp() {
 		// recalculate(new FilterBp());
@@ -79,7 +82,7 @@ public class AnalysisBp {
 	private void calculatePerSector(Filter filter) {
 		assert filter != null;
 
-		sectorAnalysis = new ArrayList<Analysis>();
+		sectorAnalysis = new ArrayList<SectorAnalysis>();
 
 		for (SectorEnum sector : SectorEnum.retrieveSortedSectors()) {
 			Collection<Transaction> trans = transactionsDao.getTransactionsBySector(sector, filter, false);
@@ -96,7 +99,7 @@ public class AnalysisBp {
 	private void calculatePerYear(Filter filter, Year startYear) {
 		assert filter != null;
 
-		yearAnalysis = new ArrayList<Analysis>();
+		yearAnalysis = new ArrayList<YearAnalysis>();
 
 		if (filter.isDateFiltered()) {
 			Collection<Transaction> trans = transactionsDao.getTransactions(filter, false);
@@ -127,7 +130,7 @@ public class AnalysisBp {
 	private void calculatePerLabel(Filter filter) {
 		assert filter != null;
 
-		labelAnalysis = new ArrayList<Analysis>();
+		labelAnalysis = new ArrayList<LabelAnalysis>();
 
 		for (Label label : labelsDao.get()) {
 			if (!filter.getLabels().contains(label)) {
@@ -146,7 +149,7 @@ public class AnalysisBp {
 	private void calculatePerSymbol(Filter filter) {
 		assert filter != null;
 
-		symbolAnalysis = new ArrayList<Analysis>();
+		symbolAnalysis = new ArrayList<SymbolAnalysis>();
 		for (Symbol symbol : symbolsDao.get(filter)) {
 			Collection<Transaction> trans = transactionsDao.getTransactionsBySymbol(symbol, filter, false);
 			if (trans.size() > 0) {
@@ -173,7 +176,7 @@ public class AnalysisBp {
 	private void calculatePerCurrency(Filter filter) {
 		assert filter != null;
 
-		currencyAnalysis = new ArrayList<Analysis>();
+		currencyAnalysis = new ArrayList<CurrencyAnalysis>();
 
 		for (CurrencyEnum currency : CurrencyEnum.values()) {
 			Collection<Transaction> trans = transactionsDao.getTransactionsByCurrency(currency, filter, false);
@@ -187,15 +190,15 @@ public class AnalysisBp {
 		}
 	}
 
-	public Collection<? extends SymbolAnalysis> getSymbolAnalysis() {
+	public Collection<SymbolAnalysis> getSymbolAnalysis() {
 		return symbolAnalysis;
 	}
 
-	public Collection<? extends CurrencyAnalysis> getCurrencyAnalysis() {
+	public Collection<CurrencyAnalysis> getCurrencyAnalysis() {
 		return currencyAnalysis;
 	}
 
-	public Collection<Analysis> getSectorAnalysis() {
+	public Collection<SectorAnalysis> getSectorAnalysis() {
 		return sectorAnalysis;
 	}
 

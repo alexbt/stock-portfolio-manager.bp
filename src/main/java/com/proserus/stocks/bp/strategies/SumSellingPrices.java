@@ -19,7 +19,7 @@ public class SumSellingPrices extends AbstractStrategyCumulative {
 		//TODO Logging
 		if (t.getType().equals(TransactionType.SELL)) {
 			//TODO Consider the case if  "isUseCustomFirst"
-			value = t.getPrice().multiply(t.getQuantity());
+			value = t.getPrice().multiply(t.getQuantity()).add(t.getCommission());
 		}
 		return value;
 	}
