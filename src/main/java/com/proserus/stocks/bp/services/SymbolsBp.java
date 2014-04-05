@@ -46,8 +46,10 @@ public class SymbolsBp {
 
 	public Collection<Symbol> get(Filter filter) {
 		return symbolsDao.get(filter);
-//		Query query = em.createNamedQuery("symbol.findAll");
-//		return new HashSet<Symbol>(query.getResultList());
+	}
+	
+	public Collection<Symbol> get() {
+		return symbolsDao.get(new Filter());
 	}
 
 	//TODO This should not allow adding a symbol with same name!

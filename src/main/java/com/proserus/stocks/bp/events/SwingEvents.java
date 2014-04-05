@@ -17,6 +17,9 @@ public class SwingEvents {
 	static public ModelEvent<Collection<Transaction>> TRANSACTION_UPDATED = new ModelEvent<Collection<Transaction>>();
 	
 	static public ModelEvent<Collection<Symbol>> SYMBOLS_UPDATED = new ModelEvent<Collection<Symbol>>();
+	
+	static public ModelEvent<Collection<Symbol>> SYMBOLS_LIST_UPDATED = new ModelEvent<Collection<Symbol>>();
+	
 	static public ModelEvent<Collection<Symbol>> FILTER_SYMBOLS = new ModelEvent<Collection<Symbol>>();
 	
 	static public NoModelEvent SYMBOLS_HISTORICAL_PRICE_UPDATED = new NoModelEvent();
