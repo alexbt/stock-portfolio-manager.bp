@@ -96,18 +96,6 @@ public class PersistenceManager implements EventListener {
 		// emf.close();
 	}
 
-	private EntityManager getEntityManager() {
-		// if (em == null) {
-		// try {
-		// em =
-		// Persistence.createEntityManagerFactory("jpaDemo").createEntityManager();
-		// } catch (Throwable e) {
-		// // ignore
-		// }
-		// }
-		return em;
-	}
-	
 	public EntityTransaction getTransaction(){
 		return em.getTransaction();
 	}

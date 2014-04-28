@@ -1,7 +1,6 @@
 package com.proserus.stocks.bp.events;
 
 import java.util.Collection;
-import java.util.Set;
 
 import com.proserus.stocks.bo.analysis.CurrencyAnalysis;
 import com.proserus.stocks.bo.analysis.LabelAnalysis;

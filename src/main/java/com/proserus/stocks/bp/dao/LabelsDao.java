@@ -2,7 +2,6 @@ package com.proserus.stocks.bp.dao;
 
 import java.util.Collection;
 
-import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import org.apache.commons.lang3.Validate;
