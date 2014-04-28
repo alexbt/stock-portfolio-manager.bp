@@ -21,8 +21,7 @@ public class LabelsDao {
 	
 	@SuppressWarnings("unchecked")
 	public Collection<Label> get() {
-		EntityManager em  = persistenceManager.getEntityManager();
-		Query query = em.createNamedQuery("label.findAll");
+		Query query = persistenceManager.createNamedQuery("label.findAll");
 		return query.getResultList();
 	}
 	
@@ -31,8 +30,7 @@ public class LabelsDao {
 		Validate.notNull(labels);
 		Validate.notEmpty(labels);
 		
-		EntityManager em  = persistenceManager.getEntityManager();
-		Query query = em.createNamedQuery("label.findSubLabels");
+		Query query = persistenceManager.createNamedQuery("label.findSubLabels");
 		query.setParameter("labels", labels);
 		return query.getResultList();
 	}
@@ -40,8 +38,7 @@ public class LabelsDao {
 	public Label add(Label label){
 		Validate.notNull(label);
 		
-		EntityManager em  = persistenceManager.getEntityManager();
-		Query query = em.createNamedQuery("label.findByName");
+		Query query = persistenceManager.createNamedQuery("label.findByName");
 		query.setParameter("label", label.getName());
 		try{
 		Label l = (Label)query.getSingleResult();

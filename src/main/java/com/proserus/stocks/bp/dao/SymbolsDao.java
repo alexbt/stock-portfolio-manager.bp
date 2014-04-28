@@ -28,7 +28,7 @@ public class SymbolsDao {
 		String str = "SELECT s FROM Symbol s WHERE 1=1";
 		str += getFilterQuery(filter);
 		str += getAscendingOrder();
-		Query query = persistenceManager.getEntityManager().createQuery(str);
+		Query query = persistenceManager.createQuery(str);
 
 		return new HashSet<Symbol>(query.getResultList());
 	}
@@ -111,7 +111,7 @@ public class SymbolsDao {
 		Validate.notEmpty(ticker);
 
 		Symbol symbol = null;
-		Query query = persistenceManager.getEntityManager().createNamedQuery("symbol.findByTicker");
+		Query query = persistenceManager.createNamedQuery("symbol.findByTicker");
 		query.setParameter("ticker", ticker);
 		try {
 			symbol = (Symbol) query.getSingleResult();

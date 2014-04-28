@@ -18,7 +18,7 @@ public class QuantityRemaining extends AbstractStrategyCumulative {
 			calculsLog.info("getQuantity: " + t.getQuantity());
 		}
 		BigDecimal  value = BigDecimal .ZERO;
-		if ((!t.getType().equals(TransactionType.DIVIDEND))) {
+		if (!TransactionType.DIVIDEND.equals(t.getType())) {
 			value = t.getQuantity();
 			if (t.getType().equals(TransactionType.SELL)) {
 				value = value.negate();
