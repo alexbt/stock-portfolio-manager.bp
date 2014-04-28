@@ -26,14 +26,14 @@ public class TransactionsDao {
 	public Transaction add(Transaction t) {
 		Validate.notNull(t);
 
-		t = (Transaction) persistenceManager.persist(t);
+		t = (Transaction)persistenceManager.persist(t);
 		return t;
 	}
 
 	@SuppressWarnings("unchecked")
 	public Collection<Transaction> getTransactions() {
 		String str = "SELECT t FROM Transaction t where 1=1";
-		Query query = persistenceManager.getEntityManager().createQuery(str);
+		Query query = persistenceManager.createQuery(str);
 		return query.getResultList();
 	}
 
@@ -44,7 +44,7 @@ public class TransactionsDao {
 		String str = "SELECT t FROM Transaction t where 1=1";
 		str += getSymbolQuery(s);
 		str += getAscendingOrder();
-		Query query = persistenceManager.getEntityManager().createQuery(str);
+		Query query = persistenceManager.createQuery(str);
 		return query.getResultList();
 	}
 	
@@ -57,7 +57,7 @@ public class TransactionsDao {
 		str += getFilterQuery(filter, dateFlag);
 		str += getSectorQuery(sector);
 		str += getAscendingOrder();
-		Query query = persistenceManager.getEntityManager().createQuery(str);
+		Query query = persistenceManager.createQuery(str);
 		return query.getResultList();
 	}
 	
@@ -69,7 +69,7 @@ public class TransactionsDao {
 		str += getFilterQuery(filter, dateFlag);
 		str += getDateQuery(year, true);
 		str += getAscendingOrder();
-		Query query = persistenceManager.getEntityManager().createQuery(str);
+		Query query = persistenceManager.createQuery(str);
 		return query.getResultList();
 	}
 
@@ -82,7 +82,7 @@ public class TransactionsDao {
 		str += getFilterQuery(filter, dateFlag);
 		str += getSymbolQuery(s);
 		str += getAscendingOrder();
-		Query query = persistenceManager.getEntityManager().createQuery(str);
+		Query query = persistenceManager.createQuery(str);
 		return query.getResultList();
 	}
 
@@ -93,7 +93,7 @@ public class TransactionsDao {
 		String str = "SELECT t FROM Transaction t, Symbol s WHERE symbol_id=s.id";
 		str += getFilterQuery(filter, dateFlag);
 		str += getAscendingOrder();
-		Query query = persistenceManager.getEntityManager().createQuery(str);
+		Query query = persistenceManager.createQuery(str);
 		return query.getResultList();
 	}
 
@@ -106,7 +106,7 @@ public class TransactionsDao {
 		str += getFilterQuery(filter, dateFlag);
 		str += getCurrencyQuery(currency);
 		str += getAscendingOrder();
-		Query query = persistenceManager.getEntityManager().createQuery(str);
+		Query query = persistenceManager.createQuery(str);
 		return query.getResultList();
 	}
 
@@ -198,7 +198,7 @@ public class TransactionsDao {
 	public Collection<Transaction> getTransactionsByLabel(Label label) {
 		Validate.notNull(label);
 
-		Query query = persistenceManager.getEntityManager().createNamedQuery("transaction.findAllByLabel");
+		Query query = persistenceManager.createNamedQuery("transaction.findAllByLabel");
 		query.setParameter("label", label);
 		return query.getResultList();
 	}
@@ -212,7 +212,7 @@ public class TransactionsDao {
 		str += getFilterQuery(filter, dateFlag);
 		str += getLabelQuery(label);
 		str += getAscendingOrder();
-		Query query = persistenceManager.getEntityManager().createQuery(str);
+		Query query = persistenceManager.createQuery(str);
 		return query.getResultList();
 	}
 
@@ -222,7 +222,7 @@ public class TransactionsDao {
 	}
 
 	public Date getFirstYear() {
-		Query query = persistenceManager.getEntityManager().createNamedQuery("transaction.findMinDate");
+		Query query = persistenceManager.createNamedQuery("transaction.findMinDate");
 		return (Date) query.getSingleResult();
 	}
 
