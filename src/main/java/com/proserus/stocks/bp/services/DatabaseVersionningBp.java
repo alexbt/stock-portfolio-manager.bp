@@ -15,5 +15,7 @@ public interface DatabaseVersionningBp {
 	public Double retrieveLatestVersion(String url);
 	
 	public void writeVersion(Properties pro, String version);
+
+	void setIgnorePopop(boolean ignorePopop);
 	
 }
