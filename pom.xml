@@ -27,7 +27,11 @@
 							<customClasspathLayout>$${artifact.artifactId}-$${artifact.version}$${dashClassifier?}.$${artifact.extension}</customClasspathLayout>
 						</manifest>
 						<manifestEntries>
-							<built-timestamp>${maven.build.timestamp}</built-timestamp>
+							<Built-By>${user.name}</Built-By>
+							<Built-Timestamp>${maven.build.timestamp}</Built-Timestamp>
+							<Implementation-Version>${version}</Implementation-Version>
+							<Implementation-Title>${project.artifactId}</Implementation-Title>
+							<Implementation-Vendor>${organisation}</Implementation-Vendor>
 						</manifestEntries>
 					</archive>
 				</configuration>
