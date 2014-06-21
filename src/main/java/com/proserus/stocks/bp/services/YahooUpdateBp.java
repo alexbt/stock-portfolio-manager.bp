@@ -13,7 +13,6 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.Validate;
-import org.jfree.data.time.Year;
 
 import com.google.inject.Singleton;
 import com.proserus.stocks.bo.common.BoBuilder;
@@ -103,7 +102,7 @@ public class YahooUpdateBp implements OnlineUpdateBp {
 							s.setName(str[1]);
 						}
 						//TODO Manage Date better
-						s.setPrice(new BigDecimal(Double.parseDouble(str[2])), DateUtil.getCurrentYear());//FIXME Year JFree
+						s.setPrice(new BigDecimal(Double.parseDouble(str[2])), DateUtil.getCurrentYear());
 					}
 				}
 			} catch (MalformedURLException e) {
@@ -112,12 +111,11 @@ public class YahooUpdateBp implements OnlineUpdateBp {
 		}
 	}
 
-	public Collection<HistoricalPrice> retrieveHistoricalPrices(Symbol symbol, Year year) {//FIXME Year JFree
+	public Collection<HistoricalPrice> retrieveHistoricalPrices(Symbol symbol, int year) {
 		Validate.notNull(symbol);
-		Validate.notNull(year);
 		
 		Collection<HistoricalPrice> prices = symbol.getPrices();
-		Map<Year, HistoricalPrice> mapPrices = symbol.getMapPrices();
+		Map<Integer, HistoricalPrice> mapPrices = symbol.getMapPrices();
 
 		String tAddress = URL_HIST_START + symbol.getTicker().replaceFirst(DOT_UN, DASH_UN).replaceAll(DASH_TO, DOT_TO)
 		        + URL_HIST_END;
@@ -129,10 +127,10 @@ public class YahooUpdateBp implements OnlineUpdateBp {
 			tConnection.connect();
 			BufferedReader in = new BufferedReader(new InputStreamReader(tConnection.getInputStream()));
 			String str;
-			Year previousYear = (Year)DateUtil.getCurrentYear().previous();
+			Integer previousYear = DateUtil.getCurrentYear()-1;
 			while (true) {
 				while ((str=in.readLine())!=null){
-					if(str.startsWith(previousYear.toString())){
+					if(str.startsWith(String.valueOf(previousYear))){
 						break;
 					}
 				}
@@ -156,7 +154,7 @@ public class YahooUpdateBp implements OnlineUpdateBp {
 					h.setYear(previousYear);
 				}
 				h.setPrice(new BigDecimal(value));
-				previousYear = (Year)previousYear.previous();
+				previousYear = previousYear--;
 			}
 
 		} catch (MalformedURLException e) {

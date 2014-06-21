@@ -7,7 +7,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.Transient;
 
 import org.apache.commons.lang3.Validate;
-import org.jfree.data.time.Year;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -81,14 +80,14 @@ public class SymbolsBp {
 	public void updatePrices(Symbol symbol) {
 		Validate.notNull(symbol);
 		// TODO Manage Date better
-		symbol.setPrice(onlineUpdateBp.retrieveCurrentPrice(symbol), DateUtil.getCurrentYear());//FIXME Year JFree
+		symbol.setPrice(onlineUpdateBp.retrieveCurrentPrice(symbol), DateUtil.getCurrentYear());
 		symbolsDao.updatePrices(symbol);
 	}
 
 	public void updateHistoricalPrices(Symbol symbol) {
 		Validate.notNull(symbol);
 		
-		symbol.setPrices(onlineUpdateBp.retrieveHistoricalPrices(symbol, new Year(1994)));
+		symbol.setPrices(onlineUpdateBp.retrieveHistoricalPrices(symbol, 1994));
 		symbolsDao.updateHistoricalPrices(symbol);
 	}
 

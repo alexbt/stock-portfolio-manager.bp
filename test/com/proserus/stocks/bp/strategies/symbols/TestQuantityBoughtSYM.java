@@ -1,3 +1,5 @@
+import java.util.Calendar;
+
 //package com.proserus.stocks.bp.strategies.symbols;
 //
 //import java.math.BigDecimal;
@@ -6,7 +8,6 @@
 //import junit.framework.TestCase;
 //
 //import org.hibernate.ejb.TransactionImpl;
-//import org.jfree.data.time.Year;
 //
 //import com.proserus.stocks.bp.FilterBp;
 //import com.proserus.stocks.bo.symbols.CurrencyEnum;
@@ -26,7 +27,7 @@
 //		s.setTicker("Test");
 //		
 //		Transaction t = new TransactionImpl();
-//		t.setDate(new Date());
+//		t.setDate(Calendar.getInstance().getTime());
 //		t.setCommission(new BigDecimal(4.95));
 //		t.setPrice(new BigDecimal(36.29));
 //		t.setQuantity(new BigDecimal(10));
