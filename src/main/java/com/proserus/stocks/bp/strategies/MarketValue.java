@@ -20,7 +20,7 @@ public class MarketValue extends AbstractStrategyCumulative {
 		}
 		BigDecimal  value = BigDecimal.ZERO;
 		if (!t.getType().equals(TransactionType.DIVIDEND)) {
-			HistoricalPrice h = t.getSymbol().getPrice(DateUtil.getYearForUsablePrice(filter));
+			HistoricalPrice h = t.getSymbol().getPrice(DateUtil.getFilteredYear(filter));
 			if (calculsLog.isInfoEnabled()) {
 				calculsLog.info("getCustomPrice: " + h.getCustomPrice());
 				calculsLog.info("getPrice: " + h.getPrice());
