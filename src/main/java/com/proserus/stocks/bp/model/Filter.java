@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jfree.data.time.Year;
 import org.joda.time.DateTime;
 
 import com.proserus.stocks.bo.symbols.CurrencyEnum;
@@ -16,7 +15,7 @@ import com.proserus.stocks.bo.transactions.TransactionType;
 public class Filter{
 	private Map<String, Label> labels = new HashMap<String, Label>();
 
-	private Year year = null;//FIXME Year JFree
+	private Integer year = null;
 	
 	private TransactionType type = null;
 	
@@ -52,9 +51,9 @@ public class Filter{
 		this.labels = labels;
 	}
 
-	public void setYear(Year year) {
+	public void setYear(Integer year) {
 		if (year != null) {
-			this.year = new Year(year.getYear());
+			this.year = year;
 		} else {
 			this.year = null;
 		}
@@ -90,7 +89,7 @@ public class Filter{
 
 	public boolean isFilteredYearAfter(DateTime date) {
 		//TODO Manage Date better
-		return isDateFiltered() && (getYear().getYear() > date.getYear());
+		return isDateFiltered() && (getYear() > date.getYear());
 	}
 	
 	public void setTransactionType(TransactionType type){
@@ -102,7 +101,7 @@ public class Filter{
     	return type;
     }
 
-	public Year getYear() {
+	public Integer getYear() {
 		return year;
 	}
 	
@@ -124,6 +123,7 @@ public class Filter{
 
 	private Symbol symbol = null;
 
+	//TODO do not use toString() for business logic
 	public String toString() {
 		String str = "";
 		String labelsStr = labels.values().toString();
@@ -132,7 +132,7 @@ public class Filter{
 		}
 
 		if (year != null) {
-			str += "        Year: [" + year.getYear() + "]";
+			str += "        Year: [" + year + "]";
 		} else {
 			str += "        Year: [   ]";
 		}

@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -28,234 +29,241 @@ import com.proserus.stocks.bo.transactions.Label;
 import com.proserus.stocks.bo.transactions.Transaction;
 import com.proserus.stocks.bo.transactions.TransactionType;
 import com.proserus.stocks.bo.utils.BigDecimalUtils;
+import com.proserus.stocks.bp.dao.PersistenceManager;
 import com.proserus.stocks.bp.model.CsvModel;
 import com.proserus.stocks.bp.utils.DateUtil;
 
 public class ImportExportBp {
-	private final static Logger LOGGER = Logger.getLogger(ImportExportBp.class.getName());
-	@Inject
-	private SymbolsBp symbolsBp;
+    private final static Logger LOGGER = Logger.getLogger(ImportExportBp.class.getName());
+    @Inject
+    private SymbolsBp symbolsBp;
 
-	@Inject
-	private TransactionsBp transactionsBp;
+    @Inject
+    private TransactionsBp transactionsBp;
 
-	@Inject
-	private BoBuilder boBuilder;
+    @Inject
+    private BoBuilder boBuilder;
 
-	@Inject
-	private LabelsBp labelsBp;
+    @Inject
+    private LabelsBp labelsBp;
 
-	public ByteArrayOutputStream exportTransactions(Collection<Transaction> transactions) throws IOException {
-		Validate.notNull(transactions);
-		Validate.notEmpty(transactions);
+    @Inject
+    private PersistenceManager persistenceManager;
 
-		ByteArrayOutputStream b = new ByteArrayOutputStream();
-		CSVWriter writer = new CSVWriter(new OutputStreamWriter(b), ',');
-		writer.writeNext(CsvModel.getHeaders());
-		for (Transaction t : transactions) {
-			writer.writeNext(new CsvModel(t).getFields());
-		}
-		writer.close();
-		b.close();
-		return b;
-	}
+    public String exportTransactions(Collection<Transaction> transactions) throws IOException {
+        Validate.notNull(transactions);
+        Validate.notEmpty(transactions);
 
-	public void importTransactions(File file, CurrencyEnum defaultCurrency) throws FileNotFoundException {
-		Validate.notNull(file);
+        ByteArrayOutputStream b = new ByteArrayOutputStream();
+        CSVWriter writer = new CSVWriter(new OutputStreamWriter(b), ',');
+        writer.writeNext(CsvModel.getHeaders());
+        for (Transaction t : transactions) {
+            writer.writeNext(new CsvModel(t).getFields());
+        }
+        writer.close();
+        b.close();
+        return b.toString("UTF-8");
+    }
 
-		// HeaderColumnNameMappingStrategy<CsvModel> strat = new HeaderColumnNameMappingStrategy<CsvModel>();
-		HeaderColumnNameTranslateMappingStrategy<CsvModel> strat2 = new HeaderColumnNameTranslateMappingStrategy<CsvModel>();
-		strat2.setColumnMapping(CsvModel.getColumnMapping());
-		strat2.setType(CsvModel.class);
+    public void importTransactions(File file, CurrencyEnum defaultCurrency) throws FileNotFoundException {
+        Validate.notNull(file);
 
-		CsvToBean<CsvModel> csv = new CsvToBean<CsvModel>();
-		List<CsvModel> list = csv.parse(strat2, new CSVReader(new FileReader(file)));
+        // HeaderColumnNameMappingStrategy<CsvModel> strat = new
+        // HeaderColumnNameMappingStrategy<CsvModel>();
+        HeaderColumnNameTranslateMappingStrategy<CsvModel> strat2 = new HeaderColumnNameTranslateMappingStrategy<CsvModel>();
+        strat2.setColumnMapping(CsvModel.getColumnMapping());
+        strat2.setType(CsvModel.class);
 
-		for (CsvModel model : list) {
-			Symbol s = boBuilder.getSymbol();
-			Transaction transaction = boBuilder.getTransaction();
+        CsvToBean<CsvModel> csv = new CsvToBean<CsvModel>();
+        List<CsvModel> list = csv.parse(strat2, new CSVReader(new FileReader(file)));
 
-			if (setSymbol(model, s) && setDate(model, transaction) && setQuantity(model, transaction) && setType(model, transaction)
-			        && setPrice(model, transaction)) {
+        persistenceManager.getTransaction().begin();
+        for (CsvModel model : list) {
+            Symbol s = boBuilder.getSymbol();
+            Transaction transaction = boBuilder.getTransaction();
 
-				setName(model, s);
-				setCurrency(model, s, defaultCurrency);
-				setSector(model, s);
-				setCustomPrice(model, s);
-				s = symbolsBp.add(s);
-				transaction.setSymbol(s);
-				setCommission(model, transaction);
-				setLabels(model, transaction);
-				transactionsBp.add(transaction);
-			}
-		}
-	}
+            if (setSymbol(model, s) && setDate(model, transaction) && setQuantity(model, transaction) && setType(model, transaction)
+                    && setPrice(model, transaction)) {
 
-	private boolean setLabels(CsvModel model, Transaction transaction) {
-		Validate.notNull(model);
-		Validate.notNull(transaction);
+                setName(model, s);
+                setCurrency(model, s, defaultCurrency);
+                setSector(model, s);
+                setCustomPrice(model, s);
+                s = symbolsBp.add(s);
+                transaction.setSymbol(s);
+                setCommission(model, transaction);
+                setLabels(model, transaction);
+                transactionsBp.add(transaction);
+            }
+        }
+        persistenceManager.getTransaction().commit();
+    }
 
-		if (model.getLabels() != null && !model.getLabels().isEmpty()) {
-			for (String str : model.getLabels().replaceFirst("\\[", "").replaceAll("\\]", "").split(",")) {
-				if (!str.isEmpty()) {
-					Label label = boBuilder.getLabel();
-					label.setName(str);
-					label = labelsBp.add(label);
-					transaction.addLabel(label);
-				}
-			}
-		}
-		return true;
-	}
+    private boolean setLabels(CsvModel model, Transaction transaction) {
+        Validate.notNull(model);
+        Validate.notNull(transaction);
 
-	private boolean setCommission(CsvModel model, Transaction transaction) {
-		Validate.notNull(model);
-		Validate.notNull(transaction);
+        if (model.getLabels() != null && !model.getLabels().isEmpty()) {
+            for (String str : model.getLabels().replaceFirst("\\[", "").replaceAll("\\]", "").split(",")) {
+                if (!str.isEmpty()) {
+                    Label label = boBuilder.getLabel();
+                    label.setName(str);
+                    label = labelsBp.add(label);
+                    transaction.addLabel(label);
+                }
+            }
+        }
+        return true;
+    }
 
-		if (model.getCommission() != null && !model.getCommission().isEmpty()) {
-			transaction.setCommission(BigDecimalUtils.stringToBigDecimal(model.getCommission()));
-		} else {
-			transaction.setCommission(BigDecimal.ZERO);
-			LOGGER.debug("No commission found during import: Continuing");
-		}
-		return true;
-	}
+    private boolean setCommission(CsvModel model, Transaction transaction) {
+        Validate.notNull(model);
+        Validate.notNull(transaction);
 
-	private boolean setPrice(CsvModel model, Transaction transaction) {
-		Validate.notNull(model);
-		Validate.notNull(transaction);
+        if (model.getCommission() != null && !model.getCommission().isEmpty()) {
+            transaction.setCommission(BigDecimalUtils.stringToBigDecimal(model.getCommission()));
+        } else {
+            transaction.setCommission(BigDecimal.ZERO);
+            LOGGER.debug("No commission found during import: Continuing");
+        }
+        return true;
+    }
 
-		if (model.getPrice() != null && !model.getPrice().isEmpty()) {
-			transaction.setPrice(BigDecimalUtils.stringToBigDecimal(model.getPrice()));
-			return true;
-		} else {
-			LOGGER.debug("Unable to import transaction: No price found");
-		}
-		return false;
-	}
+    private boolean setPrice(CsvModel model, Transaction transaction) {
+        Validate.notNull(model);
+        Validate.notNull(transaction);
 
-	private boolean setType(CsvModel model, Transaction transaction) {
-		Validate.notNull(model);
-		Validate.notNull(transaction);
+        if (model.getPrice() != null && !model.getPrice().isEmpty()) {
+            transaction.setPrice(BigDecimalUtils.stringToBigDecimal(model.getPrice()));
+            return true;
+        } else {
+            LOGGER.debug("Unable to import transaction: No price found");
+        }
+        return false;
+    }
 
-		if (model.getType() != null && !model.getType().isEmpty()) {
-			transaction.setQuantity(BigDecimalUtils.stringToBigDecimal(model.getQuantity()));
-			try {
-				TransactionType type = TransactionType.valueOf(model.getType().toUpperCase());
-				transaction.setType(type);
-				return true;
-			} catch (IllegalArgumentException e) {
-				LOGGER.debug("Unable to import transaction: No valid type found");
+    private boolean setType(CsvModel model, Transaction transaction) {
+        Validate.notNull(model);
+        Validate.notNull(transaction);
 
-			}
-		} else {
-			LOGGER.debug("Unable to import transaction: No type found");
-		}
+        if (model.getType() != null && !model.getType().isEmpty()) {
+            transaction.setQuantity(BigDecimalUtils.stringToBigDecimal(model.getQuantity()));
+            try {
+                TransactionType type = TransactionType.valueOf(model.getType().toUpperCase());
+                transaction.setType(type);
+                return true;
+            } catch (IllegalArgumentException e) {
+                LOGGER.debug("Unable to import transaction: No valid type found");
 
-		return false;
-	}
+            }
+        } else {
+            LOGGER.debug("Unable to import transaction: No type found");
+        }
 
-	private boolean setQuantity(CsvModel model, Transaction transaction) {
-		Validate.notNull(model);
-		Validate.notNull(transaction);
+        return false;
+    }
 
-		if (model.getQuantity() != null && !model.getQuantity().isEmpty()) {
-			transaction.setQuantity(BigDecimalUtils.stringToBigDecimal(model.getQuantity()));
-			return true;
-		} else {
-			LOGGER.debug("Unable to import transaction: No quantity found");
-		}
-		return false;
-	}
+    private boolean setQuantity(CsvModel model, Transaction transaction) {
+        Validate.notNull(model);
+        Validate.notNull(transaction);
 
-	private boolean setDate(CsvModel model, Transaction transaction) {
-		Validate.notNull(model);
-		Validate.notNull(transaction);
+        if (model.getQuantity() != null && !model.getQuantity().isEmpty()) {
+            transaction.setQuantity(BigDecimalUtils.stringToBigDecimal(model.getQuantity()));
+            return true;
+        } else {
+            LOGGER.debug("Unable to import transaction: No quantity found");
+        }
+        return false;
+    }
 
-		if (model.getDate() != null && !model.getDate().isEmpty()) {
-			int i = 0;
-			Date date = null;
-			while (date == null && i < CsvModel.DATE_FORMATS.length) {
-				date = DateUtil.stringToToDate(CsvModel.DATE_FORMATS[i], model.getDate());
-				i++;
-			}
+    private boolean setDate(CsvModel model, Transaction transaction) {
+        Validate.notNull(model);
+        Validate.notNull(transaction);
 
-			if (date != null) {
-				transaction.setDate(date);
-				return true;
-			} else {
-				transaction.setDate(new Date());
-				LOGGER.debug("No valid date found during import: continuing with today's date");
-			}
-		}
-		return false;
-	}
+        if (model.getDate() != null && !model.getDate().isEmpty()) {
+            int i = 0;
+            Date date = null;
+            while (date == null && i < CsvModel.DATE_FORMATS.length) {
+                date = DateUtil.stringToToDate(CsvModel.DATE_FORMATS[i], model.getDate());
+                i++;
+            }
 
-	private boolean setName(CsvModel model, Symbol s) {
-		Validate.notNull(model);
-		Validate.notNull(s);
+            if (date != null) {
+                transaction.setDate(date);
+                return true;
+            } else {
+                transaction.setDate(Calendar.getInstance().getTime());
+                LOGGER.debug("No valid date found during import: continuing with today's date");
+            }
+        }
+        return false;
+    }
 
-		if (model.getName() != null && !model.getName().isEmpty()) {
-			s.setName(model.getName());
-		} else {
-			LOGGER.debug("No name found during import: continuing");
-		}
-		return true;
-	}
+    private boolean setName(CsvModel model, Symbol s) {
+        Validate.notNull(model);
+        Validate.notNull(s);
 
-	private boolean setCurrency(CsvModel model, Symbol s, CurrencyEnum defaultCurrency) {
-		Validate.notNull(model);
-		Validate.notNull(s);
+        if (model.getName() != null && !model.getName().isEmpty()) {
+            s.setName(model.getName());
+        } else {
+            LOGGER.debug("No name found during import: continuing");
+        }
+        return true;
+    }
 
-		if (model.getCurrency() != null && !model.getCurrency().isEmpty()) {
-			try {
-				s.setCurrency(CurrencyEnum.valueOf(model.getCurrency()));
-			} catch (IllegalArgumentException e) {
+    private boolean setCurrency(CsvModel model, Symbol s, CurrencyEnum defaultCurrency) {
+        Validate.notNull(model);
+        Validate.notNull(s);
 
-			}
-		}
-		if (s.getCurrency() == null) {
-			s.setCurrency(defaultCurrency);
-			LOGGER.debug("Using default currency: continuing");
-		}
-		return true;
-	}
+        if (model.getCurrency() != null && !model.getCurrency().isEmpty()) {
+            try {
+                s.setCurrency(CurrencyEnum.valueOf(model.getCurrency()));
+            } catch (IllegalArgumentException e) {
 
-	private boolean setSector(CsvModel model, Symbol s) {
-		Validate.notNull(model);
-		Validate.notNull(s);
+            }
+        }
+        if (s.getCurrency() == null) {
+            s.setCurrency(defaultCurrency);
+            LOGGER.debug("Using default currency: continuing");
+        }
+        return true;
+    }
 
-		if (model.getSector() != null && !model.getSector().isEmpty()) {
-			try {
-				s.setSector(SectorEnum.valueOf(model.getSector()));
-				return true;
-			} catch (IllegalArgumentException e) {
+    private boolean setSector(CsvModel model, Symbol s) {
+        Validate.notNull(model);
+        Validate.notNull(s);
 
-			}
-		}
-		s.setSector(SectorEnum.UNKNOWN);
-		return true;
-	}
+        if (model.getSector() != null && !model.getSector().isEmpty()) {
+            try {
+                s.setSector(SectorEnum.valueOf(model.getSector()));
+                return true;
+            } catch (IllegalArgumentException e) {
 
-	private boolean setCustomPrice(CsvModel model, Symbol s) {
-		Validate.notNull(model);
-		Validate.notNull(s);
+            }
+        }
+        s.setSector(SectorEnum.UNKNOWN);
+        return true;
+    }
 
-		s.setCustomPriceFirst(Boolean.parseBoolean(model.getCustomPrices()));
-		
-		return true;
-	}
+    private boolean setCustomPrice(CsvModel model, Symbol s) {
+        Validate.notNull(model);
+        Validate.notNull(s);
 
-	private boolean setSymbol(CsvModel model, Symbol s) {
-		Validate.notNull(model);
-		Validate.notNull(s);
+        s.setCustomPriceFirst(Boolean.parseBoolean(model.getCustomPrices()));
 
-		if (model.getSymbol() != null && !model.getSymbol().isEmpty()) {
-			s.setTicker(model.getSymbol());
-			return true;
-		} else {
-			LOGGER.debug("Unable to import transaction: No symbol found");
-		}
-		return false;
-	}
+        return true;
+    }
+
+    private boolean setSymbol(CsvModel model, Symbol s) {
+        Validate.notNull(model);
+        Validate.notNull(s);
+
+        if (model.getSymbol() != null && !model.getSymbol().isEmpty()) {
+            s.setTicker(model.getSymbol());
+            return true;
+        } else {
+            LOGGER.debug("Unable to import transaction: No symbol found");
+        }
+        return false;
+    }
 }

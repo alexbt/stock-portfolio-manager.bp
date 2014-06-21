@@ -3,8 +3,6 @@ package com.proserus.stocks.bp.services;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.jfree.data.time.Year;
-
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.proserus.stocks.bo.analysis.Analysis;
@@ -74,7 +72,7 @@ public class AnalysisBp {
 		calculatePerLabel(filter);
 	}
 
-	public void calculateByYear(Filter filter, Year startYear) {
+	public void calculateByYear(Filter filter, int startYear) {
 		assert filter != null;
 		calculatePerYear(filter, startYear);
 	}
@@ -96,7 +94,7 @@ public class AnalysisBp {
 		}
 	}
 
-	private void calculatePerYear(Filter filter, Year startYear) {
+	private void calculatePerYear(Filter filter, int startYear) {
 		assert filter != null;
 
 		yearAnalysis = new ArrayList<YearAnalysis>();
@@ -105,23 +103,23 @@ public class AnalysisBp {
 			Collection<Transaction> trans = transactionsDao.getTransactions(filter, false);
 			if (trans.size() > 0) {
 				Analysis analysis = createAnalysis(trans, filter);
-				analysis.setYear(filter.getYear().getYear());
+				analysis.setYear(filter.getYear());
 				if (analysis.getQuantity().floatValue() != 0F) {
 					yearAnalysis.add(analysis);
 				}
 			}
 		} else {
-			while (startYear.getYear() <= DateUtil.getCurrentYear().getYear()) {
+			while (startYear  <= DateUtil.getCurrentYear()) {
 				filter.setYear(startYear);
 				Collection<Transaction> trans = transactionsDao.getTransactions(filter, false);
 				if (trans.size() > 0) {
 					Analysis analysis = createAnalysis(trans, filter);
-					analysis.setYear(startYear.getYear());
+					analysis.setYear(startYear);
 					if (analysis.getQuantity().floatValue() != 0F) {
 						yearAnalysis.add(analysis);
 					}
 				}
-				startYear = (Year) startYear.next();
+				startYear++;
 			}
 			filter.setYear(null);
 		}

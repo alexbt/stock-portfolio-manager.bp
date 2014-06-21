@@ -6,7 +6,6 @@ import java.util.Date;
 import javax.persistence.Query;
 
 import org.apache.commons.lang3.Validate;
-import org.jfree.data.time.Year;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -25,6 +24,13 @@ public class TransactionsDao {
 
 	public Transaction add(Transaction t) {
 		Validate.notNull(t);
+		Validate.notNull(t.getCommission());
+		Validate.notNull(t.getDate());
+		Validate.notNull(t.getLabelsValues());
+		Validate.notNull(t.getPrice());
+		Validate.notNull(t.getQuantity());
+		Validate.notNull(t.getSymbol());
+		Validate.notNull(t.getType());
 
 		t = (Transaction)persistenceManager.persist(t);
 		return t;
@@ -62,7 +68,7 @@ public class TransactionsDao {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public Collection<Transaction> getTransactionsByYear(Year year, Filter filter, boolean dateFlag) {
+	public Collection<Transaction> getTransactionsByYear(Integer year, Filter filter, boolean dateFlag) {
 		Validate.notNull(filter);
 
 		String str = "SELECT t FROM Transaction t, Symbol s WHERE symbol_id=s.id";
@@ -113,7 +119,6 @@ public class TransactionsDao {
 	private String getFilterQuery(Filter filter, boolean dateFlag) {
 		Validate.notNull(filter);
 		// TODO Manage Date better
-		//FIXME Year JFree
 		return getLabelQuery(filter.getLabels()) + getSymbolQuery(filter.getSymbol()) + getTypeQuery(filter.getTransactionType())
 		        + getDateQuery(filter.getYear(), dateFlag) + getCurrencyQuery(filter.getCurrency()) + getSectorQuery(filter.getSector());
 	}
@@ -155,7 +160,7 @@ public class TransactionsDao {
 		return query;
 	}
 
-	private String getDateQuery(Year year, boolean dateFlag) {
+	private String getDateQuery(Integer year, boolean dateFlag) {
 
 		String query = "";
 		if (year != null) {
@@ -163,9 +168,9 @@ public class TransactionsDao {
 			String DATE_DB_FORMAT_MAX = "-01-01 00:00:00";
 
 			if (dateFlag) {
-				query += " AND " + " date>'" + (year.getYear() - 1) + DATE_DB_FORMAT_MIN + "'";
+				query += " AND " + " date>'" + (year - 1) + DATE_DB_FORMAT_MIN + "'";
 			}
-			query += " AND " + " date<'" + (year.getYear() + 1) + DATE_DB_FORMAT_MAX + "'";
+			query += " AND " + " date<'" + (year + 1) + DATE_DB_FORMAT_MAX + "'";
 		}
 		return query;
 	}

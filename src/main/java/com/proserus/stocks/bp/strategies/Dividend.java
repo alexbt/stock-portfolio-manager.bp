@@ -21,7 +21,7 @@ public class Dividend extends AbstractStrategyCumulative {
 		BigDecimal value = BigDecimal.ZERO;
 		if (t.getType().equals(TransactionType.DIVIDEND)) {
 			//TODO Consider the case if  "isUseCustomFirst"
-			if (!filter.isDateFiltered() || !filter.isFilteredYearAfter(new DateTime(t.getDate()))) {
+			if (!filter.isDateFiltered() || !filter.isFilteredYearAfter(new DateTime(t.getDate()))) {//TODO remove Joda
 				value = t.getPrice().multiply(t.getQuantity());
 			}
 		}

@@ -2,7 +2,6 @@ package com.proserus.stocks.bp.strategies;
 
 import java.math.BigDecimal;
 
-import org.jfree.data.time.Year;
 import org.joda.time.DateTime;
 
 import com.proserus.stocks.bo.analysis.Analysis;
@@ -25,9 +24,8 @@ public class TotalCost extends AbstractStrategyCumulative {
 
 		if (t.getType().equals(TransactionType.BUY)) {
 			value = t.getQuantity();
-			if (filter.isDateFiltered() && filter.isFilteredYearAfter(new DateTime(t.getDate()))) {
-				//FIXME Year JFree
-				HistoricalPrice h = t.getSymbol().getPrice((Year)DateUtil.getYearForUsablePrice(filter).previous());
+			if (filter.isDateFiltered() && filter.isFilteredYearAfter(new DateTime(t.getDate()))) {//TODO remove Joda
+				HistoricalPrice h = t.getSymbol().getPrice(DateUtil.getFilteredPreviousYear(filter));
 				if (t.getSymbol().isCustomPriceFirst()) {
 					value = value.multiply(h.getCustomPrice());
 				} else {

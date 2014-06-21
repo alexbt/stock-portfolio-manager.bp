@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang3.Validate;
-import org.jfree.data.time.Year;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -25,7 +24,7 @@ public class TransactionsBp{
 	@Inject
 	TransactionsDao transactionsDao;
 
-	private Map<Integer, Integer> years = new HashMap<Integer, Integer>();//FIXME Year JFree
+	private Map<Integer, Integer> years = new HashMap<Integer, Integer>();
 	private int minYear = 99999;
 	private int maxYear = -1;
 
@@ -46,11 +45,11 @@ public class TransactionsBp{
 		return t;
 	}
 	
-	public Year getFirstYear(){
+	public int getFirstYear(){
 		Date val = transactionsDao.getFirstYear();
 		// TODO Manage Date better
 		if (val != null) {
-			return new Year(val);
+			return DateUtil.getYear(val);
 		} else {
 			return DateUtil.getCurrentYear();
 		}

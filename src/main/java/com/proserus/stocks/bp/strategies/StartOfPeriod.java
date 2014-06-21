@@ -22,7 +22,7 @@ public class StartOfPeriod implements SymbolStrategy {
 		if (transactions.size() > 0) {
 			Transaction t = transactions.iterator().next();
 			// TODO Manage Date better
-			DateTime date = DateUtil.getFilteredStartDate(new DateTime(t.getDate()), filter);
+			DateTime date = DateUtil.getFilteredStartDate(new DateTime(t.getDate()), filter);//TODO remove Joda
 			analysis.setStartOfPeriod(date);
 		}
 	}
