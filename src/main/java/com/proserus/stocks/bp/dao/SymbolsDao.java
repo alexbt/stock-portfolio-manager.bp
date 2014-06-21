@@ -25,7 +25,7 @@ public class SymbolsDao {
 
 	@SuppressWarnings("unchecked")
 	public Collection<Symbol> get(Filter filter) {
-		String str = "SELECT s FROM Symbol s WHERE 1=1";
+		String str = "SELECT s FROM Symbol s WHERE 1=1 AND id<>-1";
 		str += getFilterQuery(filter);
 		str += getAscendingOrder();
 		Query query = persistenceManager.createQuery(str);
