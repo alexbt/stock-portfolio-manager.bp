@@ -18,10 +18,15 @@ public abstract class BasicDecimalStrategy extends BasicStrategy<BigDecimal> {
 			calculsLog.info("--------------------------------------");
 		}
 		BigDecimal value = getDefaultAnalysisValue();
-		for (Transaction t : transactions) {
-			value = value.add(getTransactionValue(t, filter));
-		}
-		if (value == null || Double.valueOf(value.doubleValue()).isInfinite() || Double.valueOf(value.doubleValue()).isNaN()) {
+		try {
+			for (Transaction t : transactions) {
+				value = value.add(getTransactionValue(t, filter));
+			}
+
+			if (value == null || Double.valueOf(value.doubleValue()).isInfinite() || Double.valueOf(value.doubleValue()).isNaN()) {
+				value = getDefaultAnalysisValue();
+			}
+		} catch (NumberFormatException e) {
 			value = getDefaultAnalysisValue();
 		}
 		setAnalysisValue(analysis, value);
