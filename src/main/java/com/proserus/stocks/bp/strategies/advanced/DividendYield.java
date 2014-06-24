@@ -1,17 +1,19 @@
-package com.proserus.stocks.bp.strategies;
+package com.proserus.stocks.bp.strategies.advanced;
 
 import java.math.BigDecimal;
 
 import org.apache.log4j.Logger;
 
 import com.proserus.stocks.bo.analysis.Analysis;
+import com.proserus.stocks.bo.analysis.ViewableAnalysis;
 import com.proserus.stocks.bo.utils.BigDecimalUtils;
+import com.proserus.stocks.bp.strategies.fw.AdvancedStrategy;
 
-public class DividendYield extends AbstractAnalysisStrategy {
+public class DividendYield extends AdvancedStrategy {
 	protected static Logger calculsLog = Logger.getLogger("calculs." + DividendYield.class.getName());
 
 	@Override
-	protected void process(Analysis analysis) {
+	protected BigDecimal process(ViewableAnalysis analysis) {
 		BigDecimal value = BigDecimal.ZERO;
 
 		BigDecimal divisor = analysis.getTotalCost().add(analysis.getTotalSold()).subtract(analysis.getCapitalGain());
@@ -36,11 +38,11 @@ public class DividendYield extends AbstractAnalysisStrategy {
 		}
 
 		calculsLog.info("setDividendYield = " + value);
-		setValue(analysis, value);
+		return value;
 	}
 
 	@Override
-	protected void setValue(Analysis analysis, BigDecimal value) {
+	public void setAnalysisValue(Analysis analysis, BigDecimal value) {
 		analysis.setDividendYield(value);
 	}
 }

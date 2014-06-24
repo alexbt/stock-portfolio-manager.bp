@@ -1,11 +1,12 @@
-package com.proserus.stocks.bp.strategies;
+package com.proserus.stocks.bp.strategies.basics;
 
 import java.math.BigDecimal;
 
 import com.proserus.stocks.bo.analysis.Analysis;
 import com.proserus.stocks.bo.transactions.Transaction;
 import com.proserus.stocks.bp.model.Filter;
-public class Commission extends AbstractStrategyCumulative {
+import com.proserus.stocks.bp.strategies.fw.BasicDecimalStrategy;
+public class Commission extends BasicDecimalStrategy {
 
 	@Override
 	public BigDecimal getTransactionValue(Transaction t, Filter filter) {

@@ -1,17 +1,19 @@
-package com.proserus.stocks.bp.strategies;
+package com.proserus.stocks.bp.strategies.advanced;
 
 import java.math.BigDecimal;
 
 import org.apache.log4j.Logger;
 
 import com.proserus.stocks.bo.analysis.Analysis;
+import com.proserus.stocks.bo.analysis.ViewableAnalysis;
+import com.proserus.stocks.bp.strategies.fw.AdvancedStrategy;
 import com.proserus.stocks.bp.utils.DateUtils;
 
-public class NumberOfYears extends AbstractAnalysisStrategy {
+public class NumberOfYears extends AdvancedStrategy {
 	protected static Logger calculsLog = Logger.getLogger("calculs." + NumberOfYears.class.getName());
 
 	@Override
-	public void process(Analysis analysis) {
+	public BigDecimal process(ViewableAnalysis analysis) {
 
 		if (calculsLog.isInfoEnabled()) {
 			calculsLog.info("--------------------------------------");
@@ -24,11 +26,11 @@ public class NumberOfYears extends AbstractAnalysisStrategy {
 		calculsLog.info("Calculated NumberOfYears successfully!");
 
 		calculsLog.info("setNumberOfYears = " + years + " years");
-		setValue(analysis, new BigDecimal(years));
+		return new BigDecimal(years);
 	}
 
 	@Override
-	protected void setValue(Analysis analysis, BigDecimal value) {
+	public void setAnalysisValue(Analysis analysis, BigDecimal value) {
 		analysis.setNumberOfYears(value);
 	}
 }

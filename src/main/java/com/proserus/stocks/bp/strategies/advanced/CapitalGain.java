@@ -1,19 +1,18 @@
-package com.proserus.stocks.bp.strategies;
+package com.proserus.stocks.bp.strategies.advanced;
 
 import java.math.BigDecimal;
-import java.util.Collection;
 
 import org.apache.log4j.Logger;
 
 import com.proserus.stocks.bo.analysis.Analysis;
-import com.proserus.stocks.bo.transactions.Transaction;
-import com.proserus.stocks.bp.model.Filter;
+import com.proserus.stocks.bo.analysis.ViewableAnalysis;
+import com.proserus.stocks.bp.strategies.fw.AdvancedStrategy;
 
-public class CapitalGain implements SymbolStrategy {
+public class CapitalGain extends AdvancedStrategy {
 	protected static Logger calculsLog = Logger.getLogger("calculs." + CapitalGain.class.getName());
 
 	@Override
-	public void process(Analysis analysis, Collection<Transaction> transactions, Filter filter) {
+	public BigDecimal process(ViewableAnalysis analysis) {
 		BigDecimal value = BigDecimal.ZERO;
 		BigDecimal divider = analysis.getQuantitySold().multiply(analysis.getAveragePrice());
 
@@ -32,6 +31,11 @@ public class CapitalGain implements SymbolStrategy {
 		}
 
 		calculsLog.info("setCapitalGain = " + value);
+		return value;
+	}
+
+	@Override
+	public void setAnalysisValue(Analysis analysis, BigDecimal value) {
 		analysis.setCapitalGain(value);
 	}
 
