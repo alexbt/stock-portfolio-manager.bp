@@ -1,6 +1,7 @@
 package com.proserus.stocks.bp.strategies;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import org.apache.log4j.Logger;
 
@@ -11,9 +12,10 @@ public class OverallReturn extends AbstractAnalysisStrategy {
 
 	@Override
 	protected void process(Analysis analysis) {
-		// BigDecimal value = analysis.getDividendYield().add(analysis.getMarketGrowth().add(analysis.getCapitalGainPercent()));
+		// BigDecimal value =
+		// analysis.getDividendYield().add(analysis.getMarketGrowth().add(analysis.getCapitalGainPercent()));
 		// analysis.setOverallReturn(value);
-		double value = 0d;
+		BigDecimal value = BigDecimal.ZERO;
 		if (calculsLog.isInfoEnabled()) {
 			calculsLog.info("--------------------------------------");
 			calculsLog.info("Overall Return = (capitalGain / (currentCost+totalSold)) + marketGrowth + dividendYield");
@@ -25,21 +27,22 @@ public class OverallReturn extends AbstractAnalysisStrategy {
 		}
 
 		if (!analysis.getCapitalGain().equals(BigDecimal.ZERO)) {
-			value = analysis.getCapitalGain().doubleValue() / analysis.getTotalCost().add(analysis.getTotalSold()).doubleValue();
+			value = analysis.getCapitalGain().divide(analysis.getTotalCost().add(analysis.getTotalSold()), RoundingMode.HALF_EVEN);
 		} else {
 			calculsLog.info("Capital gain is 0: (currentCost+totalSold): Overall return is market growth + dividend yield.");
 		}
-		if(analysis.getMarketGrowth()!=null){
-			value += analysis.getMarketGrowth().doubleValue();
+		if (analysis.getMarketGrowth() != null) {
+			value = value.add(analysis.getMarketGrowth());
 		}
-		value += analysis.getDividendYield().doubleValue();
+		value = value.add(analysis.getDividendYield());
 		calculsLog.info("Calculated OverallReturn successfully!");
 
 		calculsLog.info("setOverallReturn: " + value);
-		try{
-		analysis.setOverallReturn(new BigDecimal(value));
-		}catch(java.lang.NumberFormatException e){
-			analysis.setOverallReturn(null);
-		}
+		setValue(analysis, value);
+	}
+
+	@Override
+	protected void setValue(Analysis analysis, BigDecimal value) {
+		analysis.setOverallReturn(value);
 	}
 }

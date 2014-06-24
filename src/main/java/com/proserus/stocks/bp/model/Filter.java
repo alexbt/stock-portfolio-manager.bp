@@ -1,41 +1,41 @@
 package com.proserus.stocks.bp.model;
 
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.joda.time.DateTime;
 
 import com.proserus.stocks.bo.symbols.CurrencyEnum;
 import com.proserus.stocks.bo.symbols.SectorEnum;
 import com.proserus.stocks.bo.symbols.Symbol;
 import com.proserus.stocks.bo.transactions.Label;
 import com.proserus.stocks.bo.transactions.TransactionType;
+import com.proserus.stocks.bo.utils.LoggerUtils;
 
-public class Filter{
+public class Filter {
 	private Map<String, Label> labels = new HashMap<String, Label>();
 
 	private Integer year = null;
-	
+
 	private TransactionType type = null;
-	
+
 	private SectorEnum sector = null;
-	
+
 	public SectorEnum getSector() {
-    	return sector;
-    }
+		return sector;
+	}
 
 	public void setSector(SectorEnum sector) {
-    	this.sector = sector;
-    }
+		this.sector = sector;
+	}
 
 	public CurrencyEnum getCurrency() {
-    	return currency;
-    }
+		return currency;
+	}
 
 	public void setCurrency(CurrencyEnum currency) {
-    	this.currency = currency;
-    }
+		this.currency = currency;
+	}
 
 	private CurrencyEnum currency = null;
 
@@ -52,59 +52,54 @@ public class Filter{
 	}
 
 	public void setYear(Integer year) {
-		if (year != null) {
-			this.year = year;
-		} else {
-			this.year = null;
-		}
+		this.year = year;
 	}
 
 	public boolean isDateFiltered() {
 		return year != null;
 	}
-	
-	public boolean isFiltered(){
-		return isDateFiltered() || isSymbolFiltered() || isLabelsFiltered() || isTypeFiltered() || isCurrencyFiltered() || isSectorFiltered();
+
+	public boolean isFiltered() {
+		return isDateFiltered() || isSymbolFiltered() || isLabelsFiltered() || isTypeFiltered() || isCurrencyFiltered()
+				|| isSectorFiltered();
 	}
-	
+
 	public boolean isSymbolFiltered() {
-		return symbol!=null && !symbol.getTicker().isEmpty();
+		return symbol != null && !symbol.getTicker().isEmpty();
 	}
-	
+
 	public boolean isTypeFiltered() {
 		return type != null;
 	}
-	
+
 	public boolean isSectorFiltered() {
 		return sector != null;
 	}
-	
+
 	public boolean isCurrencyFiltered() {
 		return currency != null;
 	}
-	
+
 	public boolean isLabelsFiltered() {
 		return !labels.isEmpty();
 	}
 
-	public boolean isFilteredYearAfter(DateTime date) {
-		//TODO Manage Date better
-		return isDateFiltered() && (getYear() > date.getYear());
+	public boolean isTransactionBeforeFilteredYear(Calendar calendar) {
+		return isDateFiltered() && (getYear() > calendar.get(Calendar.YEAR));
 	}
-	
-	public void setTransactionType(TransactionType type){
+
+	public void setTransactionType(TransactionType type) {
 		this.type = type;
 	}
-	
 
 	public TransactionType getTransactionType() {
-    	return type;
-    }
+		return type;
+	}
 
 	public Integer getYear() {
 		return year;
 	}
-	
+
 	public void addLabel(Label label) {
 		this.labels.put(label.getName(), label);
 	}
@@ -123,28 +118,11 @@ public class Filter{
 
 	private Symbol symbol = null;
 
-	//TODO do not use toString() for business logic
+	@Override
 	public String toString() {
-		String str = "";
-		String labelsStr = labels.values().toString();
-		if (labelsStr.compareTo("[]") == 0) {
-			labelsStr = "[   ]";
-		}
-
-		if (year != null) {
-			str += "        Year: [" + year + "]";
-		} else {
-			str += "        Year: [   ]";
-		}
-
-		if (symbol != null) {
-			str += "        Symbol: [" + getSymbol().getTicker() + "]";
-		} else {
-			str += "        Symbol: [   ]";
-		}
-
-		str += "        Labels: " + labelsStr;
-		return str;
+		assert LoggerUtils.validateCalledFromLogger() : LoggerUtils.callerException();
+		return "Filter [labels=" + labels + ", year=" + year + ", type=" + type + ", sector=" + sector + ", currency=" + currency
+				+ ", symbol=" + symbol + "]";
 	}
-	
+
 }

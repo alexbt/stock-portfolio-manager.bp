@@ -8,27 +8,27 @@ import java.util.Map;
 import org.apache.commons.lang3.Validate;
 
 public class EventBus {
-	
+
 	static private EventBus singleton = new EventBus();
-	private EventBus(){
-		
+
+	private EventBus() {
+
 	}
-	
-	static public EventBus getInstance(){
+
+	static public EventBus getInstance() {
 		return singleton;
 	}
-	
-	
+
 	Map<Event, Collection<EventListener>> listeners = new HashMap<Event, Collection<EventListener>>();
-	
-	public void add(EventListener listener, Event... events){
+
+	public void add(EventListener listener, Event... events) {
 		Validate.notNull(listener);
 		Validate.notNull(events);
 		Validate.notEmpty(events);
-		
-		for(Event event: events){
+
+		for (Event event : events) {
 			Collection<EventListener> col = listeners.get(event);
-			if(col==null){
+			if (col == null) {
 				col = new ArrayList<EventListener>();
 				listeners.put(event, col);
 			}
@@ -36,20 +36,19 @@ public class EventBus {
 		}
 	}
 
-	
-	public void fireEvent(Event event, Object model){
+	public void fireEvent(Event event, Object model) {
 		Validate.notNull(event);
-		
+
 		Collection<EventListener> col = listeners.get(event);
-		
-		if(col != null){
-			for(EventListener listener: col){
+
+		if (col != null) {
+			for (EventListener listener : col) {
 				listener.update(event, model);
 			}
 		}
 	}
-	
-	public void fireEvent(Event event){
+
+	public void fireEvent(Event event) {
 		fireEvent(event, null);
 	}
 }

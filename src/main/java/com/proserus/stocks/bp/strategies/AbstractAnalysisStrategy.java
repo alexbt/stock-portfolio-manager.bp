@@ -1,5 +1,6 @@
 package com.proserus.stocks.bp.strategies;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 
 import com.proserus.stocks.bo.analysis.Analysis;
@@ -13,10 +14,16 @@ public abstract class AbstractAnalysisStrategy implements SymbolStrategy {
 		assert analysis != null;
 		assert transactions != null;
 		assert filter != null;
-		
-		process(analysis);
+
+		try {
+			process(analysis);
+		} catch (NumberFormatException e) {
+			setValue(analysis, BigDecimal.ZERO);
+		}
 
 	}
 
 	protected abstract void process(Analysis analysis);
+
+	protected abstract void setValue(Analysis analysis, BigDecimal value);
 }

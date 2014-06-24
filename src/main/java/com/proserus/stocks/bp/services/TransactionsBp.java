@@ -2,7 +2,6 @@ package com.proserus.stocks.bp.services;
 
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,11 +15,11 @@ import com.proserus.stocks.bo.transactions.Label;
 import com.proserus.stocks.bo.transactions.Transaction;
 import com.proserus.stocks.bp.dao.TransactionsDao;
 import com.proserus.stocks.bp.model.Filter;
-import com.proserus.stocks.bp.utils.DateUtil;
+import com.proserus.stocks.bp.utils.DateUtils;
 
 @Singleton
-public class TransactionsBp{
-	
+public class TransactionsBp {
+
 	@Inject
 	TransactionsDao transactionsDao;
 
@@ -30,10 +29,8 @@ public class TransactionsBp{
 
 	public Transaction add(Transaction t) {
 		Validate.notNull(t);
-		
-		//TODO Manage Date better
-		Calendar c = Calendar.getInstance();
-		c.setTime(t.getDate());
+
+		Calendar c = t.getCalendar();
 		if (!years.containsKey(c.get(Calendar.YEAR))) {
 			years.put(c.get(Calendar.YEAR), c.get(Calendar.YEAR));
 		}
@@ -44,49 +41,42 @@ public class TransactionsBp{
 
 		return t;
 	}
-	
-	public int getFirstYear(){
-		Date val = transactionsDao.getFirstYear();
-		// TODO Manage Date better
-		if (val != null) {
-			return DateUtil.getYear(val);
-		} else {
-			return DateUtil.getCurrentYear();
-		}
-		
+
+	public int getFirstYear() {
+		Calendar val = transactionsDao.getFirstYear();
+		return val != null ? DateUtils.getCalendarYear(val) : DateUtils.getCurrentYear();
 	}
 
 	public boolean contains(Symbol symbol) {
 		Validate.notNull(symbol);
-		//TODO use count instead ?
+		// TODO use count instead ?
 		return transactionsDao.getTransactionsBySymbol(symbol, true).size() > 0;
 	}
-	
+
 	public Collection<Transaction> getTransactions() {
 		return transactionsDao.getTransactions();
 	}
-	
-	
+
 	public Collection<Transaction> getTransactions(Filter filter, boolean dateFlag) {
 		Validate.notNull(filter);
-		
+
 		return transactionsDao.getTransactions(filter, dateFlag);
 	}
-	
+
 	public Collection<Transaction> getTransactionsByCurrency(CurrencyEnum currency, Filter filter, boolean dateFlag) {
 		Validate.notNull(currency);
 		Validate.notNull(filter);
-		
+
 		return transactionsDao.getTransactionsByCurrency(currency, filter, dateFlag);
 	}
 
 	public Collection<Transaction> getTransactionsByLabel(Label label) {
 		Validate.notNull(label);
-		
+
 		return transactionsDao.getTransactionsByLabel(label);
 	}
 
-	public void updateTransaction(Transaction t){
+	public void updateTransaction(Transaction t) {
 		Validate.notNull(t);
 		transactionsDao.add(t);
 	}
@@ -96,7 +86,7 @@ public class TransactionsBp{
 		transactionsDao.remove(t);
 	}
 
-	public TransactionsBp() {	
+	public TransactionsBp() {
 	}
 
 	public int getMinYear() {

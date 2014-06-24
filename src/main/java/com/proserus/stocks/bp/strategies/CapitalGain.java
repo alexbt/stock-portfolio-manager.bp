@@ -11,7 +11,7 @@ import com.proserus.stocks.bp.model.Filter;
 
 public class CapitalGain implements SymbolStrategy {
 	protected static Logger calculsLog = Logger.getLogger("calculs." + CapitalGain.class.getName());
-	
+
 	@Override
 	public void process(Analysis analysis, Collection<Transaction> transactions, Filter filter) {
 		BigDecimal value = BigDecimal.ZERO;
@@ -24,14 +24,14 @@ public class CapitalGain implements SymbolStrategy {
 			calculsLog.info("getQuantitySold: " + analysis.getQuantitySold());
 			calculsLog.info("getAveragePrice: " + analysis.getAveragePrice());
 		}
-		if (divider.doubleValue()!=0) {
+		if (!divider.equals(BigDecimal.ZERO)) {
 			value = analysis.getTotalSold().subtract(divider);
 			calculsLog.info("Calculated CapitalGainSYM successfully!");
-		}else{
+		} else {
 			calculsLog.error("Failed to calculated CapitalGainSYM: (numberofSharesSold X average Price) is 0");
 		}
-		
-		calculsLog.info("setCapitalGain = " +  value);
+
+		calculsLog.info("setCapitalGain = " + value);
 		analysis.setCapitalGain(value);
 	}
 

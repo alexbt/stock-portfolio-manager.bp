@@ -3,7 +3,6 @@ package com.proserus.stocks.bp.dao;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Properties;
 
 import javax.persistence.EntityExistsException;
@@ -21,7 +20,7 @@ import com.proserus.stocks.bo.common.DatabasePaths;
 import com.proserus.stocks.bp.events.Event;
 import com.proserus.stocks.bp.events.EventBus;
 import com.proserus.stocks.bp.events.EventListener;
-import com.proserus.stocks.bp.events.SwingEvents;
+import com.proserus.stocks.bp.events.ModelChangeEvents;
 
 @Singleton
 public class PersistenceManager implements EventListener {
@@ -49,8 +48,8 @@ public class PersistenceManager implements EventListener {
     private static final Logger LOGGER = Logger.getLogger(PersistenceManager.class.getName());
 
     public PersistenceManager() {
-        EventBus.getInstance().add(this, SwingEvents.DATABASE_SELECTED);
-        EventBus.getInstance().add(this, SwingEvents.CURRENT_DATABASE_DELETED);
+        EventBus.getInstance().add(this, ModelChangeEvents.DATABASE_SELECTED);
+        EventBus.getInstance().add(this, ModelChangeEvents.CURRENT_DATABASE_DELETED);
     }
 
     public Object persist(Object o) {
@@ -123,11 +122,11 @@ public class PersistenceManager implements EventListener {
 
     @Override
     public void update(Event event, Object model) {
-        if (SwingEvents.DATABASE_SELECTED.equals(event)) {
-            dbPath = SwingEvents.DATABASE_SELECTED.resolveModel(model);
+        if (ModelChangeEvents.DATABASE_SELECTED.equals(event)) {
+            dbPath = ModelChangeEvents.DATABASE_SELECTED.resolveModel(model);
 
             em = createEntityManager();
-        } else if (SwingEvents.CURRENT_DATABASE_DELETED.equals(event)) {
+        } else if (ModelChangeEvents.CURRENT_DATABASE_DELETED.equals(event)) {
             String ts = new SimpleDateFormat(YYYY_M_MDDHHMMSS).format(Calendar.getInstance().getTime());
             File script = new File(dbPath.getSelectedDatabase().getPath() + SCRIPT);
             File properties = new File(dbPath.getSelectedDatabase().getPath() + PROPERTIES);

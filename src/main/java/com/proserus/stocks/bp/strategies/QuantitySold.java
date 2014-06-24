@@ -14,7 +14,7 @@ public class QuantitySold extends AbstractStrategyCumulative {
 		if (calculsLog.isInfoEnabled()) {
 			calculsLog.info("--------------------------------------");
 			//TODO logging
-			calculsLog.info("Logging not completely implemented for this calcul");
+			calculsLog.info("Logging not implemented");
 		}
 		BigDecimal value = BigDecimal.ZERO;
 
