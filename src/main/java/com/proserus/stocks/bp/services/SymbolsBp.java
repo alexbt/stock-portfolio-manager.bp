@@ -46,7 +46,6 @@ public class SymbolsBp {
 		return symbolsDao.get(new Filter());
 	}
 
-	// TODO 0.24 This should not allow adding a symbol with same name!
 	public boolean updateSymbol(Symbol symbol) {
 		Validate.notNull(symbol);
 		symbolsDao.updateSymbol(symbol);

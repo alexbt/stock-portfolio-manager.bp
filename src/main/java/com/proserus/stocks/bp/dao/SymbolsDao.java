@@ -69,7 +69,6 @@ public class SymbolsDao {
 		return query;
 	}
 
-	// TODO 0.24 This should not allow adding a symbol with same name!
 	public boolean updateSymbol(Symbol symbol) {
 		Validate.notNull(symbol);
 		persistenceManager.persist(symbol);
@@ -98,6 +97,7 @@ public class SymbolsDao {
 
 	public Symbol add(Symbol symbol) {
 		Validate.notNull(symbol);
+		Validate.isTrue(getSymbol(symbol.getTicker()) == null);
 
 		persistenceManager.persist(symbol);
 		return symbol;

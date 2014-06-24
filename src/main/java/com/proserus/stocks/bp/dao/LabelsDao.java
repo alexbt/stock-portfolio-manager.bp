@@ -17,41 +17,42 @@ public class LabelsDao {
 
 	public LabelsDao() {
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public Collection<Label> get() {
 		Query query = persistenceManager.createNamedQuery("label.findAll");
 		return query.getResultList();
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public Collection<Label> getSubLabels(Collection<Label> labels) {
 		Validate.notNull(labels);
 		Validate.notEmpty(labels);
-		
+
 		Query query = persistenceManager.createNamedQuery("label.findSubLabels");
 		query.setParameter("labels", labels);
 		return query.getResultList();
 	}
-	
-	public Label add(Label label){
+
+	public Label add(Label label) {
 		Validate.notNull(label);
-		
+		Validate.notEmpty(label.getName());
+
 		Query query = persistenceManager.createNamedQuery("label.findByName");
 		query.setParameter("label", label.getName());
-		try{
-		Label l = (Label)query.getSingleResult();
-		label = l;
-		}catch(javax.persistence.NoResultException e){
-			label = (Label)persistenceManager.persist(label);
+		try {
+			Label l = (Label) query.getSingleResult();
+			label = l;
+		} catch (javax.persistence.NoResultException e) {
+			label = (Label) persistenceManager.persist(label);
 		}
-		
+
 		return label;
 	}
 
 	public void remove(Label label) {
 		Validate.notNull(label);
-		
+
 		persistenceManager.remove(label);
 	}
 }

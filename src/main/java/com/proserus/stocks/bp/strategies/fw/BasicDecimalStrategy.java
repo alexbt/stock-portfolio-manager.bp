@@ -24,10 +24,10 @@ public abstract class BasicDecimalStrategy extends BasicStrategy<BigDecimal> {
 			}
 
 			if (value == null || Double.valueOf(value.doubleValue()).isInfinite() || Double.valueOf(value.doubleValue()).isNaN()) {
-				value = getDefaultAnalysisValue();
+				value = getDefaultAnalysisValue();// TODO Add logging
 			}
 		} catch (NumberFormatException e) {
-			value = getDefaultAnalysisValue();
+			value = getDefaultAnalysisValue();// TODO Add logging
 		}
 		setAnalysisValue(analysis, value);
 	}
