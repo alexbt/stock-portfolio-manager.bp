@@ -1,7 +1,6 @@
 package com.proserus.stocks.bp.services;
 
 import java.util.Collection;
-import java.util.HashMap;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Transient;
@@ -19,7 +18,6 @@ import com.proserus.stocks.bp.utils.DateUtils;
 @Singleton
 public class SymbolsBp {
 
-	private HashMap<String, Symbol> symbols = new HashMap<String, Symbol>();
 	public static Boolean automaticUpdate = false;
 
 	@Inject
@@ -103,25 +101,6 @@ public class SymbolsBp {
 		}
 
 		return symbol;
-	}
-
-	/*
-	 * public void save() { try { ptrans.clear(); Iterator<String> iterator =
-	 * symbols.keySet().iterator(); HashMap<String, String> str = new
-	 * HashMap<String, String>(); while (iterator.hasNext()) { String val =
-	 * iterator.next(); str.put(val, symbols.get(val).getContent()); }
-	 * 
-	 * ptrans.putAll(str); ptrans.put(INTERNET_PROPERTY, new
-	 * Boolean(automaticUpdate).toString()); ptrans.store(new
-	 * FileOutputStream(config + SYMBOLS_PROPERTIES), EMPTY_STR); } catch
-	 * (FileNotFoundException e) { } catch (IOException e) { } }
-	 */
-
-	public boolean hasSymbol(String str) {
-		Validate.notNull(str);
-		Validate.notEmpty(str);
-
-		return symbols.containsKey(str.toLowerCase());
 	}
 
 	public Symbol getSymbol(String ticker) {

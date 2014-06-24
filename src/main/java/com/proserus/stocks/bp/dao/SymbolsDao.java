@@ -97,7 +97,7 @@ public class SymbolsDao {
 
 	public Symbol add(Symbol symbol) {
 		Validate.notNull(symbol);
-		Validate.isTrue(getSymbol(symbol.getTicker()) == null);
+		Validate.isTrue(!contains(symbol.getTicker()));
 
 		persistenceManager.persist(symbol);
 		return symbol;
@@ -117,5 +117,10 @@ public class SymbolsDao {
 		}
 
 		return symbol;
+	}
+
+	public boolean contains(String ticker) {
+		Symbol s = getSymbol(ticker);
+		return s != null ? true : false;
 	}
 }
