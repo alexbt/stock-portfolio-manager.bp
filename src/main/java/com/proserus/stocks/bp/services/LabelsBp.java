@@ -14,22 +14,23 @@ public class LabelsBp {
 
 	@Inject
 	private LabelsDao labelsDao;
-	
+
 	public LabelsBp() {
 	}
-	
+
 	public Collection<Label> get() {
 		return labelsDao.get();
 	}
-	
+
 	public Collection<Label> getSubLabels(Collection<Label> labels) {
 		Validate.notNull(labels);
-		Validate.notEmpty(labels);		
+		Validate.notEmpty(labels);
 		return labelsDao.getSubLabels(labels);
 	}
-	
-	public Label add(Label label){
+
+	public Label add(Label label) {
 		Validate.notNull(label);
+		Validate.notEmpty(label.getName());
 		label = labelsDao.add(label);
 		return label;
 	}
