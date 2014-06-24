@@ -11,9 +11,10 @@ import com.proserus.stocks.bp.model.Filter;
 
 public abstract class AbstractStrategyCumulative implements SymbolStrategy {
 	protected static Logger calculsLog = Logger.getLogger("calculs." + AbstractStrategyCumulative.class.getName());
+
 	@Override
 	public void process(Analysis analysis, Collection<Transaction> transactions, Filter filter) {
-		if(calculsLog.isInfoEnabled()){
+		if (calculsLog.isInfoEnabled()) {
 			calculsLog.info("--------------------------------------");
 		}
 		BigDecimal value = BigDecimal.ZERO;

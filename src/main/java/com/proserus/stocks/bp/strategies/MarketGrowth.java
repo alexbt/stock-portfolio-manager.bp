@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import org.apache.log4j.Logger;
 
 import com.proserus.stocks.bo.analysis.Analysis;
+import com.proserus.stocks.bo.utils.BigDecimalUtils;
 
 public class MarketGrowth extends AbstractAnalysisStrategy {
 	protected static Logger calculsLog = Logger.getLogger("calculs." + MarketGrowth.class.getName());
@@ -19,24 +20,29 @@ public class MarketGrowth extends AbstractAnalysisStrategy {
 			calculsLog.info("marketGrowth = ((marketValue - currentCost) / currentCost) x 100");
 		}
 
-		try{
+		try {
 			if (!analysis.getTotalCost().equals(BigDecimal.ZERO)) {
-		
-			value = analysis.getMarketValue();
-			value = value.subtract(analysis.getCostBasis());
-			value = value.divide(analysis.getCostBasis(), BigDecimal.ROUND_UP);
-			value = value.multiply(BigDecimal.valueOf(100));
-			calculsLog.info("Calculated MarketGrowth successfully!");
-		} else {
-			calculsLog.info("Failed to calculate MarketGrowth: current Cost is 0");
-		}
-			
+
+				value = analysis.getMarketValue();
+				value = value.subtract(analysis.getCostBasis());
+				value = value.divide(analysis.getCostBasis(), BigDecimal.ROUND_UP);
+				value = value.multiply(BigDecimalUtils.HUNDRED);
+				calculsLog.info("Calculated MarketGrowth successfully!");
+			} else {
+				calculsLog.info("Failed to calculate MarketGrowth: current Cost is 0");
+			}
+
 			calculsLog.info("setMarketGrowth = " + value);
-			analysis.setMarketGrowth(value);
-		}catch(java.lang.ArithmeticException e){
+			setValue(analysis, value);
+		} catch (java.lang.ArithmeticException e) {
 			calculsLog.info("setMarketGrowth = Infinite");
-			analysis.setMarketGrowth(null);
+			setValue(analysis, null);
 		}
-		
+
+	}
+
+	@Override
+	protected void setValue(Analysis analysis, BigDecimal value) {
+		analysis.setMarketGrowth(value);
 	}
 }

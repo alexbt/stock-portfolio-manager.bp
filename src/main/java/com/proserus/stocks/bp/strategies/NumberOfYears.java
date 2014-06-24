@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import org.apache.log4j.Logger;
 
 import com.proserus.stocks.bo.analysis.Analysis;
-import com.proserus.stocks.bp.utils.DateUtil;
+import com.proserus.stocks.bp.utils.DateUtils;
 
 public class NumberOfYears extends AbstractAnalysisStrategy {
 	protected static Logger calculsLog = Logger.getLogger("calculs." + NumberOfYears.class.getName());
@@ -20,11 +20,15 @@ public class NumberOfYears extends AbstractAnalysisStrategy {
 			calculsLog.info("getEndOfPeriod: " + analysis.getEndOfPeriod());
 		}
 
-		double years = DateUtil.getYearsBetween(analysis.getStartOfPeriod(), analysis.getEndOfPeriod());
+		double years = DateUtils.getYearsBetween(analysis.getStartOfPeriod(), analysis.getEndOfPeriod());
 		calculsLog.info("Calculated NumberOfYears successfully!");
 
 		calculsLog.info("setNumberOfYears = " + years + " years");
-		calculsLog.info("setNumberOfYears = " + years + " years");
-		analysis.setNumberOfYears(new BigDecimal(years));
+		setValue(analysis, new BigDecimal(years));
+	}
+
+	@Override
+	protected void setValue(Analysis analysis, BigDecimal value) {
+		analysis.setNumberOfYears(value);
 	}
 }

@@ -45,7 +45,7 @@ public class SymbolsDao {
 	private String getAscendingOrder() {
 		return " ORDER BY ticker ASC";
 	}
-	
+
 	private String getFilterQuery(Filter filter) {
 		Validate.notNull(filter);
 		return getSymbolQuery(filter.getSymbol()) + getCurrencyQuery(filter.getCurrency()) + getSectorQuery(filter.getSector());
@@ -55,8 +55,7 @@ public class SymbolsDao {
 
 		String query = "";
 		if (currency != null) {
-			// FIXME Do not use ordinal
-			query = " AND " + " currency='" + currency.name() + "'";
+			query = " AND " + " currency='" + currency.getId() + "'";
 		}
 		return query;
 	}
@@ -65,13 +64,12 @@ public class SymbolsDao {
 
 		String query = "";
 		if (sector != null) {
-			// FIXME Do not use ordinal
-			query = " AND " + " sector='" + sector.name() + "'";
+			query = " AND " + " sector='" + sector.getId() + "'";
 		}
 		return query;
 	}
 
-	// TODO This should not allow adding a symbol with same name!
+	// TODO 0.24 This should not allow adding a symbol with same name!
 	public boolean updateSymbol(Symbol symbol) {
 		Validate.notNull(symbol);
 		persistenceManager.persist(symbol);
@@ -85,7 +83,6 @@ public class SymbolsDao {
 
 	public void updatePrices(Symbol symbol) {
 		Validate.notNull(symbol);
-		// TODO Manage Date better
 		persistenceManager.persist(symbol);
 	}
 

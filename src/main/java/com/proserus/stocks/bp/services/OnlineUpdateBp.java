@@ -2,6 +2,7 @@ package com.proserus.stocks.bp.services;
 
 import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.Set;
 
 import com.proserus.stocks.bo.symbols.HistoricalPrice;
 import com.proserus.stocks.bo.symbols.Symbol;
@@ -11,6 +12,6 @@ public interface OnlineUpdateBp {
 
 	void retrieveCurrentPrice(Collection<Symbol> symbols);
 
-	Collection<HistoricalPrice> retrieveHistoricalPrices(Symbol symbol, int year);
+	Set<HistoricalPrice> retrieveHistoricalPrices(Symbol symbol);
 
 }

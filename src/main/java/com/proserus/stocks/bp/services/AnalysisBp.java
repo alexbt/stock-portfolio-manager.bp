@@ -1,7 +1,10 @@
 package com.proserus.stocks.bp.services;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
+
+import org.apache.commons.lang3.Validate;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -21,7 +24,7 @@ import com.proserus.stocks.bp.dao.LabelsDao;
 import com.proserus.stocks.bp.dao.SymbolsDao;
 import com.proserus.stocks.bp.dao.TransactionsDao;
 import com.proserus.stocks.bp.model.Filter;
-import com.proserus.stocks.bp.utils.DateUtil;
+import com.proserus.stocks.bp.utils.DateUtils;
 
 @Singleton
 public class AnalysisBp {
@@ -55,39 +58,38 @@ public class AnalysisBp {
 	}
 
 	public void recalculate(Filter filter) {
-		assert filter != null;
+		Validate.notNull(filter);
 
 		calculatePerSymbol(filter);
 		calculatePerCurrency(filter);
-		// calculatePerLabels(filter);
 	}
 
 	public void calculateBySector(Filter filter) {
-		assert filter != null;
+		Validate.notNull(filter);
 		calculatePerSector(filter);
 	}
 
 	public void calculateByLabel(Filter filter) {
-		assert filter != null;
+		Validate.notNull(filter);
 		calculatePerLabel(filter);
 	}
 
 	public void calculateByYear(Filter filter, int startYear) {
-		assert filter != null;
+		Validate.notNull(filter);
 		calculatePerYear(filter, startYear);
 	}
 
 	private void calculatePerSector(Filter filter) {
-		assert filter != null;
+		Validate.notNull(filter);
 
 		sectorAnalysis = new ArrayList<SectorAnalysis>();
 
 		for (SectorEnum sector : SectorEnum.retrieveSortedSectors()) {
 			Collection<Transaction> trans = transactionsDao.getTransactionsBySector(sector, filter, false);
-			if (trans.size() > 0) {
+			if (!trans.isEmpty()) {
 				Analysis analysis = createAnalysis(trans, filter);
 				analysis.setSector(sector);
-				if (analysis.getQuantity().floatValue() != 0F) {
+				if (!analysis.getQuantity().equals(BigDecimal.ZERO)) {
 					sectorAnalysis.add(analysis);
 				}
 			}
@@ -95,27 +97,28 @@ public class AnalysisBp {
 	}
 
 	private void calculatePerYear(Filter filter, int startYear) {
-		assert filter != null;
+		Validate.notNull(filter);
 
 		yearAnalysis = new ArrayList<YearAnalysis>();
 
 		if (filter.isDateFiltered()) {
 			Collection<Transaction> trans = transactionsDao.getTransactions(filter, false);
-			if (trans.size() > 0) {
+			if (!trans.isEmpty()) {
 				Analysis analysis = createAnalysis(trans, filter);
 				analysis.setYear(filter.getYear());
-				if (analysis.getQuantity().floatValue() != 0F) {
+				// before: if (analysis.getQuantity().floatValue() != 0F) {
+				if (!analysis.getQuantity().equals(BigDecimal.ZERO)) {
 					yearAnalysis.add(analysis);
 				}
 			}
 		} else {
-			while (startYear  <= DateUtil.getCurrentYear()) {
+			while (startYear <= DateUtils.getCurrentYear()) {
 				filter.setYear(startYear);
 				Collection<Transaction> trans = transactionsDao.getTransactions(filter, false);
-				if (trans.size() > 0) {
+				if (!trans.isEmpty()) {
 					Analysis analysis = createAnalysis(trans, filter);
 					analysis.setYear(startYear);
-					if (analysis.getQuantity().floatValue() != 0F) {
+					if (!analysis.getQuantity().equals(BigDecimal.ZERO)) {
 						yearAnalysis.add(analysis);
 					}
 				}
@@ -126,7 +129,7 @@ public class AnalysisBp {
 	}
 
 	private void calculatePerLabel(Filter filter) {
-		assert filter != null;
+		Validate.notNull(filter);
 
 		labelAnalysis = new ArrayList<LabelAnalysis>();
 
@@ -136,7 +139,7 @@ public class AnalysisBp {
 				if (trans.size() > 0) {
 					Analysis analysis = createAnalysis(trans, filter);
 					analysis.setLabel(label);
-					if (analysis.getQuantity().floatValue() != 0F) {
+					if (!analysis.getQuantity().equals(BigDecimal.ZERO)) {
 						labelAnalysis.add(analysis);
 					}
 				}
@@ -145,15 +148,15 @@ public class AnalysisBp {
 	}
 
 	private void calculatePerSymbol(Filter filter) {
-		assert filter != null;
+		Validate.notNull(filter);
 
 		symbolAnalysis = new ArrayList<SymbolAnalysis>();
 		for (Symbol symbol : symbolsDao.get(filter)) {
 			Collection<Transaction> trans = transactionsDao.getTransactionsBySymbol(symbol, filter, false);
-			if (trans.size() > 0) {
+			if (!trans.isEmpty()) {
 				Analysis analysis = createAnalysis(trans, filter);
 				analysis.setSymbol(symbol);
-				if (analysis.getQuantity().floatValue() != 0F) {
+				if (!analysis.getQuantity().equals(BigDecimal.ZERO)) {
 					symbolAnalysis.add(analysis);
 				}
 			}
@@ -161,8 +164,9 @@ public class AnalysisBp {
 	}
 
 	private Analysis createAnalysis(Collection<Transaction> trans, Filter filter) {
-		assert trans != null;
-		assert filter != null;
+		Validate.notNull(trans);
+		Validate.notEmpty(trans);
+		Validate.notNull(filter);
 
 		Analysis analysis = new AnalysisImpl();
 		for (PerfOverviewStrategyEnum strategy : PerfOverviewStrategyEnum.values()) {
@@ -172,7 +176,7 @@ public class AnalysisBp {
 	}
 
 	private void calculatePerCurrency(Filter filter) {
-		assert filter != null;
+		Validate.notNull(filter);
 
 		currencyAnalysis = new ArrayList<CurrencyAnalysis>();
 
@@ -181,7 +185,7 @@ public class AnalysisBp {
 			if (!trans.isEmpty()) {
 				Analysis analysis = createAnalysis(trans, filter);
 				analysis.setCurrency(currency);
-				if (analysis.getQuantity().floatValue() != 0F) {
+				if (!analysis.getQuantity().equals(BigDecimal.ZERO)) {
 					currencyAnalysis.add(analysis);
 				}
 			}
@@ -204,9 +208,11 @@ public class AnalysisBp {
 	// assert filter != null;
 	//
 	// if(filter.isLabelsFiltered()){
-	// Collection<Transaction> transactions = transactionsDao.getTransactions(filter, false);
+	// Collection<Transaction> transactions =
+	// transactionsDao.getTransactions(filter, false);
 	// for(Label label: filter.getLabels()){
-	// Collection<Transaction> trans = transactionsDao.getTransactionsByLabel(label);
+	// Collection<Transaction> trans =
+	// transactionsDao.getTransactionsByLabel(label);
 	// trans = CollectionUtils.union(trans, transactions);
 	// }
 	// }

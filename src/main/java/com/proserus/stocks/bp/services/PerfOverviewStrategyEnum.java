@@ -23,24 +23,23 @@ import com.proserus.stocks.bp.strategies.SymbolStrategy;
 import com.proserus.stocks.bp.strategies.TotalCost;
 
 public enum PerfOverviewStrategyEnum {
-
-	QUANTITY_REMAINING(new QuantityRemaining()),
-	QUANTITY_SOLD(new QuantitySold()),
-	QUANTITY_BUY(new QuantityBought()),
-	DIVIDEND(new Dividend()),
-	COMMISSION(new Commission()),
-	TOTAL_COST(new TotalCost()),
-	AVERAGE_COST_PER_SHARE(new AverageCostPerShare()),
-	COST_BASIS(new CostBasis()),
-	SUM_PRICE_SOLD(new SumSellingPrices()),
-	START_OF_PERIOD(new StartOfPeriod()),
-	END_OF_PERIOD(new EndOfPeriod()),
-	MARKET_VALUE(new MarketValue()),
-	CAPITAL_GAIN(new CapitalGain()),
-	NUMBER_OF_YEARS(new NumberOfYears()),
-	MARKET_GROWTH(new MarketGrowth()),
-	DIVIDEND_YIELD(new DividendYield()),
-	OVERALL_RETURN(new OverallReturn()),
+	QUANTITY_REMAINING(new QuantityRemaining()), //
+	QUANTITY_SOLD(new QuantitySold()), //
+	QUANTITY_BUY(new QuantityBought()), //
+	DIVIDEND(new Dividend()), //
+	COMMISSION(new Commission()), //
+	TOTAL_COST(new TotalCost()), //
+	AVERAGE_COST_PER_SHARE(new AverageCostPerShare()), //
+	COST_BASIS(new CostBasis()), //
+	SUM_PRICE_SOLD(new SumSellingPrices()), //
+	START_OF_PERIOD(new StartOfPeriod()), //
+	END_OF_PERIOD(new EndOfPeriod()), //
+	MARKET_VALUE(new MarketValue()), //
+	CAPITAL_GAIN(new CapitalGain()), //
+	NUMBER_OF_YEARS(new NumberOfYears()), //
+	MARKET_GROWTH(new MarketGrowth()), //
+	DIVIDEND_YIELD(new DividendYield()), //
+	OVERALL_RETURN(new OverallReturn()), //
 	ANNUALIZED_RETURN(new AnnualizedReturn());
 
 	protected static Logger calculsLog = Logger.getLogger("calculs." + PerfOverviewStrategyEnum.class.getName());
@@ -49,8 +48,8 @@ public enum PerfOverviewStrategyEnum {
 			calculsLog.info("--------------------------------------");
 			calculsLog.info("--------------------------------------");
 			calculsLog.info("--------------------------------------");
-			for(PerfOverviewStrategyEnum en: values()){
-				calculsLog.info("SymbolStrategies: " + en.name());
+			for (PerfOverviewStrategyEnum en : values()) {
+				calculsLog.info("SymbolStrategies: " + en);
 			}
 			calculsLog.info("--------------------------------------");
 		}

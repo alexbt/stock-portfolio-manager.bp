@@ -7,7 +7,7 @@ import com.proserus.stocks.bo.symbols.HistoricalPrice;
 import com.proserus.stocks.bo.transactions.Transaction;
 import com.proserus.stocks.bo.transactions.TransactionType;
 import com.proserus.stocks.bp.model.Filter;
-import com.proserus.stocks.bp.utils.DateUtil;
+import com.proserus.stocks.bp.utils.DateUtils;
 public class MarketValue extends AbstractStrategyCumulative {
 
 	@Override
@@ -20,7 +20,7 @@ public class MarketValue extends AbstractStrategyCumulative {
 		}
 		BigDecimal  value = BigDecimal.ZERO;
 		if (!t.getType().equals(TransactionType.DIVIDEND)) {
-			HistoricalPrice h = t.getSymbol().getPrice(DateUtil.getFilteredYear(filter));
+			HistoricalPrice h = t.getSymbol().getPrice(DateUtils.getFilteredYear(filter));
 			if (calculsLog.isInfoEnabled()) {
 				calculsLog.info("getCustomPrice: " + h.getCustomPrice());
 				calculsLog.info("getPrice: " + h.getPrice());

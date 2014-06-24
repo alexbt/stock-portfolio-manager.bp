@@ -1,5 +1,6 @@
 package com.proserus.stocks.bp.dao;
 
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 
@@ -16,6 +17,7 @@ import com.proserus.stocks.bo.transactions.Label;
 import com.proserus.stocks.bo.transactions.Transaction;
 import com.proserus.stocks.bo.transactions.TransactionType;
 import com.proserus.stocks.bp.model.Filter;
+import com.proserus.stocks.bp.utils.DateUtils;
 
 @Singleton
 public class TransactionsDao {
@@ -25,14 +27,14 @@ public class TransactionsDao {
 	public Transaction add(Transaction t) {
 		Validate.notNull(t);
 		Validate.notNull(t.getCommission());
-		Validate.notNull(t.getDate());
+		Validate.notNull(t.getCalendar());
 		Validate.notNull(t.getLabelsValues());
 		Validate.notNull(t.getPrice());
 		Validate.notNull(t.getQuantity());
 		Validate.notNull(t.getSymbol());
 		Validate.notNull(t.getType());
 
-		t = (Transaction)persistenceManager.persist(t);
+		t = (Transaction) persistenceManager.persist(t);
 		return t;
 	}
 
@@ -53,7 +55,7 @@ public class TransactionsDao {
 		Query query = persistenceManager.createQuery(str);
 		return query.getResultList();
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public Collection<Transaction> getTransactionsBySector(SectorEnum sector, Filter filter, boolean dateFlag) {
 		Validate.notNull(sector);
@@ -66,7 +68,7 @@ public class TransactionsDao {
 		Query query = persistenceManager.createQuery(str);
 		return query.getResultList();
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public Collection<Transaction> getTransactionsByYear(Integer year, Filter filter, boolean dateFlag) {
 		Validate.notNull(filter);
@@ -118,9 +120,8 @@ public class TransactionsDao {
 
 	private String getFilterQuery(Filter filter, boolean dateFlag) {
 		Validate.notNull(filter);
-		// TODO Manage Date better
 		return getLabelQuery(filter.getLabels()) + getSymbolQuery(filter.getSymbol()) + getTypeQuery(filter.getTransactionType())
-		        + getDateQuery(filter.getYear(), dateFlag) + getCurrencyQuery(filter.getCurrency()) + getSectorQuery(filter.getSector());
+				+ getDateQuery(filter.getYear(), dateFlag) + getCurrencyQuery(filter.getCurrency()) + getSectorQuery(filter.getSector());
 	}
 
 	private String getLabelQuery(Collection<Label> labels) {
@@ -133,7 +134,7 @@ public class TransactionsDao {
 		}
 		return query;
 	}
-	
+
 	private String getLabelQuery(Label label) {
 
 		String query = "";
@@ -151,17 +152,17 @@ public class TransactionsDao {
 		}
 		return query;
 	}
-	
+
 	private String getTypeQuery(TransactionType type) {
 		String query = "";
 		if (type != null) {
-			query = " AND " + " type='" + type.name() + "'";
+			query = " AND " + " type='" + type.getId() + "'";
 		}
 		return query;
 	}
 
 	private String getDateQuery(Integer year, boolean dateFlag) {
-
+		// TODO why this when we have DateUtils
 		String query = "";
 		if (year != null) {
 			String DATE_DB_FORMAT_MIN = "-12-31 23:59:59";
@@ -183,8 +184,7 @@ public class TransactionsDao {
 
 		String query = "";
 		if (currency != null) {
-			// FIXME Do not use ordinal
-			query = " AND " + " currency='" + currency.name() + "'";
+			query = " AND " + " currency='" + currency.getId() + "'";
 		}
 		return query;
 	}
@@ -193,8 +193,7 @@ public class TransactionsDao {
 
 		String query = "";
 		if (sector != null) {
-			// FIXME Do not use ordinal
-			query = " AND " + " sector='" + sector.name() + "'";
+			query = " AND " + " sector='" + sector.getId() + "'";
 		}
 		return query;
 	}
@@ -207,7 +206,7 @@ public class TransactionsDao {
 		query.setParameter("label", label);
 		return query.getResultList();
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public Collection<Transaction> getTransactionsByLabel(Label label, Filter filter, boolean dateFlag) {
 		Validate.notNull(label);
@@ -226,9 +225,14 @@ public class TransactionsDao {
 		persistenceManager.remove(t);
 	}
 
-	public Date getFirstYear() {
+	public Calendar getFirstYear() {
 		Query query = persistenceManager.createNamedQuery("transaction.findMinDate");
-		return (Date) query.getSingleResult();
+		Date date = (Date) query.getSingleResult();
+		Calendar calendar = Calendar.getInstance();
+		if (date != null) {
+			calendar = DateUtils.getCalendar(date);
+		}
+		return calendar;
 	}
 
 	public TransactionsDao() {
