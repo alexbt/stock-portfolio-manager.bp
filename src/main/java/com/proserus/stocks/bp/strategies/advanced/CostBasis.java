@@ -1,20 +1,20 @@
-package com.proserus.stocks.bp.strategies;
+package com.proserus.stocks.bp.strategies.advanced;
 
 import java.math.BigDecimal;
-import java.util.Collection;
 
 import org.apache.log4j.Logger;
 
 import com.proserus.stocks.bo.analysis.Analysis;
-import com.proserus.stocks.bo.transactions.Transaction;
-import com.proserus.stocks.bp.model.Filter;
-public class CostBasis implements SymbolStrategy {
+import com.proserus.stocks.bo.analysis.ViewableAnalysis;
+import com.proserus.stocks.bp.strategies.fw.AdvancedStrategy;
+
+public class CostBasis extends AdvancedStrategy {
 	protected static Logger calculsLog = Logger.getLogger("calculs." + CostBasis.class.getName());
-	
+
 	@Override
-	public void process(Analysis analysis, Collection<Transaction> transactions, Filter filter) {
+	public BigDecimal process(ViewableAnalysis analysis) {
 		BigDecimal value = BigDecimal.ZERO;
-		
+
 		if (calculsLog.isInfoEnabled()) {
 			calculsLog.info("--------------------------------------");
 			calculsLog.info("CostBasisSYM = quantity x averagePrice");
@@ -22,11 +22,16 @@ public class CostBasis implements SymbolStrategy {
 			calculsLog.info("getAveragePrice: " + analysis.getAveragePrice());
 		}
 		value = analysis.getAveragePrice().multiply(analysis.getQuantity());
-		
-		//value = value.add(analysis.getTotalCost().subtract(value));
-		//value.subtract(analysis.getTotalCost().subtract(analysis.getQua))
-				
-		calculsLog.info("setAveragePrice = " +  value);
+
+		// value = value.add(analysis.getTotalCost().subtract(value));
+		// value.subtract(analysis.getTotalCost().subtract(analysis.getQua))
+
+		calculsLog.info("setAveragePrice = " + value);
+		return value;
+	}
+
+	@Override
+	public void setAnalysisValue(Analysis analysis, BigDecimal value) {
 		analysis.setCostBasis(value);
 	}
 }

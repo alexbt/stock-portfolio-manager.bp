@@ -1,16 +1,18 @@
-package com.proserus.stocks.bp.strategies;
+package com.proserus.stocks.bp.strategies.advanced;
 
 import java.math.BigDecimal;
 
 import org.apache.log4j.Logger;
 
 import com.proserus.stocks.bo.analysis.Analysis;
+import com.proserus.stocks.bo.analysis.ViewableAnalysis;
 import com.proserus.stocks.bo.utils.BigDecimalUtils;
+import com.proserus.stocks.bp.strategies.fw.AdvancedStrategy;
 
-public class MarketGrowth extends AbstractAnalysisStrategy {
+public class MarketGrowth extends AdvancedStrategy {
 	protected static Logger calculsLog = Logger.getLogger("calculs." + MarketGrowth.class.getName());
 
-	protected void process(Analysis analysis) {
+	protected BigDecimal process(ViewableAnalysis analysis) {
 		BigDecimal value = BigDecimal.ZERO;
 
 		if (calculsLog.isInfoEnabled()) {
@@ -33,16 +35,17 @@ public class MarketGrowth extends AbstractAnalysisStrategy {
 			}
 
 			calculsLog.info("setMarketGrowth = " + value);
-			setValue(analysis, value);
 		} catch (java.lang.ArithmeticException e) {
 			calculsLog.info("setMarketGrowth = Infinite");
-			setValue(analysis, null);
+			value = null;
 		}
+
+		return value;
 
 	}
 
 	@Override
-	protected void setValue(Analysis analysis, BigDecimal value) {
+	public void setAnalysisValue(Analysis analysis, BigDecimal value) {
 		analysis.setMarketGrowth(value);
 	}
 }

@@ -24,6 +24,8 @@ import com.proserus.stocks.bp.dao.LabelsDao;
 import com.proserus.stocks.bp.dao.SymbolsDao;
 import com.proserus.stocks.bp.dao.TransactionsDao;
 import com.proserus.stocks.bp.model.Filter;
+import com.proserus.stocks.bp.strategies.fw.AdvancedStrategiesEnum;
+import com.proserus.stocks.bp.strategies.fw.BasicStrategiesEnum;
 import com.proserus.stocks.bp.utils.DateUtils;
 
 @Singleton
@@ -163,13 +165,16 @@ public class AnalysisBp {
 		}
 	}
 
-	private Analysis createAnalysis(Collection<Transaction> trans, Filter filter) {
+	/* package */Analysis createAnalysis(Collection<Transaction> trans, Filter filter) {
 		Validate.notNull(trans);
 		Validate.notEmpty(trans);
 		Validate.notNull(filter);
 
 		Analysis analysis = new AnalysisImpl();
-		for (PerfOverviewStrategyEnum strategy : PerfOverviewStrategyEnum.values()) {
+		for (BasicStrategiesEnum strategy : BasicStrategiesEnum.values()) {
+			strategy.getStrategy().process(analysis, trans, filter);
+		}
+		for (AdvancedStrategiesEnum strategy : AdvancedStrategiesEnum.values()) {
 			strategy.getStrategy().process(analysis, trans, filter);
 		}
 		return analysis;

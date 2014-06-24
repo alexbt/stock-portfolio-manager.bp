@@ -1,36 +1,40 @@
-package com.proserus.stocks.bp.strategies;
+package com.proserus.stocks.bp.strategies.advanced;
 
 import java.math.BigDecimal;
-import java.util.Collection;
 
 import org.apache.log4j.Logger;
 
 import com.proserus.stocks.bo.analysis.Analysis;
-import com.proserus.stocks.bo.transactions.Transaction;
-import com.proserus.stocks.bp.model.Filter;
+import com.proserus.stocks.bo.analysis.ViewableAnalysis;
+import com.proserus.stocks.bp.strategies.fw.AdvancedStrategy;
 
-public class AverageCostPerShare implements SymbolStrategy {
+public class AverageCostPerShare extends AdvancedStrategy {
 	protected static Logger calculsLog = Logger.getLogger("calculs." + AverageCostPerShare.class.getName());
-	
+
 	@Override
-	public void process(Analysis analysis, Collection<Transaction> transactions, Filter filter) {
+	public BigDecimal process(ViewableAnalysis analysis) {
 		BigDecimal value = BigDecimal.ZERO;
-		
+
 		if (calculsLog.isInfoEnabled()) {
 			calculsLog.info("--------------------------------------");
 			calculsLog.info("AverageCostPerShareSYM = Cost / Quantity");
 			calculsLog.info("getQuantityBuy: " + analysis.getQuantityBuy());
 			calculsLog.info("getCurrentCost: " + analysis.getTotalCost());
 		}
-		
+
 		if (!analysis.getQuantityBuy().equals(BigDecimal.ZERO)) {
-			value = analysis.getTotalCost().divide(analysis.getQuantityBuy(),BigDecimal.ROUND_UP);
+			value = analysis.getTotalCost().divide(analysis.getQuantityBuy(), BigDecimal.ROUND_UP);
 			calculsLog.info("Calculated AverageCostPerShare successfully!");
-		}else{
+		} else {
 			calculsLog.error("Failed to calculated AverageCostPerShare: Quantity is 0");
 		}
-		
-		calculsLog.info("setAveragePrice = " +  value);
+
+		calculsLog.info("setAveragePrice = " + value);
+		return value;
+	}
+
+	@Override
+	public void setAnalysisValue(Analysis analysis, BigDecimal value) {
 		analysis.setAveragePrice(value);
 	}
 }

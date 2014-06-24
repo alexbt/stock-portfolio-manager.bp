@@ -1,4 +1,4 @@
-package com.proserus.stocks.bp.strategies;
+package com.proserus.stocks.bp.strategies.advanced;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -6,12 +6,14 @@ import java.math.RoundingMode;
 import org.apache.log4j.Logger;
 
 import com.proserus.stocks.bo.analysis.Analysis;
+import com.proserus.stocks.bo.analysis.ViewableAnalysis;
+import com.proserus.stocks.bp.strategies.fw.AdvancedStrategy;
 
-public class OverallReturn extends AbstractAnalysisStrategy {
+public class OverallReturn extends AdvancedStrategy {
 	protected static Logger calculsLog = Logger.getLogger("calculs." + OverallReturn.class.getName());
 
 	@Override
-	protected void process(Analysis analysis) {
+	protected BigDecimal process(ViewableAnalysis analysis) {
 		// BigDecimal value =
 		// analysis.getDividendYield().add(analysis.getMarketGrowth().add(analysis.getCapitalGainPercent()));
 		// analysis.setOverallReturn(value);
@@ -38,11 +40,11 @@ public class OverallReturn extends AbstractAnalysisStrategy {
 		calculsLog.info("Calculated OverallReturn successfully!");
 
 		calculsLog.info("setOverallReturn: " + value);
-		setValue(analysis, value);
+		return value;
 	}
 
 	@Override
-	protected void setValue(Analysis analysis, BigDecimal value) {
+	public void setAnalysisValue(Analysis analysis, BigDecimal value) {
 		analysis.setOverallReturn(value);
 	}
 }
