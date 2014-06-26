@@ -12,7 +12,8 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.lang3.Validate;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.CSVWriter;
@@ -33,7 +34,7 @@ import com.proserus.stocks.bp.model.CsvModel;
 import com.proserus.stocks.bp.utils.DateUtils;
 
 public class ImportExportBp {
-	private final static Logger LOGGER = Logger.getLogger(ImportExportBp.class.getName());
+	private final static Logger LOGGER = LoggerFactory.getLogger(ImportExportBp.class.getName());
 	@Inject
 	private SymbolsBp symbolsBp;
 

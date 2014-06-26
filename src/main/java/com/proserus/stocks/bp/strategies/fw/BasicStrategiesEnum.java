@@ -1,6 +1,7 @@
 package com.proserus.stocks.bp.strategies.fw;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.proserus.stocks.bp.strategies.basics.Commission;
 import com.proserus.stocks.bp.strategies.basics.Dividend;
@@ -25,7 +26,7 @@ public enum BasicStrategiesEnum {
 	END_OF_PERIOD(new EndOfPeriod()), //
 	MARKET_VALUE(new MarketValue()); //
 
-	protected static Logger calculsLog = Logger.getLogger("calculs." + BasicStrategiesEnum.class.getName());
+	protected static Logger calculsLog = LoggerFactory.getLogger("calculs." + BasicStrategiesEnum.class.getName());
 	static {
 		if (calculsLog.isInfoEnabled()) {
 			calculsLog.info("--------------------------------------");
