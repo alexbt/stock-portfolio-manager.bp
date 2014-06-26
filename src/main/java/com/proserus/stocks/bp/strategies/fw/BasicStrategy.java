@@ -2,14 +2,15 @@ package com.proserus.stocks.bp.strategies.fw;
 
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.proserus.stocks.bo.analysis.Analysis;
 import com.proserus.stocks.bo.transactions.Transaction;
 import com.proserus.stocks.bp.model.Filter;
 
 public abstract class BasicStrategy<T> implements SymbolStrategy<T> {
-	protected static Logger calculsLog = Logger.getLogger("calculs." + BasicStrategy.class.getName());
+	protected static Logger calculsLog = LoggerFactory.getLogger("calculs." + BasicStrategy.class.getName());
 
 	@Override
 	abstract public void process(Analysis analysis, Collection<Transaction> transactions, Filter filter);

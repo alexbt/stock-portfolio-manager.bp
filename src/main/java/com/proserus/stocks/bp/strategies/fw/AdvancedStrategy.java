@@ -19,12 +19,16 @@ public abstract class AdvancedStrategy implements SymbolStrategy<BigDecimal> {
 		BigDecimal value;
 		try {
 			value = process(analysis);
-			if (value == null || Double.valueOf(value.doubleValue()).isInfinite() || Double.valueOf(value.doubleValue()).isNaN()) {
+
+			if (value == null || Double.isInfinite(value.doubleValue()) || Double.isNaN(value.doubleValue())) {
 				value = getDefaultAnalysisValue();
 			}
 		} catch (NumberFormatException e) {
 			value = getDefaultAnalysisValue();
+		} catch (ArithmeticException e) {
+			value = getDefaultAnalysisValue();
 		}
+		// TODO change to JDK 7
 
 		setAnalysisValue(analysis, value);
 	}

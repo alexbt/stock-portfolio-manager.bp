@@ -3,7 +3,8 @@ package com.proserus.stocks.bp.strategies.dates;
 import java.util.Calendar;
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.proserus.stocks.bo.analysis.Analysis;
 import com.proserus.stocks.bo.transactions.Transaction;
@@ -12,7 +13,7 @@ import com.proserus.stocks.bp.strategies.fw.BasicDateStrategy;
 import com.proserus.stocks.bp.utils.DateUtils;
 
 public class EndOfPeriod extends BasicDateStrategy {
-	protected static Logger calculsLog = Logger.getLogger("calculs." + EndOfPeriod.class.getName());
+	protected static Logger calculsLog = LoggerFactory.getLogger("calculs." + EndOfPeriod.class.getName());
 
 	@Override
 	public Calendar getDefaultAnalysisValue() {

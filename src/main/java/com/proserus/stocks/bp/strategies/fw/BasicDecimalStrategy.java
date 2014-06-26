@@ -3,14 +3,15 @@ package com.proserus.stocks.bp.strategies.fw;
 import java.math.BigDecimal;
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.proserus.stocks.bo.analysis.Analysis;
 import com.proserus.stocks.bo.transactions.Transaction;
 import com.proserus.stocks.bp.model.Filter;
 
 public abstract class BasicDecimalStrategy extends BasicStrategy<BigDecimal> {
-	protected static Logger calculsLog = Logger.getLogger("calculs." + BasicDecimalStrategy.class.getName());
+	protected static Logger calculsLog = LoggerFactory.getLogger("calculs." + BasicDecimalStrategy.class.getName());
 
 	@Override
 	public void process(Analysis analysis, Collection<Transaction> transactions, Filter filter) {
@@ -23,7 +24,7 @@ public abstract class BasicDecimalStrategy extends BasicStrategy<BigDecimal> {
 				value = value.add(getTransactionValue(t, filter));
 			}
 
-			if (value == null || Double.valueOf(value.doubleValue()).isInfinite() || Double.valueOf(value.doubleValue()).isNaN()) {
+			if (value == null || Double.isInfinite(value.doubleValue()) || Double.isNaN(value.doubleValue())) {
 				value = getDefaultAnalysisValue();// TODO Add logging
 			}
 		} catch (NumberFormatException e) {
