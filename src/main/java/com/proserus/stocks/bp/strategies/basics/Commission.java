@@ -6,6 +6,7 @@ import com.proserus.stocks.bo.analysis.Analysis;
 import com.proserus.stocks.bo.transactions.Transaction;
 import com.proserus.stocks.bp.model.Filter;
 import com.proserus.stocks.bp.strategies.fw.BasicDecimalStrategy;
+
 public class Commission extends BasicDecimalStrategy {
 
 	@Override
@@ -15,9 +16,9 @@ public class Commission extends BasicDecimalStrategy {
 	}
 
 	@Override
-    public void setAnalysisValue(Analysis analysis, BigDecimal value) {
+	public void setAnalysisValue(Analysis analysis, BigDecimal value) {
 		calculsLog.info("setCommission: " + value);
 		analysis.setCommission(value);
-    }
+	}
 
 }

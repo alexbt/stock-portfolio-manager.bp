@@ -9,17 +9,18 @@ import com.proserus.stocks.bo.transactions.TransactionType;
 import com.proserus.stocks.bp.model.Filter;
 import com.proserus.stocks.bp.strategies.fw.BasicDecimalStrategy;
 import com.proserus.stocks.bp.utils.DateUtils;
+
 public class MarketValue extends BasicDecimalStrategy {
 
 	@Override
 	public BigDecimal getTransactionValue(Transaction t, Filter filter) {
-		//TODO Logging
+		// TODO Logging
 		if (calculsLog.isInfoEnabled()) {
 			calculsLog.info("--------------------------------------");
 			calculsLog.info(this.getClass().getName() + " - Symbol: " + t.getSymbol().getTicker());
 			calculsLog.info("getQuantity: " + t.getQuantity());
 		}
-		BigDecimal  value = BigDecimal.ZERO;
+		BigDecimal value = BigDecimal.ZERO;
 		if (!t.getType().equals(TransactionType.DIVIDEND)) {
 			HistoricalPrice h = t.getSymbol().getPrice(DateUtils.getFilteredYear(filter));
 			if (calculsLog.isInfoEnabled()) {
@@ -27,10 +28,10 @@ public class MarketValue extends BasicDecimalStrategy {
 				calculsLog.info("getPrice: " + h.getPrice());
 			}
 			value = t.getQuantity();
-			if(t.getSymbol().isCustomPriceFirst()){
+			if (t.getSymbol().isCustomPriceFirst()) {
 				calculsLog.info("=> Using custom price");
 				value = value.multiply(h.getCustomPrice());
-			}else{
+			} else {
 				value = value.multiply(h.getPrice());
 				calculsLog.info("=> Using online price (not custom)");
 			}
@@ -47,4 +48,3 @@ public class MarketValue extends BasicDecimalStrategy {
 		analysis.setMarketValue(value);
 	}
 }
-	

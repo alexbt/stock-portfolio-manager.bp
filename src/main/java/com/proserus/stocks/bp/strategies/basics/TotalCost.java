@@ -9,16 +9,17 @@ import com.proserus.stocks.bo.transactions.TransactionType;
 import com.proserus.stocks.bp.model.Filter;
 import com.proserus.stocks.bp.strategies.fw.BasicDecimalStrategy;
 import com.proserus.stocks.bp.utils.DateUtils;
+
 public class TotalCost extends BasicDecimalStrategy {
 
 	@Override
 	public BigDecimal getTransactionValue(Transaction t, Filter filter) {
-		//TODO logging
+		// TODO logging
 		if (calculsLog.isInfoEnabled()) {
 			calculsLog.info("--------------------------------------");
 			calculsLog.info("Logging not implemented");
 		}
-		
+
 		BigDecimal value = BigDecimal.ZERO;
 
 		if (t.getType().equals(TransactionType.BUY)) {
@@ -33,10 +34,10 @@ public class TotalCost extends BasicDecimalStrategy {
 			} else {
 				value = value.multiply(t.getPrice());
 			}
-			
+
 			value = value.add(t.getCommission());
 		}
-		
+
 		return value;
 	}
 
