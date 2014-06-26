@@ -7,14 +7,15 @@ import com.proserus.stocks.bo.transactions.Transaction;
 import com.proserus.stocks.bo.transactions.TransactionType;
 import com.proserus.stocks.bp.model.Filter;
 import com.proserus.stocks.bp.strategies.fw.BasicDecimalStrategy;
+
 public class QuantitySold extends BasicDecimalStrategy {
 
 	@Override
 	public BigDecimal getTransactionValue(Transaction t, Filter filter) {
-		//TODO Logging
+		// TODO Logging
 		if (calculsLog.isInfoEnabled()) {
 			calculsLog.info("--------------------------------------");
-			//TODO logging
+			// TODO logging
 			calculsLog.info("Logging not implemented");
 		}
 		BigDecimal value = BigDecimal.ZERO;
