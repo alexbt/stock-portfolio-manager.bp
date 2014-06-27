@@ -53,6 +53,15 @@ public class DateUtils {
 	static public double getDaysBetween(Calendar start, Calendar end) {
 		long timeDifference = end.getTimeInMillis() - start.getTimeInMillis();
 		return (double) timeDifference / (double) MILLISECONDS_PER_DAY;
+
+		// DateTime dtStart = new DateTime(start);
+		// DateTime dtEnd = new DateTime(end);
+		// int jodaDays = Days.daysBetween(dtStart, dtEnd).getDays();
+		// int remainingSec = Seconds.secondsBetween(dtStart,
+		// dtEnd).getSeconds() - (jodaDays * SECONDS_PER_DAY);
+		// double fractionSecondsInDay = Double.valueOf(remainingSec) /
+		// SECONDS_PER_DAY;
+		// return jodaDays + fractionSecondsInDay;
 	}
 
 	static public double getYearsBetween(Calendar start, Calendar end) {
