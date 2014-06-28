@@ -14,6 +14,7 @@ import org.junit.Test;
 
 public class DateUtilTest {
 
+	private static final double EPSILON = .0000001;
 	private static final String JAPANESE_IMPERIAL_CALENDAR = "JapaneseImperialCalendar";
 	private static final String GREGORIAN_CALENDAR = "GregorianCalendar";
 	private static final String BUDDHIST_CALENDAR = "BuddhistCalendar";
@@ -178,7 +179,8 @@ public class DateUtilTest {
 		int remainingSec = Seconds.secondsBetween(dtStart, dtEnd).getSeconds() - (jodaDays * SECONDS_PER_DAY);
 		double jodaFractionSecondsInDay = Double.valueOf(remainingSec) / SECONDS_PER_DAY;
 
-		assertTrue(DateUtils.getDaysBetween(start, end) == (jodaDays + jodaFractionSecondsInDay));
+		// http://stackoverflow.com/questions/3832592/test-for-floating-point-equality-fe-floating-point-equality
+		assertTrue(Math.abs(DateUtils.getDaysBetween(start, end) - (jodaDays + jodaFractionSecondsInDay)) < EPSILON);
 	}
 	// getCurrentDate()
 	// getFilteredEndDate(Filter)

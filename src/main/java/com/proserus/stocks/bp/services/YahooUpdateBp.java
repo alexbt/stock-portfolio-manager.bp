@@ -95,15 +95,16 @@ public class YahooUpdateBp implements OnlineUpdateBp {
 
 				for (Symbol s : symbols) {
 					String re = in.readLine();
-
-					String[] str = re.split(QUOTE);
-					if (str != null && str.length >= 3) {
-						String price = str[2];
-						String ticker = str[1];
-						if ((s.getName().isEmpty()) && !s.getTicker().toUpperCase().equals(ticker)) {
-							s.setName(ticker);
+					if (re != null) {
+						String[] str = re.split(QUOTE);
+						if (str != null && str.length >= 3) {
+							String price = str[2];
+							String ticker = str[1];
+							if ((s.getName().isEmpty()) && !s.getTicker().toUpperCase().equals(ticker)) {
+								s.setName(ticker);
+							}
+							s.setPrice(new BigDecimal(Double.parseDouble(price)), DateUtils.getCurrentYear());
 						}
-						s.setPrice(new BigDecimal(Double.parseDouble(price)), DateUtils.getCurrentYear());
 					}
 				}
 			} catch (MalformedURLException e) {
