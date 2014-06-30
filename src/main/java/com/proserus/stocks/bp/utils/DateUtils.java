@@ -17,6 +17,12 @@ public class DateUtils {
 		return Calendar.getInstance().get(Calendar.YEAR);
 	}
 
+	static public Calendar getTomorrow() {
+		Calendar c = Calendar.getInstance();
+		c.add(Calendar.DAY_OF_YEAR, 1);
+		return c;
+	}
+
 	static public int getPreviousYear() {
 		return getCurrentYear() - 1;
 	}
