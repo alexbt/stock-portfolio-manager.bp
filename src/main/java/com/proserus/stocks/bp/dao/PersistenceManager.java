@@ -131,9 +131,9 @@ public class PersistenceManager implements EventListener {
 			String ts = new SimpleDateFormat(YYYY_M_MDDHHMMSS).format(Calendar.getInstance().getTime());
 			File script = new File(dbPath.getSelectedDatabase().getPath() + SCRIPT);
 			File properties = new File(dbPath.getSelectedDatabase().getPath() + PROPERTIES);
-			LOGGER.info("Removing " + script.getAbsoluteFile());
+			LOGGER.info("Removing {}", new Object[] { script.getAbsoluteFile() });
 			script.renameTo(new File(dbPath.getSelectedDatabase().getPath() + OLD + ts + SCRIPT));
-			LOGGER.info("Removing " + properties.getAbsoluteFile());
+			LOGGER.info("Removing {}", new Object[] { properties.getAbsoluteFile() });
 			properties.renameTo(new File(dbPath.getSelectedDatabase().getPath() + OLD + ts + PROPERTIES));
 		}
 	}

@@ -29,7 +29,7 @@ public enum AdvancedStrategiesEnum {
 			calculsLog.info("--------------------------------------");
 			calculsLog.info("--------------------------------------");
 			for (AdvancedStrategiesEnum en : values()) {
-				calculsLog.info("SymbolStrategies: " + en);
+				calculsLog.info("SymbolStrategies: {}", new Object[] { en });
 			}
 			calculsLog.info("--------------------------------------");
 		}

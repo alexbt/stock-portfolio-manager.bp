@@ -23,11 +23,11 @@ public class DividendYield extends AdvancedStrategy {
 			calculsLog.info("--------------------------------------");
 			calculsLog.info("dividend yield = dividend / divisor");
 			calculsLog.info("divisor = (getCurrentCost + getTotalSold - getCapitalGain)");
-			calculsLog.info("getCurrentCost: " + analysis.getTotalCost());
-			calculsLog.info("getTotalSold: " + analysis.getTotalSold());
-			calculsLog.info("getCapitalGain: " + analysis.getCapitalGain());
-			calculsLog.info("getDividend: " + analysis.getDividend());
-			calculsLog.info("divisor: " + divisor);
+			calculsLog.info("getCurrentCost: {}", new Object[] { analysis.getTotalCost() });
+			calculsLog.info("getTotalSold: {}", new Object[] { analysis.getTotalSold() });
+			calculsLog.info("getCapitalGain: {}", new Object[] { analysis.getCapitalGain() });
+			calculsLog.info("getDividend: {}", new Object[] { analysis.getDividend() });
+			calculsLog.info("divisor: {}", new Object[] { divisor });
 		}
 
 		// TODO use averageCostPerDay instead

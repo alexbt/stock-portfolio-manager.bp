@@ -26,9 +26,9 @@ public class AnnualizedReturn extends AdvancedStrategy {
 			if (calculsLog.isInfoEnabled()) {
 				calculsLog.info("--------------------------------------");
 				calculsLog.info("AnnualizedReturn = (overallReturn/100+1)^(1/(CompoundingPeriod X numberOfYears)) - 1");
-				calculsLog.info("getOverallReturn: " + analysis.getOverallReturn());
-				calculsLog.info("CompoundingPeriod: " + COMPOUNDING_PERIOD);
-				calculsLog.info("getNumberOfYears: " + analysis.getNumberOfYears());
+				calculsLog.info("getOverallReturn: {}", new Object[] { analysis.getOverallReturn() });
+				calculsLog.info("CompoundingPeriod: {}", new Object[] { COMPOUNDING_PERIOD });
+				calculsLog.info("getNumberOfYears: {}", new Object[] { analysis.getNumberOfYears() });
 			}
 
 			if (!analysis.getNumberOfYears().equals(BigDecimal.ZERO)) {

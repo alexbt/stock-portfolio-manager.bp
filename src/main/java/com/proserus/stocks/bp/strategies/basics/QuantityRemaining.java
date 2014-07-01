@@ -15,9 +15,9 @@ public class QuantityRemaining extends BasicDecimalStrategy {
 		// TODO Logging
 		if (calculsLog.isInfoEnabled()) {
 			calculsLog.info("--------------------------------------");
-			calculsLog.info(this.getClass().getName() + " - Symbol: " + t.getSymbol().getTicker());
-			calculsLog.info("Transaction Type: " + t.getType());
-			calculsLog.info("getQuantity: " + t.getQuantity());
+			calculsLog.info("{} - Symbol: {}", new Object[] { this.getClass().getName(), t.getSymbol().getTicker() });
+			calculsLog.info("Transaction Type: {}", new Object[] { t.getType() });
+			calculsLog.info("getQuantity: {}", new Object[] { t.getQuantity() });
 		}
 		BigDecimal value = BigDecimal.ZERO;
 		if (!TransactionType.DIVIDEND.equals(t.getType())) {
@@ -31,7 +31,7 @@ public class QuantityRemaining extends BasicDecimalStrategy {
 
 	@Override
 	public void setAnalysisValue(Analysis analysis, BigDecimal value) {
-		calculsLog.info("setQuantity: " + value);
+		calculsLog.info("setQuantity: {}", new Object[] { value });
 		analysis.setQuantity(value);
 	}
 }

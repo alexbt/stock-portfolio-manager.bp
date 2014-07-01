@@ -33,7 +33,7 @@ public enum BasicStrategiesEnum {
 			calculsLog.info("--------------------------------------");
 			calculsLog.info("--------------------------------------");
 			for (BasicStrategiesEnum en : values()) {
-				calculsLog.info("SymbolStrategies: " + en);
+				calculsLog.info("SymbolStrategies: {}", new Object[] { en });
 			}
 			calculsLog.info("--------------------------------------");
 		}

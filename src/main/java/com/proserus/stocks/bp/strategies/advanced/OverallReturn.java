@@ -22,11 +22,11 @@ public class OverallReturn extends AdvancedStrategy {
 		if (calculsLog.isInfoEnabled()) {
 			calculsLog.info("--------------------------------------");
 			calculsLog.info("Overall Return = (capitalGain / (currentCost+totalSold)) + marketGrowth + dividendYield");
-			calculsLog.info("getCapitalGain: " + analysis.getCapitalGain());
-			calculsLog.info("getCurrentCost: " + analysis.getTotalCost());
-			calculsLog.info("getTotalSold: " + analysis.getTotalSold());
-			calculsLog.info("getMarketGrowth: " + analysis.getMarketGrowth());
-			calculsLog.info("getDividendYield: " + analysis.getDividendYield());
+			calculsLog.info("getCapitalGain: {}", new Object[] { analysis.getCapitalGain() });
+			calculsLog.info("getCurrentCost: {}", new Object[] { analysis.getTotalCost() });
+			calculsLog.info("getTotalSold: {}", new Object[] { analysis.getTotalSold() });
+			calculsLog.info("getMarketGrowth: {}", new Object[] { analysis.getMarketGrowth() });
+			calculsLog.info("getDividendYield: {}", new Object[] { analysis.getDividendYield() });
 		}
 
 		if (!analysis.getCapitalGain().equals(BigDecimal.ZERO)) {
@@ -40,7 +40,7 @@ public class OverallReturn extends AdvancedStrategy {
 		value = value.add(analysis.getDividendYield());
 		calculsLog.info("Calculated OverallReturn successfully!");
 
-		calculsLog.info("setOverallReturn: " + value);
+		calculsLog.info("setOverallReturn: {}", new Object[] { value });
 		return value;
 	}
 

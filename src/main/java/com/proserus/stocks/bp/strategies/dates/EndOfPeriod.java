@@ -34,7 +34,7 @@ public class EndOfPeriod extends BasicDateStrategy {
 		if (calculsLog.isInfoEnabled()) {
 			calculsLog.info("--------------------------------------");
 			calculsLog.info("EndOfPeriod = Today OR (last day of filtered year");
-			calculsLog.info("EndOfPeriod = " + endDate);
+			calculsLog.info("EndOfPeriod = {}", new Object[] { endDate });
 		}
 
 		return endDate;

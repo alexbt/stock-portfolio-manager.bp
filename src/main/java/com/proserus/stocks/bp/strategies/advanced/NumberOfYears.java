@@ -19,14 +19,14 @@ public class NumberOfYears extends AdvancedStrategy {
 		if (calculsLog.isInfoEnabled()) {
 			calculsLog.info("--------------------------------------");
 			calculsLog.info("setNumberOfYears = Days.daysBetween(getStartOfPeriod,getEndOfPeriod) / 365");
-			calculsLog.info("getStartOfPeriod: " + analysis.getStartOfPeriod());
-			calculsLog.info("getEndOfPeriod: " + analysis.getEndOfPeriod());
+			calculsLog.info("getStartOfPeriod: {}", new Object[] { analysis.getStartOfPeriod() });
+			calculsLog.info("getEndOfPeriod: {}", new Object[] { analysis.getEndOfPeriod() });
 		}
 
 		double years = DateUtils.getYearsBetween(analysis.getStartOfPeriod(), analysis.getEndOfPeriod());
 		calculsLog.info("Calculated NumberOfYears successfully!");
 
-		calculsLog.info("setNumberOfYears = " + years + " years");
+		calculsLog.info("setNumberOfYears = {} years", new Object[] { years });
 		return new BigDecimal(years);
 	}
 

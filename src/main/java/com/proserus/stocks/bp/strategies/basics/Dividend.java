@@ -28,7 +28,7 @@ public class Dividend extends BasicDecimalStrategy {
 
 	@Override
 	public void setAnalysisValue(Analysis analysis, BigDecimal value) {
-		calculsLog.info("setDividend: " + value);
+		calculsLog.info("setDividend: {}", new Object[] { value });
 		analysis.setDividend(value);
 	}
 }
