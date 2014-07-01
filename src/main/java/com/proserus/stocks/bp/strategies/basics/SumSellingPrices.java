@@ -27,7 +27,7 @@ public class SumSellingPrices extends BasicDecimalStrategy {
 
 	@Override
 	public void setAnalysisValue(Analysis analysis, BigDecimal value) {
-		calculsLog.info("setTotalSold: " + value);
+		calculsLog.info("setTotalSold: {}", new Object[] { value });
 		analysis.setTotalSold(value);
 	}
 }

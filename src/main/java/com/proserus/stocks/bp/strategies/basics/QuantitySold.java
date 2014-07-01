@@ -28,7 +28,7 @@ public class QuantitySold extends BasicDecimalStrategy {
 
 	@Override
 	public void setAnalysisValue(Analysis analysis, BigDecimal value) {
-		calculsLog.info("setQuantitySold: " + value);
+		calculsLog.info("setQuantitySold: {}", new Object[] { value });
 		analysis.setQuantitySold(value);
 	}
 }

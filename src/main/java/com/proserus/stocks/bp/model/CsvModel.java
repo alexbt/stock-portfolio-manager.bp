@@ -77,7 +77,7 @@ public class CsvModel {
 			labelString.append(l.getName() + ", ");
 		}
 
-		labels = "[" + StringUtils.removeEnd(labelString.toString(), ", ") + "]";
+		labels = "[" + StringUtils.removeEnd(String.valueOf(labelString), ", ") + "]";
 
 		currency = transaction.getSymbol().getCurrency().getId();
 		sector = transaction.getSymbol().getSector().getId();

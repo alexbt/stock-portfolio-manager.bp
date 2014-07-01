@@ -17,15 +17,15 @@ public class MarketValue extends BasicDecimalStrategy {
 		// TODO Logging
 		if (calculsLog.isInfoEnabled()) {
 			calculsLog.info("--------------------------------------");
-			calculsLog.info(this.getClass().getName() + " - Symbol: " + t.getSymbol().getTicker());
-			calculsLog.info("getQuantity: " + t.getQuantity());
+			calculsLog.info("{} - Symbol: {}", new Object[] { this.getClass().getName(), t.getSymbol().getTicker() });
+			calculsLog.info("getQuantity: {}", new Object[] { t.getQuantity() });
 		}
 		BigDecimal value = BigDecimal.ZERO;
 		if (!t.getType().equals(TransactionType.DIVIDEND)) {
 			HistoricalPrice h = t.getSymbol().getPrice(DateUtils.getFilteredYear(filter));
 			if (calculsLog.isInfoEnabled()) {
-				calculsLog.info("getCustomPrice: " + h.getCustomPrice());
-				calculsLog.info("getPrice: " + h.getPrice());
+				calculsLog.info("getCustomPrice: {}", new Object[] { h.getCustomPrice() });
+				calculsLog.info("getPrice: {}", new Object[] { h.getPrice() });
 			}
 			value = t.getQuantity();
 			if (t.getSymbol().isCustomPriceFirst()) {

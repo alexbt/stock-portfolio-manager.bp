@@ -19,8 +19,8 @@ public class AverageCostPerShare extends AdvancedStrategy {
 		if (calculsLog.isInfoEnabled()) {
 			calculsLog.info("--------------------------------------");
 			calculsLog.info("AverageCostPerShareSYM = Cost / Quantity");
-			calculsLog.info("getQuantityBuy: " + analysis.getQuantityBuy());
-			calculsLog.info("getCurrentCost: " + analysis.getTotalCost());
+			calculsLog.info("getQuantityBuy: {}", new Object[] { analysis.getQuantityBuy() });
+			calculsLog.info("getCurrentCost: {}", new Object[] { analysis.getTotalCost() });
 		}
 
 		if (!analysis.getQuantityBuy().equals(BigDecimal.ZERO)) {
@@ -30,7 +30,7 @@ public class AverageCostPerShare extends AdvancedStrategy {
 			calculsLog.error("Failed to calculated AverageCostPerShare: Quantity is 0");
 		}
 
-		calculsLog.info("setAveragePrice = " + value);
+		calculsLog.info("setAveragePrice = {}", new Object[] { value });
 		return value;
 	}
 

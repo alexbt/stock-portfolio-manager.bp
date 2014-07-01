@@ -18,8 +18,8 @@ public class MarketGrowth extends AdvancedStrategy {
 
 		if (calculsLog.isInfoEnabled()) {
 			calculsLog.info("--------------------------------------");
-			calculsLog.info("getCurrentCost: " + analysis.getTotalCost());
-			calculsLog.info("getMarketValue: " + analysis.getMarketValue());
+			calculsLog.info("getCurrentCost: {}", new Object[] { analysis.getTotalCost() });
+			calculsLog.info("getMarketValue: {}", new Object[] { analysis.getMarketValue() });
 			calculsLog.info("marketGrowth = ((marketValue - currentCost) / currentCost) x 100");
 		}
 
@@ -35,7 +35,7 @@ public class MarketGrowth extends AdvancedStrategy {
 				calculsLog.info("Failed to calculate MarketGrowth: current Cost is 0");
 			}
 
-			calculsLog.info("setMarketGrowth = " + value);
+			calculsLog.info("setMarketGrowth = {}", new Object[] { value });
 		} catch (java.lang.ArithmeticException e) {
 			calculsLog.info("setMarketGrowth = Infinite");
 			value = null;

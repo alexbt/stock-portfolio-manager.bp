@@ -19,8 +19,8 @@ public class CostBasis extends AdvancedStrategy {
 		if (calculsLog.isInfoEnabled()) {
 			calculsLog.info("--------------------------------------");
 			calculsLog.info("CostBasisSYM = quantity x averagePrice");
-			calculsLog.info("getQuantity: " + analysis.getQuantity());
-			calculsLog.info("getAveragePrice: " + analysis.getAveragePrice());
+			calculsLog.info("getQuantity: {}", new Object[] { analysis.getQuantity() });
+			calculsLog.info("getAveragePrice: {}", new Object[] { analysis.getAveragePrice() });
 		}
 		value = analysis.getAveragePrice().multiply(analysis.getQuantity());
 

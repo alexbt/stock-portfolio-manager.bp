@@ -14,7 +14,6 @@ import com.proserus.stocks.bo.transactions.Label;
 import com.proserus.stocks.bo.transactions.Transaction;
 
 public class ModelChangeEvents {
-	// TODO move to swing project. or rename..
 	static public ModelEvent<Collection<Transaction>> TRANSACTION_UPDATED = new ModelEvent<Collection<Transaction>>();
 
 	static public ModelEvent<Collection<Symbol>> SYMBOLS_UPDATED = new ModelEvent<Collection<Symbol>>();
@@ -43,12 +42,14 @@ public class ModelChangeEvents {
 
 	static public ModelEvent<Symbol> SYMBOL_SELECTION_CHANGED = new ModelEvent<Symbol>();
 
-	static public ModelEvent<CurrencyEnum> CURRENCY_DEFAULT_CHANGED = new ModelEvent<CurrencyEnum>();
+	static public final ModelEvent<CurrencyEnum> CURRENCY_DEFAULT_CHANGED = new ModelEvent<CurrencyEnum>();
 
-	static public ModelEvent<DatabasePaths> DATABASE_DETECTED = new ModelEvent<DatabasePaths>();
+	static public final ModelEvent<DatabasePaths> DATABASE_DETECTED = new ModelEvent<DatabasePaths>();
 
-	static public ModelEvent<DatabasePaths> DATABASE_SELECTED = new ModelEvent<DatabasePaths>();
+	static public final ModelEvent<DatabasePaths> DATABASE_SELECTED = new ModelEvent<DatabasePaths>();
 
-	static public NoModelEvent CURRENT_DATABASE_DELETED = new NoModelEvent();
+	static public final NoModelEvent CURRENT_DATABASE_DELETED = new NoModelEvent();
+
+	public static final NoModelEvent LOADING_COMPLETED = new NoModelEvent();
 
 }

@@ -43,7 +43,7 @@ public class TotalCost extends BasicDecimalStrategy {
 
 	@Override
 	public void setAnalysisValue(Analysis analysis, BigDecimal value) {
-		calculsLog.info("setCost: " + value);
+		calculsLog.info("setCost: {}", new Object[] { value });
 		analysis.setTotalCost(value);
 	}
 }

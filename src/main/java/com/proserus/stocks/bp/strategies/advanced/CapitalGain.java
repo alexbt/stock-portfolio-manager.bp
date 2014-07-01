@@ -20,9 +20,9 @@ public class CapitalGain extends AdvancedStrategy {
 		if (calculsLog.isInfoEnabled()) {
 			calculsLog.info("--------------------------------------");
 			calculsLog.info("CapitalGainSYM = Sold amount of selling prices - (numberofSharesSold X average Price)");
-			calculsLog.info("getTotalSold: " + analysis.getTotalSold());
-			calculsLog.info("getQuantitySold: " + analysis.getQuantitySold());
-			calculsLog.info("getAveragePrice: " + analysis.getAveragePrice());
+			calculsLog.info("getTotalSold: {}", new Object[] { analysis.getTotalSold() });
+			calculsLog.info("getQuantitySold: {}", new Object[] { analysis.getQuantitySold() });
+			calculsLog.info("getAveragePrice: {}", new Object[] { analysis.getAveragePrice() });
 		}
 		if (!divider.equals(BigDecimal.ZERO)) {
 			value = analysis.getTotalSold().subtract(divider);
@@ -31,7 +31,7 @@ public class CapitalGain extends AdvancedStrategy {
 			calculsLog.error("Failed to calculated CapitalGainSYM: (numberofSharesSold X average Price) is 0");
 		}
 
-		calculsLog.info("setCapitalGain = " + value);
+		calculsLog.info("setCapitalGain = {}", new Object[] { value });
 		return value;
 	}
 
