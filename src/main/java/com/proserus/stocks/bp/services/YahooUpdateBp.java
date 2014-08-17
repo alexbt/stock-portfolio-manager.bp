@@ -23,6 +23,8 @@ import com.proserus.stocks.bp.utils.DateUtils;
 
 @Singleton
 public class YahooUpdateBp implements OnlineUpdateBp {
+	private static final int PRICE_INDEX = 4;
+
 	@Inject
 	private BoBuilder boBuilder;
 
@@ -41,7 +43,7 @@ public class YahooUpdateBp implements OnlineUpdateBp {
 	// doc: http://code.google.com/p/yahoo-finance-managed/
 
 	private static String URL_HIST_START = "http://ichart.finance.yahoo.com/table.csv?s=";
-	private static String URL_HIST_END = "&c=1975&f=2010&g=m";
+	private static String URL_HIST_END = "&g=d";
 
 	// http://ichart.finance.yahoo.com/table.csv?s=goog&c=1975&f=2010&g=m
 	public BigDecimal retrieveCurrentPrice(Symbol symbol) {
@@ -140,7 +142,7 @@ public class YahooUpdateBp implements OnlineUpdateBp {
 					break;
 				}
 
-				Double value = new Double(str.split(COMMA_STR)[6]);
+				Double value = new Double(str.split(COMMA_STR)[PRICE_INDEX]);
 				HistoricalPrice h = (HistoricalPrice) mapPrices.get(previousYear);
 				if (h == null) {
 					h = boBuilder.getHistoricalPrice();

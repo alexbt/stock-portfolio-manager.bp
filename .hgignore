@@ -3,3 +3,7 @@ syntax: regexp
 ^\.settings$
 syntax: regexp
 ^target$
+syntax: regexp
+^build$
+syntax: regexp
+^dependencies$
